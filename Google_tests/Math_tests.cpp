@@ -294,3 +294,155 @@ TEST(Matricies, Matrix4Multiplication)
 
     EXPECT_EQ(A*B, Target);
 }
+
+TEST(Matricies, Matrix4VectorMultiplication)
+{
+    Matrix4 A{
+            1, 2, 3, 4,
+            2, 4, 4, 2,
+            8, 6, 4, 1,
+            0, 0, 0, 1
+    };
+
+    Tuple b{ 1, 2, 3, 1 };
+
+    Tuple target{ 18, 24, 33, 1 };
+
+    EXPECT_EQ(A*b, target);
+}
+
+TEST(Matricies, Matrix4Identity)
+{
+    Matrix4 A{
+            1, 2, 3, 4,
+            2, 4, 4, 2,
+            8, 6, 4, 1,
+            0, 0, 0, 1
+    };
+
+    EXPECT_EQ(A*Math::identiy_matrix, A);
+}
+
+TEST(Matricies, Matrix4Transpose)
+{
+    Matrix4 M{
+            0, 9, 3, 0,
+            9, 8, 0, 8,
+            1, 8, 5, 3,
+            0, 0, 5, 8
+    };
+
+    Matrix4 target{
+            0, 9, 1, 0,
+            9, 8, 8, 0,
+            3, 0, 5, 5,
+            0, 8, 3, 8
+    };
+
+    EXPECT_EQ(M.Transposed(), target);
+    EXPECT_EQ(Math::identiy_matrix.Transposed(), Math::identiy_matrix);
+}
+
+TEST(Matricies, Matrix2Determinant)
+{
+    Matrix2 A{
+            1, 5,
+            -3, 2
+    };
+
+    EXPECT_TRUE(Math::Equal(A.Determinant(), 17));
+}
+
+TEST(Matricies, Matrix3Submatrix)
+{
+    Matrix3 A{
+            1, 5, 0,
+            -3, 2, 7,
+            0, 6, -3
+    };
+    Matrix2 target_submatrix{
+            -3, 2,
+            0, 6
+    };
+
+    EXPECT_EQ(Math::Submatrix(A, 0, 2), target_submatrix);
+}
+
+TEST(Matricies, Matrix4Submatrix)
+{
+    Matrix4 A{
+            -6, 1, 1, 6,
+            -8, 5, 8, 6,
+            -1, 0, 8, 2,
+            -7, 1, -1, 1
+    };
+
+    Matrix3 target_submatrix{
+            -6, 1, 6,
+            -8, 8, 6,
+            -7, -1, 1
+    };
+
+    EXPECT_EQ(Math::Submatrix(A, 2, 1), target_submatrix);
+}
+
+TEST(Matricies, Matrix3Minor)
+{
+    Matrix3 A{
+            2, 5, 0,
+            2, -1, -7,
+            6, -1, 5
+    };
+
+    Matrix2 B = Math::Submatrix(A, 1, 0);
+
+    EXPECT_TRUE(Math::Equal(B.Determinant(), 25));
+    EXPECT_TRUE(Math::Equal(A.Minor(1, 0), 25));
+}
+
+TEST(Matricies, Matrix3Cofactor)
+{
+    Matrix3 A{
+            3, 5, 0,
+            2, -1, -7,
+            6, -1, 5
+    };
+
+    EXPECT_TRUE(Math::Equal(A.Minor(0, 0), -12));
+    EXPECT_TRUE(Math::Equal(A.Cofactor(0, 0), -12));
+    EXPECT_TRUE(Math::Equal(A.Minor(0, 1), 25));
+    EXPECT_TRUE(Math::Equal(A.Minor(0, 2), -25));
+}
+
+TEST(Matricies, Matrix3Determinant)
+{
+    Matrix3 A{
+            1, 2, 6,
+            -5, 8, -4,
+            2, 6, 4
+    };
+
+    EXPECT_TRUE(Math::Equal(A.Cofactor(0, 0), 56));
+    EXPECT_TRUE(Math::Equal(A.Cofactor(0, 1), 12));
+    EXPECT_TRUE(Math::Equal(A.Cofactor(0, 2), -46));
+
+    EXPECT_TRUE(Math::Equal(A.Determinant(), -196));
+}
+
+TEST(Matricies, Matrix4Determinant)
+{
+    Matrix4 A{
+            -2, -8, 3, 5,
+            -3, 1, 7, 3,
+            1, 2, -9, 6,
+            -6, 7, 7, -9
+    };
+
+    EXPECT_TRUE(Math::Equal(A.Cofactor(0, 0), 690));
+    EXPECT_TRUE(Math::Equal(A.Cofactor(0, 1), 447));
+    EXPECT_TRUE(Math::Equal(A.Cofactor(0, 2), 210));
+    EXPECT_TRUE(Math::Equal(A.Cofactor(0, 3), 51));
+
+    EXPECT_TRUE(Math::Equal(A.Determinant(), -4071));
+}
+
