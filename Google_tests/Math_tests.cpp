@@ -410,8 +410,8 @@ TEST(Matricies, Matrix3Cofactor)
 
     EXPECT_TRUE(Math::Equal(A.Minor(0, 0), -12));
     EXPECT_TRUE(Math::Equal(A.Cofactor(0, 0), -12));
-    EXPECT_TRUE(Math::Equal(A.Minor(0, 1), 25));
-    EXPECT_TRUE(Math::Equal(A.Minor(0, 2), -25));
+    EXPECT_TRUE(Math::Equal(A.Minor(1, 0), 25));
+    EXPECT_TRUE(Math::Equal(A.Cofactor(1, 0), -25));
 }
 
 TEST(Matricies, Matrix3Determinant)
@@ -446,3 +446,309 @@ TEST(Matricies, Matrix4Determinant)
     EXPECT_TRUE(Math::Equal(A.Determinant(), -4071));
 }
 
+TEST(Matricies, Matrix4Invertible)
+{
+    Matrix4 A{
+            6, 4, 4, 4,
+            5, 5, 7, 6,
+            4, -9, 3, -7,
+            9, 1, 7, -6
+    };
+
+    EXPECT_TRUE(Math::Equal(A.Determinant(), -2120));
+    EXPECT_TRUE(A.IsInvertible());
+}
+
+TEST(Matricies, Matrix4NonInvertible)
+{
+    Matrix4 A{
+            -4, 2, -2, -3,
+            9, 6, 2, 6,
+            0, -5, 1, -5,
+            0, 0, 0, 0
+    };
+
+    EXPECT_TRUE(Math::Equal(A.Determinant(), 0));
+    EXPECT_FALSE(A.IsInvertible());
+}
+
+TEST(Matricies, Matrix4Inversion01)
+{
+    Matrix4 A{
+            -5, 2, 6, -8,
+            1, -5, 1, 8,
+            7, 7, -6, -7,
+            1, -3, 7, 4
+    };
+    Matrix4 B = A.Inversed();
+
+    Matrix4 Target{
+            0.21805, 0.45113, 0.24060, -0.04511,
+            -0.80827, -1.45677, -0.44361, 0.52068,
+            -0.07895, -0.22368, -0.05263, 0.19737,
+            -0.52256, -0.81391, -0.30075, 0.30639
+    };
+
+    EXPECT_TRUE(Math::Equal(A.Determinant(), 532));
+
+    EXPECT_TRUE(Math::Equal(A.Cofactor(2, 3), -160));
+    EXPECT_TRUE(Math::Equal(B(3, 2), -160.0f/532.0f));
+
+    EXPECT_TRUE(Math::Equal(A.Cofactor(3, 2), 105));
+    EXPECT_TRUE(Math::Equal(B(2, 3), 105.0f/532.0f));
+
+    EXPECT_EQ(B, Target);
+}
+
+TEST(Matricies, Matrix4Inversion02)
+{
+    Matrix4 A{
+            8, -5, 9, 2,
+            7, 5, 6, 1,
+            -6, 0, 9, 6,
+            -3, 0, -9, -4
+    };
+
+
+    Matrix4 target{
+            -0.15385, -0.15385, -0.28205, -0.53846,
+            -0.07692, 0.12308, 0.02564, 0.03077,
+            0.35897, 0.35897, 0.43590, 0.92308,
+            -0.69231, -0.69231, -0.76923, -1.92308
+    };
+
+    EXPECT_EQ(A.Inversed(), target);
+}
+
+TEST(Matricies, Matrix4Inversion03)
+{
+    Matrix4 A{
+            9, 3, 0, 9,
+            -5, -2, -6, -3,
+            -4, 9, 6, 4,
+            -7, 6, 6, 2
+    };
+
+    Matrix4 target{
+            -0.04074, -0.07778, 0.14444, -0.22222,
+            -0.07778, 0.03333, 0.36667, -0.33333,
+            -0.02901, -0.14630, -0.10926, 0.12963,
+            0.17778, 0.06667, -0.26667, 0.33333
+    };
+
+    EXPECT_EQ(A.Inversed(), target);
+}
+
+TEST(Matricies, MultiplyMatrix4ProductByInverse)
+{
+    Matrix4 A{
+            3, - 9, 7, 3,
+            3, -8, 2, -9,
+            -4, 4, 4, 1,
+            -6, 5, -1, 1
+    };
+
+    Matrix4 B{
+            8, 2, 2, 2,
+            3, -1, 7, 0,
+            7, 0, 5, 4,
+            6, -2, 0, 5
+    };
+
+    Matrix4 C = A * B;
+
+    EXPECT_EQ(C*B.Inversed(), A);
+}
+
+TEST(Matricies, MultiplyByTranslationMatrix)
+{
+    Matrix4 transform = Math::Translation(5, -3, 2);
+    Point p{ -3, 4, 5 };
+    Point target{2, 1, 7};
+
+    EXPECT_EQ(transform * p, target);
+}
+
+TEST(Matricies, MultiplyByInverseOfTranslationMatrix)
+{
+    Matrix4 transform = Math::Translation(5, -3, 2);
+    Matrix4 inv = transform.Inversed();
+    Point p{ -3, 4, 5 };
+    Point target{-8, 7, 3};
+
+    EXPECT_EQ(inv * p, target);
+}
+
+TEST(Matricies, TranslationDoesNotAffectVectors)
+{
+    Matrix4 transform = Math::Translation(5, -3, 2);
+    Vector v{ -3, 4, 5 };
+
+    EXPECT_EQ(transform * v, v);
+}
+
+TEST(Matricies, ScalingMatrixAppliedToAPoint)
+{
+    Matrix4 transform = Math::Scaling(2, 3, 4);
+    Point p{ -4, 6, 8 };
+    Point target{-8, 18, 32};
+
+    EXPECT_EQ(transform * p, target);
+}
+
+TEST(Matricies, ScalingMatrixAppliedToAVector)
+{
+    Matrix4 transform = Math::Scaling(2, 3, 4);
+    Vector v{ -4, 6, 8 };
+    Vector target{-8, 18, 32};
+
+    EXPECT_EQ(transform * v, target);
+}
+
+TEST(Matricies, MultiplyingByInverseOfScalingMatrix)
+{
+    Matrix4 transform = Math::Scaling(2, 3, 4);
+    Matrix4 inv = transform.Inversed();
+    Vector v{ -4, 6, 8 };
+    Vector target{-2, 2, 2};
+
+    EXPECT_EQ(inv * v, target);
+}
+
+TEST(Matricies, ReflectionIsScalingByNegativeValue)
+{
+    Matrix4 transform = Math::Scaling(-1, 1, 1);
+    Point p{ 2, 3, 4 };
+    Point target{-2, 3, 4};
+
+    EXPECT_EQ(transform * p, target);
+}
+
+TEST(Matricies, RotatingAPointAroundXAxis)
+{
+    Point p{ 0, 1, 0 };
+    Matrix4 half_quater = Math::Rotation_X(M_PI / 4);
+    Matrix4 full_quater = Math::Rotation_X(M_PI / 2);
+    Point target1{0,static_cast<float>(std::sqrt(2)/2), static_cast<float>(std::sqrt(2)/2)};
+    Point target2{0, 0, 1};
+
+    EXPECT_TRUE(Math::Equal(half_quater * p, target1));
+    EXPECT_TRUE(Math::Equal(full_quater * p, target2));
+}
+
+TEST(Matricies, InverseOfXRotation)
+{
+    Point p{ 0,1,0 };
+    Matrix4 half_quater = Math::Rotation_X(M_PI / 4);
+    Matrix4 inverse = half_quater.Inversed();
+    Point target{0, static_cast<float>(std::sqrt(2)/2), static_cast<float>(-(std::sqrt(2)/2))};
+
+    EXPECT_TRUE(Math::Equal(inverse * p, target));
+}
+
+TEST(Matricies, RotatingAPointAroundYAxis)
+{
+    Point p{ 0,0,1 };
+    Matrix4 half_quater = Math::Rotation_Y(M_PI / 4);
+    Matrix4 full_quater = Math::Rotation_Y(M_PI / 2);
+    Point target1{static_cast<float>(std::sqrt(2) / 2), 0, static_cast<float>(std::sqrt(2) / 2)};
+    Point target2{1, 0, 0};
+
+    EXPECT_TRUE(Math::Equal(half_quater * p, target1));
+    EXPECT_TRUE(Math::Equal(full_quater * p, target2));
+}
+
+TEST(Matricies, RotatingAPointAroundZAxis)
+{
+    Point p{ 0,1,0 };
+    Matrix4 half_quater = Math::Rotation_Z(M_PI / 4);
+    Matrix4 full_quater = Math::Rotation_Z(M_PI / 2);
+    Point target1{static_cast<float>(-std::sqrt(2) / 2), static_cast<float>(std::sqrt(2) / 2), 0};
+    Point target2{-1, 0, 0};
+
+    EXPECT_TRUE(Math::Equal(half_quater * p, target1));
+    EXPECT_TRUE(Math::Equal(full_quater * p, target2));
+}
+
+TEST(Matricies, ShearingXToY)
+{
+    Matrix4 transform = Math::Shearing(1, 0, 0, 0, 0, 0);
+    Point p{ 2, 3, 4 };
+    Point target{5, 3, 4};
+
+    EXPECT_TRUE(Math::Equal(transform *p, target));
+}
+
+TEST(Matricies, ShearingXToZ)
+{
+    Matrix4 transform = Math::Shearing(0, 1, 0, 0, 0, 0);
+    Point p{ 2, 3, 4 };
+    Point target{6, 3, 4};
+    EXPECT_TRUE(Math::Equal(transform *p, target));
+}
+
+TEST(Matricies, ShearingYToX)
+{
+    Matrix4 transform = Math::Shearing(0, 0, 1, 0, 0, 0);
+    Point p{ 2, 3, 4 };
+    Point target{2, 5, 4};
+    EXPECT_TRUE(Math::Equal(transform *p, target));
+}
+
+TEST(Matricies, ShearingYToZ)
+{
+    Matrix4 transform = Math::Shearing(0, 0, 0, 1, 0, 0);
+    Point p{ 2, 3, 4 };
+    Point target{2, 7, 4};
+    EXPECT_TRUE(Math::Equal(transform *p, target));
+}
+
+TEST(Matricies, ShearingZToX)
+{
+    Matrix4 transform = Math::Shearing(0, 0, 0, 0, 1, 0);
+    Point p{ 2, 3, 4 };
+    Point target{2, 3, 6};
+    EXPECT_TRUE(Math::Equal(transform *p, target));
+}
+
+TEST(Matricies, ShearingZToY)
+{
+    Matrix4 transform = Math::Shearing(0, 0, 0, 0, 0, 1);
+    Point p{ 2, 3, 4 };
+    Point target{2, 3, 7};
+    EXPECT_TRUE(Math::Equal(transform *p, target));
+}
+
+TEST(Matricies, IndividualTransformations)
+{
+    Point p{ 1, 0, 1 };
+    Matrix4 A = Math::Rotation_X(M_PI / 2);
+    Matrix4 B = Math::Scaling(5, 5, 5);
+    Matrix4 C = Math::Translation(10, 5, 7);
+
+    Tuple p2 = A * p;
+    Tuple p3 = B * p2;
+    Tuple p4 = C * p3;
+
+    Point target2{1, -1, 0};
+    Point target3{5, -5, 0};
+    Point target4{15, 0, 7};
+
+    EXPECT_TRUE(Math::Equal(p2, target2));
+    EXPECT_TRUE(Math::Equal(p3, target3));
+    EXPECT_TRUE(Math::Equal(p4, target4));
+}
+
+TEST(Matricies, ChainedTransformations)
+{
+    Point p{ 1, 0, 1 };
+    Matrix4 A = Math::Rotation_X(M_PI / 2);
+    Matrix4 B = Math::Scaling(5, 5, 5);
+    Matrix4 C = Math::Translation(10, 5, 7);
+
+    Matrix4 T = C * B * A;
+
+    Point target{15, 0, 7};
+
+    EXPECT_TRUE(Math::Equal(T * p, target));
+}
