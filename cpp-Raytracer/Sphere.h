@@ -10,6 +10,8 @@ public:
 	Matrix4 GetTransform();
 	void SetTransform(Matrix4 transform);
 
+    Vector NormalAt(Point p);
+
 	bool operator==(const Sphere& other) const;
 	bool operator!=(const Sphere& other) const;
 

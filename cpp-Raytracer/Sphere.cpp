@@ -29,3 +29,9 @@ bool Sphere::operator!=(const Sphere& other) const
 {
 	return !(*this == other);
 }
+
+Vector Sphere::NormalAt(Point p) {
+    Tuple normal_t = p - Point(0, 0, 0);
+    Vector normal{normal_t.x, normal_t.y, normal_t.z};
+    return normal.normalized();
+}

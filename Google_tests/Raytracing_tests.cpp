@@ -275,3 +275,64 @@ TEST(RayTracing, IntersectingTranslatedSphereWithRay)
 
     EXPECT_EQ(xs.size(), 0);
 }
+
+TEST(RayTracing, NormalOnSphereX)
+{
+    Sphere s{0};
+    Vector n = s.NormalAt(Point(1, 0, 0));
+
+    EXPECT_EQ(n, Vector(1, 0, 0));
+}
+
+TEST(RayTracing, NormalOnSphereY)
+{
+    Sphere s{0};
+    Vector n = s.NormalAt(Point(0, 1, 0));
+
+    EXPECT_EQ(n, Vector(0, 1, 0));
+}
+
+TEST(RayTracing, NormalOnSphereZ)
+{
+    Sphere s{0};
+    Vector n = s.NormalAt(Point(0, 0, 1));
+
+    EXPECT_EQ(n, Vector(0, 0, 1));
+}
+
+TEST(RayTracing, NormalNonaxial)
+{
+    Sphere s{0};
+    Vector n = s.NormalAt(Point(std::sqrt(3)/3, std::sqrt(3)/3, std::sqrt(3)/3));
+
+    EXPECT_EQ(n, Vector(std::sqrt(3)/3, std::sqrt(3)/3, std::sqrt(3)/3));
+}
+
+TEST(RayTracing, NormalVectorIsNormalized)
+{
+    Sphere s{0};
+    Vector n = s.NormalAt(Point(std::sqrt(3)/3, std::sqrt(3)/3, std::sqrt(3)/3));
+
+    EXPECT_EQ(n, n.normalized());
+}
+
+TEST(RayTracing, NormalOnTranslatedSphere)
+{
+    Sphere s{0};
+    s.SetTransform(Math::Translation(0, 1, 0));
+    Vector n = s.NormalAt(Point(0, 1.70711, -070711));
+
+    EXPECT_EQ(n, Vector(0, 0.70711, -0.70711));
+}
+
+TEST(RayTracing, NormalOnTransformedSphere)
+{
+    Sphere s{0};
+    Matrix4 m = Math::Scaling(1, 0.5, 1) * Math::Rotation_Z(M_PI/5);
+
+    s.SetTransform(m);
+    Vector n = s.NormalAt(Point(0, std::sqrt(2)/2, -std::sqrt(2)/2));
+
+    EXPECT_EQ(n, Vector(0, 0.97014, -0.24254));
+}
+
