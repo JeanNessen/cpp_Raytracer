@@ -25,14 +25,18 @@
 	{
 		Point();
 		Point(float x, float y, float z);
+        explicit Point(Tuple t);
 	};
 
 	struct Vector : public Tuple
 	{
 		Vector();
 		Vector(float x, float y, float z);
+        explicit Vector(Tuple t);
 
 		Vector normalized() const;
+
+        Vector Reflect(Vector normal) const;
 	};
 
 	class Matrix2

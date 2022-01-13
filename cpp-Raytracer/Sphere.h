@@ -10,7 +10,8 @@ public:
 	Matrix4 GetTransform();
 	void SetTransform(Matrix4 transform);
 
-    Vector NormalAt(Point p);
+    //Returns the World Normal of a point on the Sphere
+    Vector NormalAt(Point world_point);
 
 	bool operator==(const Sphere& other) const;
 	bool operator!=(const Sphere& other) const;

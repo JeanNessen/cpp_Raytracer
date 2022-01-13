@@ -186,6 +186,7 @@ Tuple::Tuple(float x, float y, float z, float w)
 
 bool Tuple::operator==(const Tuple& other) const
 {
+    //return (Math::Equal(x, other.x) && Math::Equal(y, other.y), Math::Equal(z, other.z));
 	return (x == other.x && y == other.y && z == other.z && w == other.w);
 }
 
@@ -478,6 +479,13 @@ Point::Point(float x, float y, float z):
 	w = 1;
 }
 
+Point::Point(Tuple t) {
+    x = t.x;
+    y = t.y;
+    z = t.z;
+    w = 1;
+}
+
 Vector::Vector()
 {
 	x = 0;
@@ -492,6 +500,14 @@ Vector::Vector(float x, float y, float z):
 	w = 0;
 }
 
+Vector::Vector(Tuple t)
+{
+    x = t.x;
+    y = t.y;
+    z = t.z;
+    w = 0;
+}
+
 Vector Vector::normalized() const
 {
 	Vector norm;
@@ -500,4 +516,9 @@ Vector Vector::normalized() const
 	norm.z = z / magnitude();
 	norm.w = w / magnitude();
 	return norm;
+}
+
+Vector Vector::Reflect(Vector normal) const {
+    Vector in = *this;
+    return Vector{in - normal * 2 * Math::Dot(in, normal)};
 }

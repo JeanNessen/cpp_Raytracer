@@ -11,6 +11,6 @@ add_executable(cpp_Raytracer cpp-Raytracer/main.cpp
         cpp-Raytracer/Projectile.cpp cpp-Raytracer/Projectile.h
         cpp-Raytracer/Ray.cpp cpp-Raytracer/Ray.h
         cpp-Raytracer/Sphere.cpp cpp-Raytracer/Sphere.h
-        cpp-Raytracer/Tracer.cpp cpp-Raytracer/Tracer.h)
+        cpp-Raytracer/Tracer.cpp cpp-Raytracer/Tracer.h cpp-Raytracer/Light.cpp cpp-Raytracer/Light.h)
 
 add_subdirectory(Google_tests)

@@ -10,6 +10,9 @@
 #include "../cpp-Raytracer/Sphere.h"
 #include "../cpp-Raytracer/Sphere.cpp"
 
+#include "../cpp-Raytracer/Color.h"
+#include "../cpp-Raytracer/Light.h"
+
 TEST(RayTracing, CreatingARay)
 {
     Point origin{ 1, 2, 3 };
@@ -320,9 +323,9 @@ TEST(RayTracing, NormalOnTranslatedSphere)
 {
     Sphere s{0};
     s.SetTransform(Math::Translation(0, 1, 0));
-    Vector n = s.NormalAt(Point(0, 1.70711, -070711));
+    Vector n = s.NormalAt(Point(0, 1.70711, -0.70711));
 
-    EXPECT_EQ(n, Vector(0, 0.70711, -0.70711));
+    EXPECT_TRUE(Math::Equal(n, Vector(0, 0.70711, -0.70711)));
 }
 
 TEST(RayTracing, NormalOnTransformedSphere)
@@ -333,6 +336,21 @@ TEST(RayTracing, NormalOnTransformedSphere)
     s.SetTransform(m);
     Vector n = s.NormalAt(Point(0, std::sqrt(2)/2, -std::sqrt(2)/2));
 
-    EXPECT_EQ(n, Vector(0, 0.97014, -0.24254));
+    EXPECT_TRUE(Math::Equal(n, Vector(0, 0.97014, -0.24254)));
 }
 
+TEST(Lighting, PointLightPositionIntensity)
+{
+    Color intensity{1, 1, 1};
+    Point position{0, 0, 0};
+
+    PointLight light{intensity, position};
+
+    EXPECT_EQ(light.intensity, intensity);
+    EXPECT_EQ(light.position, position);
+}
+
+TEST(Material, DefaultMaterial)
+{
+
+}

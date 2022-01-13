@@ -167,6 +167,26 @@ TEST(Tuples, CrossProductVectors)
     EXPECT_TRUE(Math::Equal(Math::Cross(v1, v2), target));
 }
 
+TEST(Tuples, ReflectingVectorAt45)
+{
+    Vector v{1, -1, 0};
+    Vector n{0, 1, 0};
+
+    Vector r = v.Reflect(n);
+
+    EXPECT_TRUE(Math::Equal(r, Vector(1, 1, 0)));
+}
+
+TEST(Tuples, ReflectingVectorOffSlant)
+{
+    Vector v{0, -1, 0};
+    Vector n{static_cast<float>(std::sqrt(2)/2), static_cast<float>(std::sqrt(2)/2), 0};
+
+    Vector r = v.Reflect(n);
+
+    EXPECT_TRUE(Math::Equal(r, Vector(1, 0, 0)));
+}
+
 TEST(Matricies, ConstructionMatrix4)
 {
     Matrix4 M{	1,    2,    3,    4,
