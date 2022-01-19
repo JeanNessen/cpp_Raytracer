@@ -11,7 +11,12 @@
 #include "../cpp-Raytracer/Sphere.cpp"
 
 #include "../cpp-Raytracer/Color.h"
+
 #include "../cpp-Raytracer/Light.h"
+#include "../cpp-Raytracer/Light.cpp"
+
+#include "../cpp-Raytracer/Material.h"
+#include "../cpp-Raytracer/Material.cpp"
 
 TEST(RayTracing, CreatingARay)
 {
@@ -350,7 +355,94 @@ TEST(Lighting, PointLightPositionIntensity)
     EXPECT_EQ(light.position, position);
 }
 
-TEST(Material, DefaultMaterial)
+TEST(Materials, DefaultMaterial)
 {
+    Material m{};
 
+    EXPECT_EQ(m.color, Color(1, 1, 1));
+    EXPECT_TRUE(Math::Equal(m.ambient, 0.1f));
+    EXPECT_TRUE(Math::Equal(m.diffuse, 0.9));
+    EXPECT_TRUE(Math::Equal(m.specular, 0.9f));
+    EXPECT_TRUE(Math::Equal(m.shininess, 200.0f));
+}
+
+TEST(Materials, SphereDefaultMaterial)
+{
+    Sphere s{0};
+    EXPECT_EQ(s.GetMaterial(), Material());
+}
+
+TEST(Materials, AssignMaterialToSphere)
+{
+    Sphere s{0};
+    Material m{};
+    m.ambient = 1;
+    s.SetMaterial(m);
+
+    EXPECT_EQ(s.GetMaterial(), m);
+}
+
+TEST(Lighting, EyeBetweenLightAndSurface)
+{
+    Material m{};
+    Point position{0, 0, 0};
+
+    Vector eye_v{0, 0, -1};
+    Vector normal_v{0, 0, -1};
+    PointLight light{Color(1, 1, 1), Point(0, 0, -10)};
+    Color result = Lighting(m, light, position, eye_v, normal_v);
+
+    EXPECT_EQ(result, Color(1.9, 1.9, 1.9));
+}
+
+TEST(Lighting, EyeBetweenLightAndSurfaceOffset45)
+{
+    Material m{};
+    Point position{0, 0, 0};
+
+    Vector eye_v{0, static_cast<float>(std::sqrt(2)/2), static_cast<float>(std::sqrt(2)/2)};
+    Vector normal_v{0, 0, -1};
+    PointLight light{Color(1, 1, 1), Point(0,0, -10)};
+    Color result = Lighting(m, light, position, eye_v, normal_v);
+
+    EXPECT_EQ(result, Color(1.0, 1.0, 1.0));
+}
+
+TEST(Lighting, EyeOppositeSurfaceOffset45)
+{
+    Material m{};
+    Point position{0, 0, 0};
+
+    Vector eye_v{0, 0, -1};
+    Vector normal_v{0, 0, -1};
+    PointLight light{Color(1, 1, 1), Point(0,10, -10)};
+    Color result = Lighting(m, light, position, eye_v, normal_v);
+
+    EXPECT_EQ(result, Color(0.7364, 0.7364, 0.7364));
+}
+
+TEST(Lighting, EyeInPathOfReflectionVector)
+{
+    Material m{};
+    Point position{0, 0, 0};
+
+    Vector eye_v{0, static_cast<float>(-std::sqrt(2)/2), static_cast<float>(-std::sqrt(2)/2)};
+    Vector normal_v{0, 0, -1};
+    PointLight light{Color(1, 1, 1), Point(0,10, -10)};
+    Color result = Lighting(m, light, position, eye_v, normal_v);
+
+    EXPECT_EQ(result, Color(1.6364, 1.6364, 1.6364));
+}
+
+TEST(Lighting, LightBehindSurface)
+{
+    Material m{};
+    Point position{0, 0, -1};
+
+    Vector eye_v{0, 0, -1};
+    Vector normal_v{0, 0, -1};
+    PointLight light{Color(1, 1, 1), Point(0,0, 10)};
+    Color result = Lighting(m, light, position, eye_v, normal_v);
+
+    EXPECT_EQ(result, Color(0.1, 0.1, 0.1));
 }

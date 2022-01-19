@@ -5,6 +5,9 @@
 #include <string>
 #include "Sphere.h"
 #include "Ray.h"
+#include "Material.h"
+#include "Light.h"
+
 
 int main()
 {
@@ -29,49 +32,57 @@ int main()
 
     //c.to_ppm();
 
-//    //Goal is to Draw a sphere.
-//
-//    //center of the canvas (50, 50) will be (0, 0, 0)
-//    int canvas_size = 500;
-//    Canvas c{ canvas_size, canvas_size };
-//    Color red{ 1, 0, 0 };
-//
-//    //Create a sphere at (0,0,0) and move it back to (0,10,0)
-//    Sphere sphere{ 0 };
-//    Matrix4 translate = Math::Translation(canvas_size/2, 50, canvas_size/2);
-//    Matrix4 scale = Math::Scaling(100, 100, 100);
-//    Matrix4 transform = translate * scale;
-//    sphere.SetTransform(transform);
-//
-//
-//    //cast a ray from every pixel of the screen, directly in front
-//    //100 pixels are 1 unit long??
-//    for (int x = 0; x < canvas_size; x++)
-//    {
-//        for (int z = 0; z < canvas_size; z++)
-//        {
-//            Point ray_origin{ float(x), -1, float(z) };
-//            Vector ray_direction{ 0, 1, 0 };
-//
-//            Ray ray{ ray_origin, ray_direction };
-//
-//            std::vector<Intersection> intersections = ray.Intersect(sphere);
-//
-//            if (!intersections.empty())
-//            {
-//                c.write_pixel(x , z , red);
-//            }
-//        }
-//    }
-//
-//    c.to_ppm();
-    //Color every pixel for which a hit was detected
+    //Goal is to Draw a sphere.
 
-    Sphere s{0};
-    s.SetTransform(Math::Translation(0, 1, 0));
-    Vector n = s.NormalAt(Point(0, 1.70711, -0.70711));
+    //center of the canvas (50, 50) will be (0, 0, 0)
+    int canvas_size = 500;
+    Canvas c{ canvas_size, canvas_size };
+    Color red{ 1, 0, 0 };
 
-    std::cout << "X: " << n.x << " Y: " << n.y << " Z: " << n.z << std::endl;
+    //Create a sphere at (0,0,0) and move it back to (0,10,0)
+    Sphere sphere{ 0 };
+    Material sphere_mat{};
+    sphere_mat.color = Color(1, 0.2, 1);
+    sphere.SetMaterial(Material{});
+
+    //Create a light source
+    Point light_position{-10, 10, -10};
+    Color light_color{1, 1, 1};
+    PointLight light{light_color, light_position};
+
+    Matrix4 translate = Math::Translation(canvas_size/2, 50, canvas_size/2);
+    Matrix4 scale = Math::Scaling(100, 100, 100);
+    Matrix4 transform = translate * scale;
+    sphere.SetTransform(transform);
+
+
+    //cast a ray from every pixel of the screen, directly in front
+    //100 pixels are 1 unit long??
+    for (int x = 0; x < canvas_size; x++)
+    {
+        for (int z = 0; z < canvas_size; z++)
+        {
+            Point ray_origin{ float(x), -1, float(z) };
+            Vector ray_direction{ 0, 1, 0 };
+
+            Ray ray{ ray_origin, ray_direction.normalized() };
+
+            std::vector<Intersection> intersections = ray.Intersect(sphere);
+
+            if (!intersections.empty())
+            {
+                auto hit = *Hit(intersections);
+                Point point = ray.Position(hit.t);
+                Vector normal = hit.object.NormalAt(point);
+                Vector eye{-ray.direction};
+                Color color = Lighting(hit.object.GetMaterial(), light, point, eye, normal);
+                c.write_pixel(x , z , color);
+            }
+        }
+    }
+
+    c.to_ppm();
+
 
 
     return 0;

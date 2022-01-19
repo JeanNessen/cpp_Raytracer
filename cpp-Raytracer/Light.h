@@ -6,6 +6,7 @@
 #define CPP_RAYTRACER_LIGHT_H
 
 #include "Color.h"
+#include "Material.h"
 #include "Math.h"
 
 struct PointLight{
@@ -19,5 +20,6 @@ struct PointLight{
     }
 };
 
+Color Lighting(Material m, PointLight light, Point position, Vector eye_v, Vector normal_v);
 
 #endif //CPP_RAYTRACER_LIGHT_H
