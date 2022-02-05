@@ -7,6 +7,9 @@
 #include "../cpp-Raytracer/Ray.h"
 #include "../cpp-Raytracer/Ray.cpp"
 
+#include "../cpp-Raytracer/Intersection.h"
+#include "../cpp-Raytracer/Intersection.cpp"
+
 #include "../cpp-Raytracer/Sphere.h"
 #include "../cpp-Raytracer/Sphere.cpp"
 
@@ -271,6 +274,19 @@ TEST(RayTracing, IntersectingScaledSphereWithRay)
     EXPECT_EQ(xs.size(), 2);
     EXPECT_TRUE(Math::Equal(xs[0].t, 3.0f));
     EXPECT_TRUE(Math::Equal(xs[1].t, 7.0f));
+}
+
+TEST(RayTracing, IntersectingScaledSphereWithRay2)
+{
+    Ray r{ Point(0,0,-5), Vector(0,0,1) };
+    Sphere s{ 0 };
+
+    s.SetTransform(Math::Scaling(0.5, 0.5, 0.5));
+    std::vector<Intersection> xs = r.Intersect(s);
+
+    EXPECT_EQ(xs.size(), 2);
+    EXPECT_TRUE(Math::Equal(xs[0].t, 4.5f));
+    EXPECT_TRUE(Math::Equal(xs[1].t, 5.5f));
 }
 
 TEST(RayTracing, IntersectingTranslatedSphereWithRay)

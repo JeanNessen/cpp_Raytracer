@@ -46,3 +46,11 @@ Color Lighting(Material m, PointLight light, Point position, Vector eye_v, Vecto
     //Add the three contributions together to get the final shading
     return ambient + diffuse + specular;
 }
+
+bool PointLight::operator==(const PointLight &other) const {
+    if (intensity == other.intensity && position == other.position)
+    {
+        return true;
+    }
+    return false;
+}

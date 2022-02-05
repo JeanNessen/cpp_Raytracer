@@ -1,5 +1,8 @@
 #include "Ray.h"
 
+#include <utility>
+#include <algorithm>
+
 Ray::Ray(Point origin, Vector direction):
 	origin(origin),
 	direction(direction)
@@ -57,6 +60,11 @@ Ray Ray::Transform(Matrix4 matrix)
 	return r;
 }
 
+Comps Ray::PrepareComputations(Intersection i) {
+
+    return Comps();
+}
+
 std::vector<Intersection> Intersections(std::initializer_list<Intersection> args)
 {
 	std::vector<Intersection> intersections;
@@ -91,16 +99,3 @@ Intersection* Hit(std::vector<Intersection> &intersections)
 }
 
 
-
-bool Intersection::operator==(const Intersection& other) const
-{
-	if (t != other.t)
-	{
-		return false;
-	}
-	if (object != other.object)
-	{
-		return false;
-	}
-	return true;
-}

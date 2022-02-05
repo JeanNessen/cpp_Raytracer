@@ -18,6 +18,8 @@ struct PointLight{
         intensity = i;
         position = p;
     }
+
+    bool operator==(const PointLight& other) const;
 };
 
 Color Lighting(Material m, PointLight light, Point position, Vector eye_v, Vector normal_v);

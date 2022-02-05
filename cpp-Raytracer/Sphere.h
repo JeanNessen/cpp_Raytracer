@@ -5,14 +5,14 @@
 class Sphere
 {
 public:
-	Sphere(const int id);
+	explicit Sphere(int id);
 
-	const int id;
+	int id;
 
 	Matrix4 GetTransform();
 	void SetTransform(Matrix4 transform);
 
-    Material GetMaterial();
+    Material& GetMaterial();
     void SetMaterial(Material mat);
 
     //Returns the World Normal of a point on the Sphere

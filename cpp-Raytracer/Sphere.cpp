@@ -47,10 +47,12 @@ Vector Sphere::NormalAt(Point world_point) {
     return world_normal.normalized();
 }
 
-Material Sphere::GetMaterial() {
+Material& Sphere::GetMaterial() {
     return material;
 }
 
 void Sphere::SetMaterial(Material mat) {
     material = mat;
 }
+
+
