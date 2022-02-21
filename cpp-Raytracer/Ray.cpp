@@ -60,9 +60,25 @@ Ray Ray::Transform(Matrix4 matrix)
 	return r;
 }
 
-Comps Ray::PrepareComputations(Intersection i) {
+IntersectionComputations Ray::PrepareComputations(Intersection i) {
+    //Copy intersection properties for convenience
+    float comps_t{i.t};
+    Sphere comps_object{i.object};
 
-    return Comps();
+    //precompute needed values
+    Point comps_point{Position(i.t)};
+    Vector comps_eye_v{-direction.x, -direction.y, -direction.z};
+    Vector comps_normal_v{i.object.NormalAt(Position(i.t))};
+
+    IntersectionComputations comps{
+            comps_t,
+            comps_object,
+            comps_point,
+            comps_eye_v,
+            comps_normal_v
+    };
+
+    return comps;
 }
 
 std::vector<Intersection> Intersections(std::initializer_list<Intersection> args)

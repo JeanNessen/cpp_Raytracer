@@ -9,6 +9,8 @@
 #include "Sphere.h"
 #include "Light.h"
 #include "Ray.h"
+#include "Canvas.h"
+#include "Camera.h"
 
 
 class World {
@@ -20,17 +22,23 @@ private:
 
 public:
 
-    std::vector<PointLight> GetWorldLights(){ return world_lights; }
+    std::vector<PointLight>& GetWorldLights(){ return world_lights; }
 
     void AddLight(PointLight light);
 
-    std::vector<Sphere> GetWorldObjects(){ return world_objects; }
+    std::vector<Sphere>& GetWorldObjects(){ return world_objects; }
 
     void AddObject(Sphere obj);
 
     std::vector<Intersection> IntersectWorld(Ray ray);
 
+    bool IsShadowed(Point p);
 
+    Color ShadeHit(IntersectionComputations comps);
+
+    Color ColorAt(Ray r);
+
+    Canvas Render(Camera c);
 };
 
 World DefaultWorld();

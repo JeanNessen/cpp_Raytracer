@@ -59,3 +59,13 @@ int Color::ConvertFloatToIntInRange(float num)
 	return result;
 }
 
+void Color::Print() const {
+    std::cout << "(" << red << ", " << green << ", " << blue << ")" << std::endl;
+}
+
+std::ostream &operator<<(std::ostream &os, const Color &c) {
+    os << "c(" << c.red << ", " << c.green << ", " << c.blue << ")";
+    return os;
+}
+
+

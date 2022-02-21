@@ -1,9 +1,10 @@
 #include "Sphere.h"
+// Static Variables
+int Sphere::latest_id = 0;
 
-Sphere::Sphere(const int id):
-	id(id)
+Sphere::Sphere()
 {
-
+    this->id = ++latest_id;
 }
 
 Matrix4 Sphere::GetTransform()
@@ -18,7 +19,7 @@ void Sphere::SetTransform(Matrix4 transform)
 
 bool Sphere::operator==(const Sphere& other) const
 {
-	if (other.id == this->id)
+	if (other.material == this->material && other.transform == this->transform && other.id == this->id)
 	{
 		return true;
 	}
@@ -32,16 +33,13 @@ bool Sphere::operator!=(const Sphere& other) const
 
 Vector Sphere::NormalAt(Point world_point) {
     //Convert point from World Space to Object Space
-    Tuple object_tuple = transform.Inversed() * world_point;
-    Point object_point{object_tuple.x, object_tuple.y, object_tuple.z};
+    Point object_point{transform.Inversed() * world_point};
 
     //Calculate Object Space normals
-    Tuple object_normal_t = object_point - Point(0, 0, 0);
-    Vector object_normal{object_normal_t.x, object_normal_t.y, object_normal_t.z};
+    Vector object_normal{object_point - Point(0, 0, 0)};
 
     //Convert Object Space normals to World Space
-    Tuple world_normal_t = transform.Inversed().Transposed() * object_normal;
-    Vector world_normal{world_normal_t.x, world_normal_t.y, world_normal_t.z};
+    Vector world_normal{transform.Inversed().Transposed() * object_normal};
     world_normal.w = 0;
 
     return world_normal.normalized();

@@ -8,85 +8,76 @@
 #include "Material.h"
 #include "Light.h"
 #include "World.h"
+#include "Intersection.h"
 
 
 int main()
 {
-
-
-//    //Goal is to Draw a sphere.
-//
-//    //center of the canvas (50, 50) will be (0, 0, 0)
-//    const int canvas_size = 500;
-//    Canvas c{ canvas_size, canvas_size };
-//    Color red{1, 0, 0};
-//
-//    //Create a sphere at (0,0,0) and move it back to (0,10,0)
-//    Sphere sphere{ 0 };
-//    Material sphere_mat{};
-//    sphere_mat.color = Color(1, 0.2, 1);
-//    sphere.SetMaterial(sphere_mat);
-//
-//    //Create a light source
-//    Point light_position{-10, 10, -10};
-//    Color light_color{1, 1, 1};
-//    PointLight light{light_color, light_position};
-//
-//    Matrix4 translate = Math::Translation(canvas_size/2, 50, canvas_size/2);
-//    Matrix4 scale = Math::Scaling(100, 100, 100);
-//    Matrix4 transform = translate * scale;
-//    //sphere.SetTransform(transform);
-//
-//    //Start the ray at z=-5
-//    Point ray_origin{ 0, 0, -5 };
-//
-//    //Z position of the Wall to cast the rays to (canvas)
-//    const float wall_z = 10;
-//    const float wall_size = 7;
-//    const float pixel_size = wall_size / canvas_size;
-//    const float half = wall_size / 2;
-//
-//
-//    //cast a ray from every pixel of the screen, directly in front
-//    //100 pixels are 1 unit long??
-//    for (int y = 0; y < canvas_size; y++)
-//    {
-//        float world_y = half - pixel_size * y;
-//        for (int x = 0; x < canvas_size; x++)
-//        {
-//            float world_x = -half + pixel_size * x;
-//
-//            //describe the point on the wall that the ray will target
-//            Point position{world_x, world_y, wall_z};
-//
-//            Vector ray_direction{position - ray_origin};
-//
-//            Ray ray{ ray_origin, ray_direction.normalized() };
-//
-//            std::vector<Intersection> intersections = ray.Intersect(sphere);
-//
-//            if (!intersections.empty())
-//            {
-//                auto hit = *Hit(intersections);
-//                Point point = ray.Position(hit.t);
-//                Vector normal = hit.object.NormalAt(point);
-//                Vector eye{-ray.direction};
-//                Color color = Lighting(hit.object.GetMaterial(), light, point, eye, normal);
-//                c.write_pixel(x , y , color);
-//            }
-//        }
-//    }
-//
-//    c.to_ppm();
-
+    //Initialize the World
     World w = DefaultWorld();
-    Ray r{Point(0, 0, -5), Vector(0, 0, 1)};
 
-    std::vector<Intersection> xs = w.IntersectWorld(r);
+    w.GetWorldObjects().clear();
 
-    for (Intersection i: xs) {
-        std::cout << i.t << std::endl;
-    }
+    //Set up the floor
+    Sphere floor{};
+    floor.SetTransform(Math::Scaling(10, 0.01, 10));
+    floor.GetMaterial().color = Color(1, 0.9, 0.9);
+    floor.GetMaterial().specular = 0.0f;
+    w.AddObject(floor);
 
-    return 0;
+
+    //Set up the right wall
+    Sphere right_wall{};
+    right_wall.SetTransform(Math::Translation(0, 0, 5) *
+                            Math::Rotation_Y(M_PI / 4) * Math::Rotation_X(M_PI / 2) *
+                            Math::Scaling(10, 0.01, 10));
+    right_wall.SetMaterial(floor.GetMaterial());
+    w.AddObject(right_wall);
+
+
+    //Set up the left wall
+    Sphere left_wall{};
+    left_wall.SetTransform( Math::Translation(0, 0, 5) *
+                            Math::Rotation_Y(-M_PI /4) * Math::Rotation_X(M_PI/ 2) *
+                            Math::Scaling(10, 0.01, 10));
+    left_wall.SetMaterial(floor.GetMaterial());
+    w.AddObject(right_wall);
+    w.AddObject(left_wall);
+
+    //Set up the spheres
+    Sphere sphere_01{};
+    sphere_01.GetMaterial().color = Color(1, 0, 0);
+    sphere_01.GetMaterial().diffuse = 0.7f;
+    sphere_01.GetMaterial().specular = 0.2f;
+    sphere_01.SetTransform(Math::Translation(-3, 1, 2));
+    w.AddObject(sphere_01);
+
+
+    Sphere sphere_02{};
+    sphere_02.GetMaterial().color = Color(0, 1, 0);
+    sphere_02.GetMaterial().diffuse = 0.7f;
+    sphere_02.GetMaterial().specular = 0.2f;
+    sphere_02.SetTransform(Math::Translation(1, 2, 0) * Math::Scaling(2, 2, 2));
+    w.AddObject(sphere_02);
+
+
+    Sphere sphere_03{};
+    sphere_03.GetMaterial().color = Color(0, 0, 1);
+    sphere_03.GetMaterial().diffuse = 0.7f;
+    sphere_03.GetMaterial().specular = 0.2f;
+    sphere_03.SetTransform(Math::Translation(0, 1, 2));
+    w.AddObject(sphere_03);
+
+
+    //Initialize the Camera
+    Camera c{250, 250, M_PI/2};
+
+    //Position the Camera
+    c.SetTransform(Math::ViewTransform(Point(0, 1.5, -5), Point(0, 1, 0), Vector(0, 1, 0)));
+
+    //Render the image
+    Canvas image = w.Render(c);
+
+    image.to_ppm();
+
 }

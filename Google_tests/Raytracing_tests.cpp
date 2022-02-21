@@ -21,6 +21,8 @@
 #include "../cpp-Raytracer/Material.h"
 #include "../cpp-Raytracer/Material.cpp"
 
+#include <limits>
+
 TEST(RayTracing, CreatingARay)
 {
     Point origin{ 1, 2, 3 };
@@ -48,8 +50,8 @@ TEST(RayTracing, ComputingPointFromDistance)
 
 TEST(RayTracing, ComparingSpheres)
 {
-    Sphere s1{ 0 };
-    Sphere s2{ 1 };
+    Sphere s1{};
+    Sphere s2{};
 
     EXPECT_EQ(s1, s1);
     EXPECT_NE(s1, s2);
@@ -57,8 +59,8 @@ TEST(RayTracing, ComparingSpheres)
 
 TEST(RayTracing, ComparingIntersections)
 {
-    Sphere s1{ 0 };
-    Sphere s2{ 1 };
+    Sphere s1{};
+    Sphere s2{};
 
     Intersection i1{ 1.0f, s1 };
     Intersection i2{ 1.0f, s2 };
@@ -74,7 +76,7 @@ TEST(RayTracing, ComparingIntersections)
 TEST(RayTracing, RaySphereIntersection2Points)
 {
     Ray r{ Point{0,0,-5}, Vector{0,0,1} };
-    Sphere s{ 0 };
+    Sphere s{};
 
     std::vector<Intersection> xs = r.Intersect(s);
 
@@ -86,7 +88,7 @@ TEST(RayTracing, RaySphereIntersection2Points)
 TEST(RayTracing, RayIntersectsSphereTangent)
 {
     Ray r{ Point(0, 1, -5), Vector(0, 0, 1) };
-    Sphere s{0};
+    Sphere s{};
 
     std::vector<Intersection> xs = r.Intersect(s);
 
@@ -98,7 +100,7 @@ TEST(RayTracing, RayIntersectsSphereTangent)
 TEST(RayTracing, RayMissesSphere)
 {
     Ray r{ Point(0, 2, -5), Vector(0, 0, 1) };
-    Sphere s{ 0 };
+    Sphere s{};
 
     std::vector<Intersection> xs = r.Intersect(s);
 
@@ -108,7 +110,7 @@ TEST(RayTracing, RayMissesSphere)
 TEST(RayTracing, RayOriginInSphere)
 {
     Ray r{ Point(0, 0, 0), Vector(0, 0, 1) };
-    Sphere s{ 0 };
+    Sphere s{};
 
     std::vector<Intersection> xs = r.Intersect(s);
 
@@ -120,7 +122,7 @@ TEST(RayTracing, RayOriginInSphere)
 TEST(RayTracing, RayOriginBehindSphere)
 {
     Ray r{ Point(0, 0, 5), Vector(0, 0, 1) };
-    Sphere s{ 0 };
+    Sphere s{};
 
     std::vector<Intersection> xs = r.Intersect(s);
 
@@ -131,7 +133,7 @@ TEST(RayTracing, RayOriginBehindSphere)
 
 TEST(RayTracing, IntersectionEncapsulatesAnObject)
 {
-    Sphere s{ 0 };
+    Sphere s{};
     Intersection I1{ 1.0f, s };
     Intersection I2{ 2.0f, s };
 
@@ -144,9 +146,9 @@ TEST(RayTracing, IntersectionEncapsulatesAnObject)
 
 TEST(RayTracing, Aggregating5Intersections)
 {
-    Sphere s1{ 0 };
-    Sphere s2{ 1 };
-    Sphere s3{ 2 };
+    Sphere s1{};
+    Sphere s2{};
+    Sphere s3{};
     Intersection I1{ 1.0f, s1 };
     Intersection I2{ 2.0f, s1 };
     Intersection I3{ 3.0f, s2 };
@@ -166,7 +168,7 @@ TEST(RayTracing, Aggregating5Intersections)
 TEST(RayTracing, IntersectSetsTheObjectOnTheIntersection)
 {
     Ray r{ Point(0, 0, 5), Vector(0, 0, 1) };
-    Sphere s{ 0 };
+    Sphere s{};
     std::vector<Intersection> xs = r.Intersect(s);
 
     EXPECT_EQ(xs[0].object, s);
@@ -175,7 +177,7 @@ TEST(RayTracing, IntersectSetsTheObjectOnTheIntersection)
 
 TEST(RayTracing, HitWhenAllIntersectionsHavePositiveT)
 {
-    Sphere s{ 0 };
+    Sphere s{};
     Intersection i1{ 1, s };
     Intersection i2{ 2, s };
     std::vector<Intersection> xs{ i2, i1 };
@@ -187,7 +189,7 @@ TEST(RayTracing, HitWhenAllIntersectionsHavePositiveT)
 
 TEST(RayTracing, HitWhenSomeIntersectionsHaveNegativeT)
 {
-    Sphere s{ 0 };
+    Sphere s{};
     Intersection i1{ -1, s };
     Intersection i2{ 1, s };
     std::vector<Intersection> xs{ i2, i1 };
@@ -199,7 +201,7 @@ TEST(RayTracing, HitWhenSomeIntersectionsHaveNegativeT)
 
 TEST(RayTracing, HitWhenAllIntersectionsAreNegative)
 {
-    Sphere s{ 0 };
+    Sphere s{};
     Intersection i1{ -1, s };
     Intersection i2{ -2, s };
     std::vector<Intersection> xs{ i2, i1 };
@@ -211,7 +213,7 @@ TEST(RayTracing, HitWhenAllIntersectionsAreNegative)
 
 TEST(RayTracing, HitIsAlwaysLowestNotNegativeIntersection)
 {
-    Sphere s{ 0 };
+    Sphere s{};
     Intersection i1{ 5, s };
     Intersection i2{ 7, s };
     Intersection i3{ -3, s };
@@ -248,14 +250,14 @@ TEST(RayTracing, ScalingARay)
 
 TEST(RayTracing, SphereDefaultTransformation)
 {
-    Sphere s{0};
+    Sphere s{};
 
     EXPECT_EQ(s.GetTransform(), Math::identiy_matrix);
 }
 
 TEST(RayTracing, ChangingSphereTransform)
 {
-    Sphere s{ 0 };
+    Sphere s{};
     Matrix4 t = Math::Translation(2, 3, 4);
 
     s.SetTransform(t);
@@ -266,7 +268,7 @@ TEST(RayTracing, ChangingSphereTransform)
 TEST(RayTracing, IntersectingScaledSphereWithRay)
 {
     Ray r{ Point(0,0,-5), Vector(0,0,1) };
-    Sphere s{ 0 };
+    Sphere s{};
 
     s.SetTransform(Math::Scaling(2, 2, 2));
     std::vector<Intersection> xs = r.Intersect(s);
@@ -279,7 +281,7 @@ TEST(RayTracing, IntersectingScaledSphereWithRay)
 TEST(RayTracing, IntersectingScaledSphereWithRay2)
 {
     Ray r{ Point(0,0,-5), Vector(0,0,1) };
-    Sphere s{ 0 };
+    Sphere s{};
 
     s.SetTransform(Math::Scaling(0.5, 0.5, 0.5));
     std::vector<Intersection> xs = r.Intersect(s);
@@ -292,7 +294,7 @@ TEST(RayTracing, IntersectingScaledSphereWithRay2)
 TEST(RayTracing, IntersectingTranslatedSphereWithRay)
 {
     Ray r{ Point(0,0,-5), Vector(0,0,1) };
-    Sphere s{ 0 };
+    Sphere s{};
 
     s.SetTransform(Math::Translation(5, 0, 0));
     std::vector<Intersection> xs = r.Intersect(s);
@@ -302,7 +304,7 @@ TEST(RayTracing, IntersectingTranslatedSphereWithRay)
 
 TEST(RayTracing, NormalOnSphereX)
 {
-    Sphere s{0};
+    Sphere s{};
     Vector n = s.NormalAt(Point(1, 0, 0));
 
     EXPECT_EQ(n, Vector(1, 0, 0));
@@ -310,7 +312,7 @@ TEST(RayTracing, NormalOnSphereX)
 
 TEST(RayTracing, NormalOnSphereY)
 {
-    Sphere s{0};
+    Sphere s{};
     Vector n = s.NormalAt(Point(0, 1, 0));
 
     EXPECT_EQ(n, Vector(0, 1, 0));
@@ -318,7 +320,7 @@ TEST(RayTracing, NormalOnSphereY)
 
 TEST(RayTracing, NormalOnSphereZ)
 {
-    Sphere s{0};
+    Sphere s{};
     Vector n = s.NormalAt(Point(0, 0, 1));
 
     EXPECT_EQ(n, Vector(0, 0, 1));
@@ -326,7 +328,7 @@ TEST(RayTracing, NormalOnSphereZ)
 
 TEST(RayTracing, NormalNonaxial)
 {
-    Sphere s{0};
+    Sphere s{};
     Vector n = s.NormalAt(Point(std::sqrt(3)/3, std::sqrt(3)/3, std::sqrt(3)/3));
 
     EXPECT_EQ(n, Vector(std::sqrt(3)/3, std::sqrt(3)/3, std::sqrt(3)/3));
@@ -334,7 +336,7 @@ TEST(RayTracing, NormalNonaxial)
 
 TEST(RayTracing, NormalVectorIsNormalized)
 {
-    Sphere s{0};
+    Sphere s{};
     Vector n = s.NormalAt(Point(std::sqrt(3)/3, std::sqrt(3)/3, std::sqrt(3)/3));
 
     EXPECT_EQ(n, n.normalized());
@@ -342,7 +344,7 @@ TEST(RayTracing, NormalVectorIsNormalized)
 
 TEST(RayTracing, NormalOnTranslatedSphere)
 {
-    Sphere s{0};
+    Sphere s{};
     s.SetTransform(Math::Translation(0, 1, 0));
     Vector n = s.NormalAt(Point(0, 1.70711, -0.70711));
 
@@ -351,13 +353,53 @@ TEST(RayTracing, NormalOnTranslatedSphere)
 
 TEST(RayTracing, NormalOnTransformedSphere)
 {
-    Sphere s{0};
+    Sphere s{};
     Matrix4 m = Math::Scaling(1, 0.5, 1) * Math::Rotation_Z(M_PI/5);
 
     s.SetTransform(m);
     Vector n = s.NormalAt(Point(0, std::sqrt(2)/2, -std::sqrt(2)/2));
 
     EXPECT_TRUE(Math::Equal(n, Vector(0, 0.97014, -0.24254)));
+}
+
+TEST(RayTracing, PrecomputingStateOfAnIntersection)
+{
+    Ray r{Point(0, 0, -5), Vector(0, 0, 1)};
+    Sphere shape{};
+    Intersection i{4, shape};
+
+    IntersectionComputations comps = r.PrepareComputations(i);
+
+    EXPECT_EQ(comps.t, i.t);
+    EXPECT_EQ(comps.object, i.object);
+    EXPECT_EQ(comps.point, Point(0, 0, -1));
+    EXPECT_EQ(comps.eye_v, Vector(0, 0, -1));
+    EXPECT_EQ(comps.normal_v, Vector(0, 0, -1));
+}
+
+TEST(RayTracing, HitWhenIntersectionOccursOnOutside)
+{
+    Ray r{Point(0, 0, -5), Vector(0, 0, 1)};
+    Sphere shape{};
+    Intersection i{4, shape};
+
+    IntersectionComputations comps = r.PrepareComputations(i);
+
+    EXPECT_FALSE(comps.inside);
+}
+
+TEST(RayTracing, HitWhenIntersectionOccursOnInside)
+{
+    Ray r{Point(0, 0, 0), Vector(0, 0, 1)};
+    Sphere shape{};
+    Intersection i{1, shape};
+
+    IntersectionComputations comps = r.PrepareComputations(i);
+
+    EXPECT_EQ(comps.point, Point(0, 0, 1));
+    EXPECT_EQ(comps.eye_v, Vector(0, 0, -1));
+    EXPECT_TRUE(comps.inside);
+    EXPECT_EQ(comps.normal_v, Vector(0, 0, -1)); //inverted because the hit occured on the inside
 }
 
 TEST(Lighting, PointLightPositionIntensity)
@@ -384,13 +426,13 @@ TEST(Materials, DefaultMaterial)
 
 TEST(Materials, SphereDefaultMaterial)
 {
-    Sphere s{0};
+    Sphere s{};
     EXPECT_EQ(s.GetMaterial(), Material());
 }
 
 TEST(Materials, AssignMaterialToSphere)
 {
-    Sphere s{0};
+    Sphere s{};
     Material m{};
     m.ambient = 1;
     s.SetMaterial(m);
@@ -406,7 +448,7 @@ TEST(Lighting, EyeBetweenLightAndSurface)
     Vector eye_v{0, 0, -1};
     Vector normal_v{0, 0, -1};
     PointLight light{Color(1, 1, 1), Point(0, 0, -10)};
-    Color result = Lighting(m, light, position, eye_v, normal_v);
+    Color result = Lighting(m, light, position, eye_v, normal_v, false);
 
     EXPECT_EQ(result, Color(1.9, 1.9, 1.9));
 }
@@ -419,7 +461,7 @@ TEST(Lighting, EyeBetweenLightAndSurfaceOffset45)
     Vector eye_v{0, static_cast<float>(std::sqrt(2)/2), static_cast<float>(std::sqrt(2)/2)};
     Vector normal_v{0, 0, -1};
     PointLight light{Color(1, 1, 1), Point(0,0, -10)};
-    Color result = Lighting(m, light, position, eye_v, normal_v);
+    Color result = Lighting(m, light, position, eye_v, normal_v, false);
 
     EXPECT_EQ(result, Color(1.0, 1.0, 1.0));
 }
@@ -432,7 +474,7 @@ TEST(Lighting, EyeOppositeSurfaceOffset45)
     Vector eye_v{0, 0, -1};
     Vector normal_v{0, 0, -1};
     PointLight light{Color(1, 1, 1), Point(0,10, -10)};
-    Color result = Lighting(m, light, position, eye_v, normal_v);
+    Color result = Lighting(m, light, position, eye_v, normal_v, false);
 
     EXPECT_EQ(result, Color(0.7364, 0.7364, 0.7364));
 }
@@ -445,7 +487,7 @@ TEST(Lighting, EyeInPathOfReflectionVector)
     Vector eye_v{0, static_cast<float>(-std::sqrt(2)/2), static_cast<float>(-std::sqrt(2)/2)};
     Vector normal_v{0, 0, -1};
     PointLight light{Color(1, 1, 1), Point(0,10, -10)};
-    Color result = Lighting(m, light, position, eye_v, normal_v);
+    Color result = Lighting(m, light, position, eye_v, normal_v, false);
 
     EXPECT_EQ(result, Color(1.6364, 1.6364, 1.6364));
 }
@@ -458,7 +500,35 @@ TEST(Lighting, LightBehindSurface)
     Vector eye_v{0, 0, -1};
     Vector normal_v{0, 0, -1};
     PointLight light{Color(1, 1, 1), Point(0,0, 10)};
-    Color result = Lighting(m, light, position, eye_v, normal_v);
+    Color result = Lighting(m, light, position, eye_v, normal_v, false);
 
     EXPECT_EQ(result, Color(0.1, 0.1, 0.1));
+}
+
+TEST(Lighting, SurfaceInShadow)
+{
+    Material m{};
+    Point position{0, 0, 0};
+
+    Vector eye_v{0, 0, -1};
+    Vector normal_v{0, 0, -1};
+    PointLight light{Color(1, 1, 1), Point(0, 0, -10)};
+    bool in_shadow = true;
+
+    Color result = Lighting(m, light, position, eye_v, normal_v, in_shadow);
+
+    EXPECT_EQ(result, Color(0.1, 0.1, 0.1));
+}
+
+TEST(Lighting, HitShouldOffsetPoint)
+{
+    Ray r{Point(0, 0, -5), Vector(0, 0, 1)};
+    Sphere shape{};
+    shape.SetTransform(Math::Translation(0, 0, 1));
+    Intersection i{5, shape};
+
+    IntersectionComputations comps = r.PrepareComputations(i);
+
+    EXPECT_TRUE(comps.over_point.z < -std::numeric_limits<float>::epsilon()/2);
+    EXPECT_TRUE(comps.point.z > comps.over_point.z);
 }

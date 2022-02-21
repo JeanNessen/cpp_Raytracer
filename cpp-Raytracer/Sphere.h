@@ -1,11 +1,13 @@
 #pragma once
+
+#include <vector>
 #include "Math.h"
 #include "Material.h"
 
 class Sphere
 {
 public:
-	explicit Sphere(int id);
+	explicit Sphere();
 
 	int id;
 
@@ -22,6 +24,8 @@ public:
 	bool operator!=(const Sphere& other) const;
 
 private:
+    static int latest_id;
+
 	Matrix4 transform = Math::identiy_matrix;
     Material material{};
 };

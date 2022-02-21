@@ -3,7 +3,7 @@
 #include "Math.h"
 #include "Sphere.h"
 #include "Intersection.h"
-#include "Comps.h"
+#include "IntersectionComputations.h"
 #include <vector>
 #include <initializer_list>
 
@@ -29,7 +29,7 @@ public:
 	//Transforms the Ray according to the given transformation Matrix
 	Ray Transform(Matrix4 matrix);
 
-	Comps PrepareComputations(Intersection i);
+	IntersectionComputations PrepareComputations(Intersection i);
 
 	const Point origin;
 	const Vector direction;

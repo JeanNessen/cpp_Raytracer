@@ -1,5 +1,6 @@
 #pragma once
 #include <cmath>
+#include <iostream>
 
 # define M_PI           3.14159265358979323846  /* pi */
 
@@ -14,10 +15,13 @@
 		bool operator==(const Tuple& other) const;
 		Tuple operator+(const Tuple& other) const;
 		Tuple operator-(const Tuple& other) const;
-		Tuple operator-() const;
 		Tuple operator*(const float& other) const;
 
+        Tuple operator-();
+
 		float magnitude() const;
+
+        friend std::ostream& operator<<(std::ostream& os, const Tuple& t);
 
 	};
 
@@ -154,6 +158,11 @@
 		//(0, 0, 0, 0, 0, 1) Z in proportion to Y
 
 		Matrix4 Shearing(const int x_y, const int x_z, const int y_x, const int y_z, const int z_x, const int z_y);
+
+        //From: Where should the eye be
+        //To: Where should the eye be oriented towards
+        //Up: What direction is up
+        Matrix4 ViewTransform(Point from, Point to, Vector up);
 
 		extern Matrix4 identiy_matrix;
 	}

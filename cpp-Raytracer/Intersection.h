@@ -5,7 +5,7 @@
 #ifndef CPP_RAYTRACER_INTERSECTION_H
 #define CPP_RAYTRACER_INTERSECTION_H
 
-#include "Ray.h"
+#include "Sphere.h"
 
 
 class Intersection {

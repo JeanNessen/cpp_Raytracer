@@ -168,6 +168,21 @@ Matrix4 Math::Shearing(const int x_y, const int x_z, const int y_x, const int y_
 	return transform;
 }
 
+Matrix4 Math::ViewTransform(Point from, Point to, Vector up) {
+    Vector forward = Vector(to-from).normalized();
+    Vector left = Math::Cross(forward, up.normalized());
+    Vector true_up = Math::Cross(left, forward);
+
+    Matrix4 orientation{
+        left.x, left.y, left.z, 0,
+        true_up.x, true_up.y, true_up.z, 0,
+        -forward.x, -forward.y, -forward.z, 0,
+        0, 0, 0, 1
+    };
+
+    return orientation * Math::Translation(-from.x, -from.y, -from.z);
+}
+
 Tuple::Tuple(float x, float y, float z)
 {
 	this->x = x;
@@ -202,12 +217,6 @@ Tuple Tuple::operator-(const Tuple& other) const
 	return diff;
 }
 
-Tuple Tuple::operator-() const
-{
-	Tuple negative{ -x, -y, -z, -w };
-	return negative;
-}
-
 Tuple Tuple::operator*(const float& other) const
 {
 	Tuple product{ x * other, y * other, z * other, w * other };
@@ -217,6 +226,24 @@ Tuple Tuple::operator*(const float& other) const
 float Tuple::magnitude() const
 {
 	return std::sqrt(std::pow(x, 2)+std::pow(y, 2) + std::pow(z, 2) + std::pow(w, 2));
+}
+
+Tuple Tuple::operator-() {
+    Tuple negative{-x, -y, -z, -w};
+    return negative;
+}
+
+std::ostream &operator<<(std::ostream &os, const Tuple &t) {
+    if(t.w == 0)
+    {
+        os << "v(" << t.x << ", " << t.y << ", " << t.z << ")";
+    }
+    else
+    {
+        os << "p(" << t.x << ", " << t.y << ", " << t.z << ")";
+    }
+
+    return os;
 }
 
 Matrix4::Matrix4(

@@ -772,3 +772,54 @@ TEST(Matricies, ChainedTransformations)
 
     EXPECT_TRUE(Math::Equal(T * p, target));
 }
+
+TEST(Matricies, TransformationMatrixForDefaultorientation)
+{
+    Point from{0, 0, 0};
+    Point to{0, 0, -1};
+    Vector up{0, 1, 0};
+
+    Matrix4 t = Math::ViewTransform(from, to, up);
+
+    EXPECT_EQ(t, Math::identiy_matrix);
+}
+
+TEST(Matricies, TransformationMatrixLookingInPositiveDirection)
+{
+    Point from{0, 0, 0};
+    Point to{0, 0, 1};
+    Vector up{0, 1, 0};
+
+    Matrix4 t = Math::ViewTransform(from, to, up);
+
+    EXPECT_EQ(t, Math::Scaling(-1, 1, -1));
+}
+
+TEST(Matricies, TransfomationMovesTheWorld)
+{
+    Point from{0, 0, 8};
+    Point to{0, 0, 0};
+    Vector up{0, 1, 0};
+
+    Matrix4 t = Math::ViewTransform(from, to, up);
+
+    EXPECT_EQ(t, Math::Translation(0, 0, -8));
+}
+
+TEST(Matricies, ArbitraryViewTransformation)
+{
+    Point from{1, 3, 2};
+    Point to{4, -2, 8};
+    Vector up{1, 1, 0};
+
+    Matrix4 t = Math::ViewTransform(from, to, up);
+
+    Matrix4 target {
+        -0.50709, 0.50709, 0.67612, -2.36643,
+        0.76772, 0.60609, 0.12122, -2.82843,
+        -0.35857, 0.59761, -0.71714, 0.00000,
+        0.00000, 0.00000, 0.00000, 1.00000
+    };
+
+    EXPECT_EQ(t, target);
+}
