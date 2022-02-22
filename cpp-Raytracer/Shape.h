@@ -24,6 +24,8 @@ protected:
 
     explicit Shape(ShapeType t);
 
+    virtual Vector LocalNormalAt(Point local_point);
+
 public:
     const int id;
 
@@ -40,7 +42,7 @@ public:
 
     virtual ~Shape()= default;
 
-    virtual Vector NormalAt(Point point);
+    Vector NormalAt(Point world_point);
 
     Point saved_ray_origin;
     Vector saved_ray_direction;

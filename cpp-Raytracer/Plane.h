@@ -13,7 +13,6 @@ class Plane: public Shape {
 public:
     Plane();
 
-    Vector NormalAt(Point point) override;
 };
 
 

@@ -11,7 +11,4 @@ Plane::Plane():
 
 }
 
-Vector Plane::NormalAt(Point point) {
-    return Vector();
-}
 
