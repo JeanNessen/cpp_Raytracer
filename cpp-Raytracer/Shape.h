@@ -7,8 +7,6 @@
 
 #include "Math.h"
 #include "Material.h"
-#include "Ray.h"
-#include "Intersection.h"
 
 enum ShapeType{
     sphere,
@@ -41,8 +39,6 @@ public:
 
     bool operator==(const Shape& other) const;
     bool operator!=(const Shape& other) const;
-
-    virtual std::vector<Intersection> PocalIntersection(Ray r) = 0;
 
     virtual ~Shape()= default;
 };

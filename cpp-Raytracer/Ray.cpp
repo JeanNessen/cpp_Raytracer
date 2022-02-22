@@ -19,35 +19,6 @@ Point Ray::Position(double distance)
 	return position;
 }
 
-//std::vector<Intersection> Ray::Intersect(Sphere s)
-//{
-//	//Transform the Ray before calculating intersections, to account for the transform of the intersected sphere
-//	Ray transformed_ray{ Transform(s.GetTransform().Inversed()) };
-//
-//	Tuple sphere_to_ray_tmp = transformed_ray.origin - Point(0, 0, 0); //vector from the center of the sphere to the ray origin
-//	Vector sphere_to_ray{ sphere_to_ray_tmp.x, sphere_to_ray_tmp.y, sphere_to_ray_tmp.z };
-//
-//
-//
-//	double a = Math::Dot(transformed_ray.direction, transformed_ray.direction);
-//	double b = 2 * Math::Dot(transformed_ray.direction, sphere_to_ray);
-//	double c = Math::Dot(sphere_to_ray, sphere_to_ray) - 1;
-//
-//	double discriminant = std::pow(b, 2) - 4 * a * c;
-//
-//	//If the discriminant is smaller than 0, the ray does not intersect the sphere
-//	if (discriminant < 0 )
-//	{
-//		return std::vector<Intersection>();
-//	}
-//
-//	double t1 = (-b - std::sqrt(discriminant)) / (2 * a);
-//	Intersection i1{ t1, s };
-//	double t2 = (-b + std::sqrt(discriminant)) / (2 * a);
-//	Intersection i2{ t2, s };
-//	return std::vector<Intersection>{i1, i2};
-//}
-
 Ray Ray::Transform(Matrix4 matrix)
 {
 	Tuple origin_tuple{ matrix * origin };
@@ -103,8 +74,6 @@ std::vector<Intersection> Ray::Intersect(Shape& s) {
 std::vector<Intersection> Ray::LocalIntersect(Sphere s) {
     Tuple sphere_to_ray_tmp = origin - Point(0, 0, 0); //vector from the center of the sphere to the ray origin
     Vector sphere_to_ray{ sphere_to_ray_tmp.x, sphere_to_ray_tmp.y, sphere_to_ray_tmp.z };
-
-
 
     double a = Math::Dot(direction, direction);
     double b = 2 * Math::Dot(direction, sphere_to_ray);
