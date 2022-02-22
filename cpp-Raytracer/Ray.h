@@ -2,6 +2,7 @@
 
 #include "Math.h"
 #include "Sphere.h"
+#include "Plane.h"
 #include "Intersection.h"
 #include "IntersectionComputations.h"
 #include <vector>
@@ -19,12 +20,18 @@ public:
 	Ray(Point origin, Vector direction);
 
 	//Returns the position of the Ray at the given distance from the origin
-	Point Position(float distance);
+	Point Position(double distance);
 
 	//Returns the distances at which the Ray intersects the given sphere
     //Returns empty vector if no intersection
     //Returns std::vector of length 2 on any kind of intersection
-	std::vector<Intersection> Intersect(Sphere s);
+	//std::vector<Intersection> Intersect(Sphere s);
+
+    std::vector<Intersection> Intersect(Shape& s);
+
+    std::vector<Intersection> LocalIntersect(Sphere s);
+
+    std::vector<Intersection> LocalIntersect(Plane p);
 
 	//Transforms the Ray according to the given transformation Matrix
 	Ray Transform(Matrix4 matrix);

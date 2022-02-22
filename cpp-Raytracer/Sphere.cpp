@@ -1,35 +1,11 @@
 #include "Sphere.h"
-// Static Variables
-int Sphere::latest_id = 0;
 
-Sphere::Sphere()
+Sphere::Sphere():
+        Shape(ShapeType::sphere)
 {
-    this->id = ++latest_id;
+
 }
 
-Matrix4 Sphere::GetTransform()
-{
-	return transform;
-}
-
-void Sphere::SetTransform(Matrix4 transform)
-{
-	this->transform = transform;
-}
-
-bool Sphere::operator==(const Sphere& other) const
-{
-	if (other.material == this->material && other.transform == this->transform && other.id == this->id)
-	{
-		return true;
-	}
-	return false;
-}
-
-bool Sphere::operator!=(const Sphere& other) const
-{
-	return !(*this == other);
-}
 
 Vector Sphere::NormalAt(Point world_point) {
     //Convert point from World Space to Object Space
@@ -43,14 +19,6 @@ Vector Sphere::NormalAt(Point world_point) {
     world_normal.w = 0;
 
     return world_normal.normalized();
-}
-
-Material& Sphere::GetMaterial() {
-    return material;
-}
-
-void Sphere::SetMaterial(Material mat) {
-    material = mat;
 }
 
 

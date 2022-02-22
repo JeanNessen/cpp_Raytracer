@@ -11,7 +11,7 @@
 
 //Data structure to hold precalculated Computations about an Intersection
 struct IntersectionComputations {
-    float t;
+    double t;
     Sphere object;
     Point point;
     Vector eye_v;
@@ -19,7 +19,7 @@ struct IntersectionComputations {
     bool inside;
     Point over_point;
 
-    IntersectionComputations(float t, Sphere object, Point point, Vector eye_v, Vector normal_v):
+    IntersectionComputations(double t, Sphere object, Point point, Vector eye_v, Vector normal_v):
             t(t),
             object(object),
             point(point),
@@ -38,6 +38,6 @@ struct IntersectionComputations {
         {
             inside = false;
         }
-        over_point = Point{this->point + this->normal_v * 0.001};
+        over_point = Point{this->point + this->normal_v * 0.00001};
     }
 };

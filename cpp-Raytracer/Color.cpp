@@ -1,7 +1,7 @@
 #include "Color.h"
 
 
-Color::Color(float red, float green, float blue)
+Color::Color(double red, double green, double blue)
 {
 	this->red = red;
 	this->green = green;
@@ -32,14 +32,14 @@ Color Color::operator*(const Color& other) const
 	return product;
 }
 
-Color Color::operator*(const float& other) const
+Color Color::operator*(const double& other) const
 {
 	Color product{ red * other, green * other, blue * other };
 	return product;
 }
 
 //Converts a color in the range 0.0f-1.0f to one from the range 0-255
-int Color::ConvertFloatToIntInRange(float num)
+int Color::ConvertdoubleToIntInRange(double num)
 {
 	int result;
 	if (num < 0)
@@ -52,7 +52,7 @@ int Color::ConvertFloatToIntInRange(float num)
 	}
 	else
 	{
-		float temp_result = 255 * num;
+		double temp_result = 255 * num;
 		temp_result = std::round(temp_result);
 		result = int(temp_result);
 	}

@@ -12,7 +12,7 @@ class Intersection {
 
 public:
     //Distance at which the intersection took place, along the given ray
-    float t{};
+    double t{};
     Sphere object; //needs to be another class, only spheres for now
 
     bool operator==(const Intersection& other) const;

@@ -6,20 +6,20 @@
 
 	struct Tuple
 	{
-		float x, y, z, w;
+		double x, y, z, w;
 
 		Tuple() = default;
-		Tuple(float x, float y, float z);
-		Tuple(float x, float y, float z, float w);
+		Tuple(double x, double y, double z);
+		Tuple(double x, double y, double z, double w);
 
 		bool operator==(const Tuple& other) const;
 		Tuple operator+(const Tuple& other) const;
 		Tuple operator-(const Tuple& other) const;
-		Tuple operator*(const float& other) const;
+		Tuple operator*(const double& other) const;
 
         Tuple operator-();
 
-		float magnitude() const;
+		double magnitude() const;
 
         friend std::ostream& operator<<(std::ostream& os, const Tuple& t);
 
@@ -28,14 +28,14 @@
 	struct Point : public Tuple
 	{
 		Point();
-		Point(float x, float y, float z);
+		Point(double x, double y, double z);
         explicit Point(Tuple t);
 	};
 
 	struct Vector : public Tuple
 	{
 		Vector();
-		Vector(float x, float y, float z);
+		Vector(double x, double y, double z);
         explicit Vector(Tuple t);
 
 		Vector normalized() const;
@@ -46,17 +46,17 @@
 	class Matrix2
 	{
 	private:
-		float n[2][2];
+		double n[2][2];
 	public:
 		Matrix2() = default;
 
-		Matrix2(float n00, float n01,
-			float n10, float n11);
+		Matrix2(double n00, double n01,
+			double n10, double n11);
 
-		float Determinant();
+		double Determinant();
 
-		float& operator()(int i, int j) { return n[j][i]; }
-		const float& operator()(int i, int j) const { return n[j][i]; }
+		double& operator()(int i, int j) { return n[j][i]; }
+		const double& operator()(int i, int j) const { return n[j][i]; }
 
 		bool operator==(const Matrix2& other) const;
 		bool operator!=(const Matrix2& other) const;
@@ -66,24 +66,24 @@
 	class Matrix3
 	{
 	private:
-		float n[3][3];
+		double n[3][3];
 	public:
 
 		Matrix3() = default;
 
-		Matrix3(float n00, float n01, float n02,
-			float n10, float n11, float n12,
-			float n20, float n21, float n22);
+		Matrix3(double n00, double n01, double n02,
+			double n10, double n11, double n12,
+			double n20, double n21, double n22);
 
-		float& operator()(int i, int j) { return (n[j][i]); }
-		const float& operator()(int i, int j) const { return (n[j][i]); }
+		double& operator()(int i, int j) { return (n[j][i]); }
+		const double& operator()(int i, int j) const { return (n[j][i]); }
 
 		bool operator==(const Matrix3& other) const;
 		bool operator!=(const Matrix3& other) const;
 
-		float Determinant();
-		float Minor(const int row ,const int column);
-		float Cofactor(const int row, const int column);
+		double Determinant();
+		double Minor(const int row ,const int column);
+		double Cofactor(const int row, const int column);
 
 
 	};
@@ -91,18 +91,18 @@
 	class Matrix4
 	{
 	private:
-		float n[4][4];
+		double n[4][4];
 	public:
 
 		Matrix4() = default;
 
-		Matrix4(float n00, float n01, float n02, float n03,
-			float n10, float n11, float n12, float n13,
-			float n20, float n21, float n22, float n23,
-			float n30, float n31, float n32, float n33);
+		Matrix4(double n00, double n01, double n02, double n03,
+			double n10, double n11, double n12, double n13,
+			double n20, double n21, double n22, double n23,
+			double n30, double n31, double n32, double n33);
 
-		float& operator()(int i, int j) { return (n[j][i]); }
-		const float& operator()(int i, int j) const { return (n[j][i]); }
+		double& operator()(int i, int j) { return (n[j][i]); }
+		const double& operator()(int i, int j) const { return (n[j][i]); }
 
 		bool operator==(const Matrix4& other) const;
 		bool operator!=(const Matrix4& other) const;
@@ -113,9 +113,9 @@
 		Matrix4 Transposed();
 		Matrix4 Inversed();
 
-		float Determinant();
-		float Minor(const int row, const int column);
-		float Cofactor(const int row, const int column);
+		double Determinant();
+		double Minor(const int row, const int column);
+		double Cofactor(const int row, const int column);
 
 		bool IsInvertible();
 
@@ -125,10 +125,10 @@
 	};
 
 	namespace Math {
-		bool Equal(const float a, const float b);
+		bool Equal(const double a, const double b);
 		bool Equal(const Tuple a, const Tuple b);
 
-		float Dot(const Vector& a, const Vector& b);
+		double Dot(const Vector& a, const Vector& b);
 		Vector Cross(const Vector& a, const Vector& b);
 
 		//Returns the identity Matrix
@@ -139,15 +139,15 @@
 		Matrix3 Submatrix(const Matrix4& input, const int row, const int column);
 
 		//Translates a Point in space, does not affect Vectors
-		Matrix4 Translation(const float x, const float y, const float z);
+		Matrix4 Translation(const double x, const double y, const double z);
 
 		//Scales a Point or Vector in Space
-		Matrix4 Scaling(const float x, const float y, const float z);
+		Matrix4 Scaling(const double x, const double y, const double z);
 
 		//Rotates a Point around the given Axis
-		Matrix4 Rotation_X(const float r);
-		Matrix4 Rotation_Y(const float r);
-		Matrix4 Rotation_Z(const float r);
+		Matrix4 Rotation_X(const double r);
+		Matrix4 Rotation_Y(const double r);
+		Matrix4 Rotation_Z(const double r);
 
 		//Shearing
 		//(1, 0, 0, 0, 0, 0) X in proportion to Y

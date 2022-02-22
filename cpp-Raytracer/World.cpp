@@ -111,7 +111,7 @@ Canvas World::Render(Camera c) {
 
     auto stop = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
-    float seconds = duration.count() / 1000.0f;
+    double seconds = duration.count() / 1000.0f;
 
     std::cout << ray_count << " rays rendered in " << seconds << " seconds." << std::endl;
 
@@ -120,7 +120,7 @@ Canvas World::Render(Camera c) {
 
 bool World::IsShadowed(Point p) {
     Vector v_point_to_light{world_lights[0].position - p};
-    float distance_to_light = (v_point_to_light).magnitude();
+    double distance_to_light = (v_point_to_light).magnitude();
     Vector direction_to_light = v_point_to_light.normalized();
 
     Ray r_point_to_light{p, direction_to_light};

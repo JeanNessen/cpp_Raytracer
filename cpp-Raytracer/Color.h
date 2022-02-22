@@ -3,22 +3,22 @@
 #include <iostream>
 struct Color
 {
-	float red;
-	float green;
-	float blue;
+	double red;
+	double green;
+	double blue;
 
 	Color() = default;
-	Color(float red, float green, float blue);
+	Color(double red, double green, double blue);
 
 	bool operator==(const Color& other) const;
 	Color operator+(const Color& other) const;
 	Color operator-(const Color& other) const;
 	Color operator*(const Color& other) const;
-	Color operator*(const float& other) const;
+	Color operator*(const double& other) const;
 
-	int RGBRed() { return ConvertFloatToIntInRange(red); }
-	int RGBGreen() { return ConvertFloatToIntInRange(green); }
-	int RGBBlue() { return ConvertFloatToIntInRange(blue); }
+	int RGBRed() { return ConvertdoubleToIntInRange(red); }
+	int RGBGreen() { return ConvertdoubleToIntInRange(green); }
+	int RGBBlue() { return ConvertdoubleToIntInRange(blue); }
 
     //Debug
     void Print() const;
@@ -28,6 +28,6 @@ struct Color
 
 private:
 
-	int ConvertFloatToIntInRange(float num);
+	int ConvertdoubleToIntInRange(double num);
 };
 

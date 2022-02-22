@@ -7,7 +7,7 @@
 #include <iostream>
 
 
-Camera::Camera(int h_size, int v_size, float fov):
+Camera::Camera(int h_size, int v_size, double fov):
     horizontal_size(h_size),
     vertical_size(v_size),
     field_of_view(fov),
@@ -17,9 +17,9 @@ Camera::Camera(int h_size, int v_size, float fov):
 }
 
 void Camera::CalculatePixelSize() {
-    float half_view = std::tan(field_of_view / 2);
+    double half_view = std::tan(field_of_view / 2);
 
-    float aspect = float(horizontal_size) / float(vertical_size);
+    double aspect = double(horizontal_size) / double(vertical_size);
 
     if (aspect >= 1)
     {
@@ -36,12 +36,12 @@ void Camera::CalculatePixelSize() {
 
 Ray Camera::RayForPixel(int x, int y) {
     //The offset from the edge of the canvas to the CENTER of the pixel
-    float x_offset = (float(x) + 0.5f) * pixel_size;
-    float y_offset = (float(y) + 0.5f) * pixel_size;
+    double x_offset = (double(x) + 0.5f) * pixel_size;
+    double y_offset = (double(y) + 0.5f) * pixel_size;
 
     //The untransformed coordinates of the pixel in world space
-    float world_x = half_width - x_offset;
-    float world_y = half_height - y_offset;
+    double world_x = half_width - x_offset;
+    double world_y = half_height - y_offset;
 
     //Using the camera matrix, transform the canvas point and the origin, and then compute the rays direction vector, the canvas is at z = -1
     Point pixel{transform.Inversed() * Point(world_x, world_y, -1)};

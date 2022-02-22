@@ -27,7 +27,7 @@ Color Lighting(Material m, PointLight light, Point position, Vector eye_v, Vecto
         //light_dot_normal represents the cosine of the angle between
         //the light vector and the normal vector. A negative number means the
         //light is on the other side of the surface
-        float light_dot_normal = Math::Dot(light_v, normal_v);
+        double light_dot_normal = Math::Dot(light_v, normal_v);
 
         Color diffuse{0, 0, 0};
         Color specular{0, 0, 0};
@@ -42,14 +42,14 @@ Color Lighting(Material m, PointLight light, Point position, Vector eye_v, Vecto
             //light reflects away from it
 
             Vector reflect_v{-light_v.Reflect(normal_v)};
-            float reflect_dot_eye = Math::Dot(reflect_v, eye_v);
+            double reflect_dot_eye = Math::Dot(reflect_v, eye_v);
 
             if(reflect_dot_eye <= 0)
             {
                 specular = Color(0, 0, 0);
             } else
             {
-                float factor = std::pow(reflect_dot_eye, m.shininess);
+                double factor = std::pow(reflect_dot_eye, m.shininess);
                 specular = light.intensity * m.specular * factor;
             }
         }

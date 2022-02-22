@@ -12,16 +12,16 @@ class Camera {
 private:
     int horizontal_size;
     int vertical_size;
-    float field_of_view;
+    double field_of_view;
     Matrix4 transform;
 
-    float pixel_size;
-    float half_width, half_height;
+    double pixel_size;
+    double half_width, half_height;
 
     void CalculatePixelSize();
 
 public:
-    Camera(int h_size, int v_size, float fov);
+    Camera(int h_size, int v_size, double fov);
 
     int GetHSize() const{return horizontal_size;}
     void SetHSize(int h){horizontal_size = h;}
@@ -29,13 +29,13 @@ public:
     int GetVSize() const{return vertical_size;}
     void SetVSize(int v){vertical_size = v;}
 
-    float GetFOV() const{return field_of_view;}
-    void SetFOV(float fov){field_of_view = fov;}
+    double GetFOV() const{return field_of_view;}
+    void SetFOV(double fov){field_of_view = fov;}
 
     Matrix4 GetTransform(){return transform;}
     void SetTransform(Matrix4 t){ transform = t;}
 
-    float GetPixelSize() const{return pixel_size;}
+    double GetPixelSize() const{return pixel_size;}
 
     Ray RayForPixel(int x, int y);
 };

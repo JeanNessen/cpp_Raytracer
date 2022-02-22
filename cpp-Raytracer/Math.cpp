@@ -9,9 +9,9 @@ Matrix4 Math::identiy_matrix = Matrix4{
 			0, 0, 0, 1
 };
 
-bool Math::Equal(const float a, const float b)
+bool Math::Equal(const double a, const double b)
 {
-	float epsilon = 0.0001;
+	double epsilon = 0.0001;
 
 	if (std::abs(a - b) < epsilon)
 	{
@@ -25,7 +25,7 @@ bool Math::Equal(const Tuple a, const Tuple b)
 	return Equal(a.x, b.x) && Equal(a.y, b.y) && Equal(a.z, b.z) && Equal(a.w, b.w);
 }
 
-float Math::Dot(const Vector & a, const Vector & b)
+double Math::Dot(const Vector & a, const Vector & b)
 {
 	return a.x*b.x + a.y*b.y + a.z*b.z + a.w*b.w;
 }
@@ -102,7 +102,7 @@ Matrix3 Math::Submatrix(const Matrix4& input, const int row, const int column)
 	return submatrix;
 }
 
-Matrix4 Math::Translation(const float x, const float y, const float z)
+Matrix4 Math::Translation(const double x, const double y, const double z)
 {
 	Matrix4 transform{
 		1, 0, 0, x,
@@ -113,7 +113,7 @@ Matrix4 Math::Translation(const float x, const float y, const float z)
 	return transform;
 }
 
-Matrix4 Math::Scaling(const float x, const float y, const float z)
+Matrix4 Math::Scaling(const double x, const double y, const double z)
 {
 	Matrix4 transform{
 		x, 0, 0, 0,
@@ -124,7 +124,7 @@ Matrix4 Math::Scaling(const float x, const float y, const float z)
 	return transform;
 }
 
-Matrix4 Math::Rotation_X(const float r)
+Matrix4 Math::Rotation_X(const double r)
 {
 	Matrix4 rotation{
 		1, 0, 0, 0,
@@ -135,7 +135,7 @@ Matrix4 Math::Rotation_X(const float r)
 	return rotation;
 }
 
-Matrix4 Math::Rotation_Y(const float r)
+Matrix4 Math::Rotation_Y(const double r)
 {
 	Matrix4 rotation{
 		std::cos(r), 0, std::sin(r), 0,
@@ -146,7 +146,7 @@ Matrix4 Math::Rotation_Y(const float r)
 	return rotation;
 }
 
-Matrix4 Math::Rotation_Z(const float r)
+Matrix4 Math::Rotation_Z(const double r)
 {
 	Matrix4 rotation{
 		std::cos(r), -std::sin(r), 0, 0,
@@ -160,9 +160,9 @@ Matrix4 Math::Rotation_Z(const float r)
 Matrix4 Math::Shearing(const int x_y, const int x_z, const int y_x, const int y_z, const int z_x, const int z_y)
 {
 	Matrix4 transform{
-		1, float(x_y), float(x_z), 0,
-		float(y_x), 1, float(y_z), 0,
-		float(z_x), float(z_y), 1, 0,
+		1, double(x_y), double(x_z), 0,
+		double(y_x), 1, double(y_z), 0,
+		double(z_x), double(z_y), 1, 0,
 		0, 0, 0, 1
 	};
 	return transform;
@@ -183,7 +183,7 @@ Matrix4 Math::ViewTransform(Point from, Point to, Vector up) {
     return orientation * Math::Translation(-from.x, -from.y, -from.z);
 }
 
-Tuple::Tuple(float x, float y, float z)
+Tuple::Tuple(double x, double y, double z)
 {
 	this->x = x;
 	this->y = y;
@@ -191,7 +191,7 @@ Tuple::Tuple(float x, float y, float z)
 
 }
 
-Tuple::Tuple(float x, float y, float z, float w)
+Tuple::Tuple(double x, double y, double z, double w)
 {
 	this->x = x;
 	this->y = y;
@@ -217,13 +217,13 @@ Tuple Tuple::operator-(const Tuple& other) const
 	return diff;
 }
 
-Tuple Tuple::operator*(const float& other) const
+Tuple Tuple::operator*(const double& other) const
 {
 	Tuple product{ x * other, y * other, z * other, w * other };
 	return product;
 }
 
-float Tuple::magnitude() const
+double Tuple::magnitude() const
 {
 	return std::sqrt(std::pow(x, 2)+std::pow(y, 2) + std::pow(z, 2) + std::pow(w, 2));
 }
@@ -247,10 +247,10 @@ std::ostream &operator<<(std::ostream &os, const Tuple &t) {
 }
 
 Matrix4::Matrix4(
-	float n00, float n01, float n02, float n03, 
-	float n10, float n11, float n12, float n13, 
-	float n20, float n21, float n22, float n23, 
-	float n30, float n31, float n32, float n33)
+	double n00, double n01, double n02, double n03,
+	double n10, double n11, double n12, double n13,
+	double n20, double n21, double n22, double n23,
+	double n30, double n31, double n32, double n33)
 {
 	//This Matrix representation uses column-major storage
 	n[0][0] = n00; n[0][1] = n10; n[0][2] = n20; n[0][3] = n30;
@@ -339,21 +339,21 @@ Matrix4 Matrix4::Transposed()
 Matrix4 Matrix4::Inversed()
 {
 	Matrix4 output;
-	float det = Determinant();
+	double det = Determinant();
 	for (int row = 0; row < 4; row++)
 	{
 		for (int col = 0; col < 4; col++)
 		{
-			float c = Cofactor(row, col);
+			double c = Cofactor(row, col);
 			output(col, row) = c / det;
 		}
 	}
 	return output;
 }
 
-float Matrix4::Determinant()
+double Matrix4::Determinant()
 {
-	float det =
+	double det =
 		(*this)(0, 0) * this->Cofactor(0, 0) +
 		(*this)(0, 1) * this->Cofactor(0, 1) +
 		(*this)(0, 2) * this->Cofactor(0, 2) +
@@ -361,14 +361,14 @@ float Matrix4::Determinant()
 	return det;
 }
 
-float Matrix4::Minor(const int row, const int column)
+double Matrix4::Minor(const int row, const int column)
 {
 	Matrix3 submatrix = Math::Submatrix((*this), row, column);
-	float sub_det = submatrix.Determinant();
+	double sub_det = submatrix.Determinant();
 	return sub_det;
 }
 
-float Matrix4::Cofactor(const int row, const int column)
+double Matrix4::Cofactor(const int row, const int column)
 {
 	if ((row + column) % 2 == 0)
 	{
@@ -403,16 +403,16 @@ void Matrix4::Print()
 
 
 Matrix2::Matrix2(
-	float n00, float n01, 
-	float n10, float n11)
+	double n00, double n01,
+	double n10, double n11)
 {
 	n[0][0] = n00; n[0][1] = n10;
 	n[1][0] = n01; n[1][1] = n11;
 }
 
-float Matrix2::Determinant()
+double Matrix2::Determinant()
 {
-	float determinant = n[0][0] * n[1][1] - n[0][1] * n[1][0];
+	double determinant = n[0][0] * n[1][1] - n[0][1] * n[1][0];
 	return determinant;
 }
 
@@ -433,9 +433,9 @@ bool Matrix2::operator!=(const Matrix2& other) const
 }
 
 Matrix3::Matrix3(
-	float n00, float n01, float n02, 
-	float n10, float n11, float n12, 
-	float n20, float n21, float n22)
+	double n00, double n01, double n02,
+	double n10, double n11, double n12,
+	double n20, double n21, double n22)
 {
 	n[0][0] = n00; n[0][1] = n10; n[0][2] = n20;
 	n[1][0] = n01; n[1][1] = n11; n[1][2] = n21;
@@ -464,23 +464,23 @@ bool Matrix3::operator!=(const Matrix3& other) const
 	return !(*this == other);
 }
 
-float Matrix3::Determinant()
+double Matrix3::Determinant()
 {
-	float det = 
+	double det =
 		(*this)(0, 0) * this->Cofactor(0, 0) + 
 		(*this)(0, 1) * this->Cofactor(0, 1) + 
 		(*this)(0, 2) * this->Cofactor(0, 2);
 	return det;
 }
 
-float Matrix3::Minor(const int row, const int column)
+double Matrix3::Minor(const int row, const int column)
 {
 	Matrix2 submatrix = Math::Submatrix((*this), row, column);
-	float sub_det = submatrix.Determinant();
+	double sub_det = submatrix.Determinant();
 	return sub_det;
 }
 
-float Matrix3::Cofactor(const int row, const int column)
+double Matrix3::Cofactor(const int row, const int column)
 {
 	if ((row + column) % 2 == 0)
 	{
@@ -500,7 +500,7 @@ Point::Point()
 	w = 1;
 }
 
-Point::Point(float x, float y, float z):
+Point::Point(double x, double y, double z):
 	Tuple(x, y, z)
 {
 	w = 1;
@@ -521,7 +521,7 @@ Vector::Vector()
 	w = 0;
 }
 
-Vector::Vector(float x, float y, float z):
+Vector::Vector(double x, double y, double z):
 	Tuple(x, y, z)
 {
 	w = 0;

@@ -23,11 +23,9 @@ private:
 public:
 
     std::vector<PointLight>& GetWorldLights(){ return world_lights; }
-
     void AddLight(PointLight light);
 
     std::vector<Sphere>& GetWorldObjects(){ return world_objects; }
-
     void AddObject(Sphere obj);
 
     std::vector<Intersection> IntersectWorld(Ray ray);

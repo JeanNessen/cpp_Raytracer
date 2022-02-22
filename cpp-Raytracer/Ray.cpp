@@ -10,7 +10,7 @@ Ray::Ray(Point origin, Vector direction):
 
 }
 
-Point Ray::Position(float distance)
+Point Ray::Position(double distance)
 {
 	Tuple distance_travelled = direction * distance;
 	Point position{ distance_travelled.x + origin.x,
@@ -19,34 +19,34 @@ Point Ray::Position(float distance)
 	return position;
 }
 
-std::vector<Intersection> Ray::Intersect(Sphere s)
-{
-	//Transform the Ray before calculating intersections, to account for the transform of the intersected sphere
-	Ray transformed_ray{ Transform(s.GetTransform().Inversed()) };
-
-	Tuple sphere_to_ray_tmp = transformed_ray.origin - Point(0, 0, 0); //vector from the center of the sphere to the ray origin
-	Vector sphere_to_ray{ sphere_to_ray_tmp.x, sphere_to_ray_tmp.y, sphere_to_ray_tmp.z };
-
-
-
-	float a = Math::Dot(transformed_ray.direction, transformed_ray.direction);
-	float b = 2 * Math::Dot(transformed_ray.direction, sphere_to_ray);
-	float c = Math::Dot(sphere_to_ray, sphere_to_ray) - 1;
-
-	float discriminant = std::pow(b, 2) - 4 * a * c;
-
-	//If the discriminant is smaller than 0, the ray does not intersect the sphere
-	if (discriminant < 0 ) 
-	{
-		return std::vector<Intersection>();
-	}
-
-	float t1 = (-b - std::sqrt(discriminant)) / (2 * a);
-	Intersection i1{ t1, s };
-	float t2 = (-b + std::sqrt(discriminant)) / (2 * a);
-	Intersection i2{ t2, s };
-	return std::vector<Intersection>{i1, i2};
-}
+//std::vector<Intersection> Ray::Intersect(Sphere s)
+//{
+//	//Transform the Ray before calculating intersections, to account for the transform of the intersected sphere
+//	Ray transformed_ray{ Transform(s.GetTransform().Inversed()) };
+//
+//	Tuple sphere_to_ray_tmp = transformed_ray.origin - Point(0, 0, 0); //vector from the center of the sphere to the ray origin
+//	Vector sphere_to_ray{ sphere_to_ray_tmp.x, sphere_to_ray_tmp.y, sphere_to_ray_tmp.z };
+//
+//
+//
+//	double a = Math::Dot(transformed_ray.direction, transformed_ray.direction);
+//	double b = 2 * Math::Dot(transformed_ray.direction, sphere_to_ray);
+//	double c = Math::Dot(sphere_to_ray, sphere_to_ray) - 1;
+//
+//	double discriminant = std::pow(b, 2) - 4 * a * c;
+//
+//	//If the discriminant is smaller than 0, the ray does not intersect the sphere
+//	if (discriminant < 0 )
+//	{
+//		return std::vector<Intersection>();
+//	}
+//
+//	double t1 = (-b - std::sqrt(discriminant)) / (2 * a);
+//	Intersection i1{ t1, s };
+//	double t2 = (-b + std::sqrt(discriminant)) / (2 * a);
+//	Intersection i2{ t2, s };
+//	return std::vector<Intersection>{i1, i2};
+//}
 
 Ray Ray::Transform(Matrix4 matrix)
 {
@@ -62,7 +62,7 @@ Ray Ray::Transform(Matrix4 matrix)
 
 IntersectionComputations Ray::PrepareComputations(Intersection i) {
     //Copy intersection properties for convenience
-    float comps_t{i.t};
+    double comps_t{i.t};
     Sphere comps_object{i.object};
 
     //precompute needed values
@@ -79,6 +79,54 @@ IntersectionComputations Ray::PrepareComputations(Intersection i) {
     };
 
     return comps;
+}
+
+std::vector<Intersection> Ray::Intersect(Shape& s) {
+    //Transform the Ray before calculating intersections, to account for the transform of the intersected sphere
+    Ray local_ray{ Transform(s.GetTransform().Inversed()) };
+
+    Shape* p = &s;
+
+    //Check what type the shape is (there must be a better way to do this)
+    Sphere* sphere = dynamic_cast<Sphere*>(p);
+    Plane* plane = dynamic_cast<Plane*>(p);
+
+    switch (s.type) {
+        case ShapeType::sphere:
+            return local_ray.LocalIntersect(*sphere);
+        case ShapeType::plane:
+            return local_ray.LocalIntersect(*plane);
+    }
+
+}
+
+std::vector<Intersection> Ray::LocalIntersect(Sphere s) {
+    Tuple sphere_to_ray_tmp = origin - Point(0, 0, 0); //vector from the center of the sphere to the ray origin
+    Vector sphere_to_ray{ sphere_to_ray_tmp.x, sphere_to_ray_tmp.y, sphere_to_ray_tmp.z };
+
+
+
+    double a = Math::Dot(direction, direction);
+    double b = 2 * Math::Dot(direction, sphere_to_ray);
+    double c = Math::Dot(sphere_to_ray, sphere_to_ray) - 1;
+
+    double discriminant = std::pow(b, 2) - 4 * a * c;
+
+    //If the discriminant is smaller than 0, the ray does not intersect the sphere
+    if (discriminant < 0 )
+    {
+        return {};
+    }
+
+    double t1 = (-b - std::sqrt(discriminant)) / (2 * a);
+    Intersection i1{ t1, s };
+    double t2 = (-b + std::sqrt(discriminant)) / (2 * a);
+    Intersection i2{ t2, s };
+    return std::vector<Intersection>{i1, i2};
+}
+
+std::vector<Intersection> Ray::LocalIntersect(Plane p) {
+    return std::vector<Intersection>();
 }
 
 std::vector<Intersection> Intersections(std::initializer_list<Intersection> args)
