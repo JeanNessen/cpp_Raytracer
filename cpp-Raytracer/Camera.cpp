@@ -3,7 +3,7 @@
 //
 
 #include "Camera.h"
-#include "Ray.h"
+//#include "Ray.h"
 #include <iostream>
 
 

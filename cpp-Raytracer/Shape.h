@@ -13,8 +13,6 @@ enum ShapeType{
     plane
 };
 
-class Ray;
-
 class Shape {
 
 protected:
@@ -41,6 +39,12 @@ public:
     bool operator!=(const Shape& other) const;
 
     virtual ~Shape()= default;
+
+    virtual Vector NormalAt(Point point);
+
+    Point saved_ray_origin;
+    Vector saved_ray_direction;
+
 };
 
 #endif //CPP_RAYTRACER_SHAPE_H

@@ -9,7 +9,7 @@ public:
 	explicit Sphere();
 
     //Returns the World Normal of a point on the Sphere
-    Vector NormalAt(Point world_point);
+    Vector NormalAt(Point world_point) override;
 
 };
 

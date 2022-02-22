@@ -11,6 +11,7 @@
 #include "Ray.h"
 #include "Canvas.h"
 #include "Camera.h"
+#include "IntersectionComputations.h"
 
 
 class World {

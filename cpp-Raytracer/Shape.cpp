@@ -3,6 +3,7 @@
 //
 
 #include "Shape.h"
+//#include "Ray.h"
 
 int Shape::latest_id = 0;
 
@@ -31,3 +32,5 @@ Shape::Shape(ShapeType t):
 {
     ++latest_id;
 }
+
+

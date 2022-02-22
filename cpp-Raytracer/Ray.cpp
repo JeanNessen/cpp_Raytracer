@@ -31,34 +31,37 @@ Ray Ray::Transform(Matrix4 matrix)
 	return r;
 }
 
-IntersectionComputations Ray::PrepareComputations(Intersection i) {
-    //Copy intersection properties for convenience
-    double comps_t{i.t};
-    Sphere comps_object{i.object};
-
-    //precompute needed values
-    Point comps_point{Position(i.t)};
-    Vector comps_eye_v{-direction.x, -direction.y, -direction.z};
-    Vector comps_normal_v{i.object.NormalAt(Position(i.t))};
-
-    IntersectionComputations comps{
-            comps_t,
-            comps_object,
-            comps_point,
-            comps_eye_v,
-            comps_normal_v
-    };
-
-    return comps;
-}
+//IntersectionComputations Ray::PrepareComputations(Intersection i) {
+//    //Copy intersection properties for convenience
+//    double comps_t{i.t};
+//    Sphere comps_object{i.object};
+//
+//    //precompute needed values
+//    Point comps_point{Position(i.t)};
+//    Vector comps_eye_v{-direction.x, -direction.y, -direction.z};
+//    Vector comps_normal_v{i.object.NormalAt(Position(i.t))};
+//
+//    IntersectionComputations comps{
+//            comps_t,
+//            comps_object,
+//            comps_point,
+//            comps_eye_v,
+//            comps_normal_v
+//    };
+//
+//    return comps;
+//}
 
 std::vector<Intersection> Ray::Intersect(Shape& s) {
+
     //Transform the Ray before calculating intersections, to account for the transform of the intersected sphere
     Ray local_ray{ Transform(s.GetTransform().Inversed()) };
 
+    s.saved_ray_direction = local_ray.direction;
+    s.saved_ray_origin = local_ray.origin;
+
     Shape* p = &s;
 
-    //Check what type the shape is (there must be a better way to do this)
     Sphere* sphere = dynamic_cast<Sphere*>(p);
     Plane* plane = dynamic_cast<Plane*>(p);
 
@@ -68,7 +71,6 @@ std::vector<Intersection> Ray::Intersect(Shape& s) {
         case ShapeType::plane:
             return local_ray.LocalIntersect(*plane);
     }
-
 }
 
 std::vector<Intersection> Ray::LocalIntersect(Sphere s) {
@@ -98,37 +100,6 @@ std::vector<Intersection> Ray::LocalIntersect(Plane p) {
     return std::vector<Intersection>();
 }
 
-std::vector<Intersection> Intersections(std::initializer_list<Intersection> args)
-{
-	std::vector<Intersection> intersections;
 
-	for (auto i : args)
-	{
-		intersections.push_back(i);
-	}
-
-	return intersections;
-}
-
-Intersection* Hit(std::vector<Intersection> &intersections)
-{
-	Intersection *hit = nullptr;
-	for (int i = 0; i < intersections.size(); i++)
-	{
-		if (intersections[i].t < 0)
-		{
-			continue;
-		}
-		if (hit == nullptr)
-		{
-			hit = &intersections[i];
-		}
-		else if (intersections[i].t < hit->t)
-		{
-			hit = &intersections[i];
-		}
-	}
-	return hit;
-}
 
 

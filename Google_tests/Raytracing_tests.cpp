@@ -10,11 +10,14 @@
 #include "../cpp-Raytracer/Intersection.h"
 #include "../cpp-Raytracer/Intersection.cpp"
 
+#include "../cpp-Raytracer/IntersectionComputations.h"
+#include "../cpp-Raytracer/IntersectionComputations.cpp"
+
 #include "../cpp-Raytracer/Shape.h"
-//#include "../cpp-Raytracer/Shape.cpp"
+#include "../cpp-Raytracer/Shape.cpp"
 
 #include "../cpp-Raytracer/Sphere.h"
-//#include "../cpp-Raytracer/Sphere.cpp"
+#include "../cpp-Raytracer/Sphere.cpp"
 
 #include "../cpp-Raytracer/Color.h"
 
@@ -371,7 +374,7 @@ TEST(RayTracing, PrecomputingStateOfAnIntersection)
     Sphere shape{};
     Intersection i{4, shape};
 
-    IntersectionComputations comps = r.PrepareComputations(i);
+    IntersectionComputations comps = PrepareComputations(i, r);
 
     EXPECT_EQ(comps.t, i.t);
     EXPECT_EQ(comps.object, i.object);
@@ -386,7 +389,7 @@ TEST(RayTracing, HitWhenIntersectionOccursOnOutside)
     Sphere shape{};
     Intersection i{4, shape};
 
-    IntersectionComputations comps = r.PrepareComputations(i);
+    IntersectionComputations comps = PrepareComputations(i, r);
 
     EXPECT_FALSE(comps.inside);
 }
@@ -397,7 +400,7 @@ TEST(RayTracing, HitWhenIntersectionOccursOnInside)
     Sphere shape{};
     Intersection i{1, shape};
 
-    IntersectionComputations comps = r.PrepareComputations(i);
+    IntersectionComputations comps = PrepareComputations(i, r);
 
     EXPECT_EQ(comps.point, Point(0, 0, 1));
     EXPECT_EQ(comps.eye_v, Vector(0, 0, -1));
@@ -530,7 +533,7 @@ TEST(Lighting, HitShouldOffsetPoint)
     shape.SetTransform(Math::Translation(0, 0, 1));
     Intersection i{5, shape};
 
-    IntersectionComputations comps = r.PrepareComputations(i);
+    IntersectionComputations comps = PrepareComputations(i, r);
 
     EXPECT_TRUE(comps.over_point.z < -std::numeric_limits<float>::epsilon()/2);
     EXPECT_TRUE(comps.point.z > comps.over_point.z);

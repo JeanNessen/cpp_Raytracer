@@ -3,9 +3,15 @@
 //
 
 #include "Plane.h"
+//#include "Ray.h"
 
 Plane::Plane():
     Shape(ShapeType::plane)
 {
 
 }
+
+Vector Plane::NormalAt(Point point) {
+    return Vector();
+}
+

@@ -19,6 +19,6 @@ add_executable(cpp_Raytracer cpp-Raytracer/main.cpp
         cpp-Raytracer/IntersectionComputations.h
         cpp-Raytracer/Camera.cpp cpp-Raytracer/Camera.h
         cpp-Raytracer/Shape.cpp cpp-Raytracer/Shape.h
-        cpp-Raytracer/Plane.cpp cpp-Raytracer/Plane.h)
+        cpp-Raytracer/Plane.cpp cpp-Raytracer/Plane.h cpp-Raytracer/IntersectionComputations.cpp)
 
 add_subdirectory(Google_tests)

@@ -14,6 +14,12 @@
 
 #include "../cpp-Raytracer/Canvas.h"
 
+#include "../cpp-Raytracer/Intersection.h"
+#include "../cpp-Raytracer/Intersection.cpp"
+
+#include "../cpp-Raytracer/IntersectionComputations.h"
+#include "../cpp-Raytracer/IntersectionComputations.cpp"
+
 TEST(World, WorldCreation)
 {
     World w{};
@@ -75,7 +81,7 @@ TEST(World, ShadingAnIntersection)
     Sphere shape = w.GetWorldObjects()[0];
     Intersection i{4, shape};
 
-    IntersectionComputations comps = r.PrepareComputations(i);
+    IntersectionComputations comps = PrepareComputations(i, r);
     Color c = w.ShadeHit(comps);
 
     EXPECT_EQ(c, Color(0.38066, 0.47583, 0.2855));
@@ -89,7 +95,7 @@ TEST(World, ShadingAnIntersectionFromInside)
     Sphere shape = w.GetWorldObjects()[1];
     Intersection i{0.5, shape};
 
-    IntersectionComputations comps = r.PrepareComputations(i);
+    IntersectionComputations comps = PrepareComputations(i, r);
     Color c = w.ShadeHit(comps);
     EXPECT_EQ(c, Color(0.90498, 0.90498, 0.90498));
 }
@@ -250,7 +256,7 @@ TEST(Lighting, ShadeHitIsGivenIntersectionInShadow)
     Ray r{Point(0, 0, 5), Vector(0, 0, 1)};
     Intersection i{4, s2};
 
-    IntersectionComputations comps = r.PrepareComputations(i);
+    IntersectionComputations comps = PrepareComputations(i, r);
     Color c = w.ShadeHit(comps);
 
     EXPECT_EQ(c, Color(0.1, 0.1, 0.1));

@@ -83,7 +83,7 @@ Color World::ColorAt(Ray r) {
     if(!intersections.empty() && Hit(intersections))
     {
         Intersection hit = *Hit(intersections);
-        IntersectionComputations comps = r.PrepareComputations(hit);
+        IntersectionComputations comps = PrepareComputations(hit, r);
         Color color = ShadeHit(comps);
         return color;
     }

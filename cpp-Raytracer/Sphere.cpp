@@ -1,4 +1,6 @@
 #include "Sphere.h"
+//#include "Ray.h"
+//#include "Intersection.h"
 
 Sphere::Sphere():
         Shape(ShapeType::sphere)
@@ -20,5 +22,6 @@ Vector Sphere::NormalAt(Point world_point) {
 
     return world_normal.normalized();
 }
+
 
 
