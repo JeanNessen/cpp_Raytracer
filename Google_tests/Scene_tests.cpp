@@ -2,6 +2,7 @@
 // Created by Jean-Luc von Nessen on 24.01.22.
 //
 
+
 #include <algorithm>
 
 #include "gtest/gtest.h"
@@ -15,10 +16,10 @@
 #include "../cpp-Raytracer/Canvas.h"
 
 #include "../cpp-Raytracer/Intersection.h"
-#include "../cpp-Raytracer/Intersection.cpp"
+//#include "../cpp-Raytracer/Intersection.cpp"
 
 #include "../cpp-Raytracer/IntersectionComputations.h"
-#include "../cpp-Raytracer/IntersectionComputations.cpp"
+//#include "../cpp-Raytracer/IntersectionComputations.cpp"
 
 TEST(World, WorldCreation)
 {

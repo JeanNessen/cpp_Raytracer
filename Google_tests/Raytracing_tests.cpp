@@ -10,11 +10,11 @@
 #include "../cpp-Raytracer/Intersection.h"
 #include "../cpp-Raytracer/Intersection.cpp"
 
-#include "../cpp-Raytracer/IntersectionComputations.h"
+//#include "../cpp-Raytracer/IntersectionComputations.h"
 #include "../cpp-Raytracer/IntersectionComputations.cpp"
 
 #include "../cpp-Raytracer/Shape.h"
-#include "../cpp-Raytracer/Shape.cpp"
+//#include "../cpp-Raytracer/Shape.cpp"
 
 #include "../cpp-Raytracer/Sphere.h"
 #include "../cpp-Raytracer/Sphere.cpp"
