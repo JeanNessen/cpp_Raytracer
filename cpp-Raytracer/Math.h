@@ -111,11 +111,11 @@
 		Tuple operator*(const Tuple& b) const;
 
 		Matrix4 Transposed();
-		Matrix4 Inversed();
+		Matrix4 Inversed() const;
 
-		double Determinant();
-		double Minor(const int row, const int column);
-		double Cofactor(const int row, const int column);
+		double Determinant() const;
+		double Minor(const int row, const int column) const;
+		double Cofactor(const int row, const int column) const;
 
 		bool IsInvertible();
 

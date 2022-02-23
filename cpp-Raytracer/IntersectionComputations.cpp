@@ -6,7 +6,7 @@
 //#include "Intersection.h"
 //#include "Ray.h"
 
-IntersectionComputations::IntersectionComputations(double t, Shape object, Point point, Vector eye_v, Vector normal_v):
+IntersectionComputations::IntersectionComputations(double t, const Shape& object, Point point, Vector eye_v, Vector normal_v):
         t(t),
         object(object),
         point(point),
@@ -31,7 +31,7 @@ IntersectionComputations::IntersectionComputations(double t, Shape object, Point
 IntersectionComputations PrepareComputations(Intersection intersection, Ray ray) {
     //Copy intersection properties for convenience
     double comps_t{intersection.t};
-    Shape comps_object{intersection.object};
+    const Shape& comps_object{intersection.object};
 
     //precompute needed values
     Point comps_point{ray.Position(intersection.t)};

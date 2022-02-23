@@ -5,7 +5,8 @@
 #ifndef CPP_RAYTRACER_INTERSECTION_H
 #define CPP_RAYTRACER_INTERSECTION_H
 
-#include "Shape.h"
+#include "Sphere.h"
+#include "Plane.h"
 #include <vector>
 
 class Intersection {
@@ -15,9 +16,12 @@ public:
     double t{};
 
     //The object with which this intersection occurred
-    Shape object;
+    const Shape& object;
 
     bool operator==(const Intersection& other) const;
+
+    Intersection(double t, const Shape& shape);
+    //Intersection(const Intersection &other); //Copy constructor
 
 };
 

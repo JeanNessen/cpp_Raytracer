@@ -42,7 +42,7 @@ std::vector<Intersection> World::IntersectWorld(Ray ray) {
     std::vector<std::unique_ptr<Intersection>> world_intersections_ptr;
 
     //Add all the intersections to the vector
-    for (Sphere obj: world_objects) {
+    for (Sphere& obj: world_objects) {
         std::vector<Intersection> intersections = ray.Intersect(obj);
         for (Intersection i: intersections) {
             world_intersections_ptr.push_back(std::make_unique<Intersection>(i));
@@ -68,7 +68,7 @@ std::vector<Intersection> World::IntersectWorld(Ray ray) {
 }
 
 Color World::ShadeHit(IntersectionComputations comps) {
-    return Lighting(comps.object.GetMaterial(),
+    return Lighting(comps.object.GetMaterialConst(),
                     world_lights[0],
                     comps.over_point,
                     comps.eye_v,

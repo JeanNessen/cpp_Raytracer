@@ -33,16 +33,14 @@ Shape::Shape(ShapeType t):
     ++latest_id;
 }
 
-Vector Shape::NormalAt(Point world_point) {
-    Point local_point{transform.Inversed() * world_point};
+Vector Shape::NormalAt(Point world_point) const{
+    Point local_point{GetTransform().Inversed() * world_point};
     Vector local_normal{LocalNormalAt(local_point)};
-    Vector world_normal{transform.Inversed().Transposed() * local_normal};
+    Vector world_normal{GetTransform().Inversed().Transposed() * local_normal};
     world_normal.w = 0;
     return world_normal.normalized();
 }
 
-Vector Shape::LocalNormalAt(Point local_point) {
-    return Vector();
-}
+
 
 

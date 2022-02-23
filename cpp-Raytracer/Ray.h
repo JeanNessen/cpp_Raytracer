@@ -32,8 +32,8 @@ public:
 	const Vector direction;
 private:
 
-    std::vector<Intersection> LocalIntersect(Sphere s);
-    std::vector<Intersection> LocalIntersect(Plane p);
+    std::vector<Intersection> LocalIntersect(Sphere& s);
+    std::vector<Intersection> LocalIntersect(Plane& p);
 };
 
 

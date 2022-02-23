@@ -24,17 +24,18 @@ protected:
 
     explicit Shape(ShapeType t);
 
-    virtual Vector LocalNormalAt(Point local_point);
+    virtual Vector LocalNormalAt(Point local_point) const = 0;
 
 public:
     const int id;
 
     const ShapeType type;
 
-    Matrix4 GetTransform(){ return transform; }
+    Matrix4 GetTransform() const { return transform; }
     void SetTransform(Matrix4 t){ transform = t; }
 
-    Material& GetMaterial(){ return material; }
+    Material& GetMaterial() { return material; }
+    Material GetMaterialConst() const {return material;}
     void SetMaterial(Material m){ material = m; }
 
     bool operator==(const Shape& other) const;
@@ -42,7 +43,7 @@ public:
 
     virtual ~Shape()= default;
 
-    Vector NormalAt(Point world_point);
+    Vector NormalAt(Point world_point) const;
 
     Point saved_ray_origin;
     Vector saved_ray_direction;

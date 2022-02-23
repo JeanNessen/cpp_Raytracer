@@ -17,6 +17,15 @@ bool Intersection::operator==(const Intersection& other) const
     return true;
 }
 
+Intersection::Intersection(double t, const Shape& shape):
+    t(t),
+    object(shape)
+{
+}
+
+
+
+
 std::vector<Intersection> Intersections(std::initializer_list<Intersection> args)
 {
     std::vector<Intersection> intersections;

@@ -11,4 +11,8 @@ Plane::Plane():
 
 }
 
+Vector Plane::LocalNormalAt(Point local_point) const{
+    return Vector();
+}
+
 

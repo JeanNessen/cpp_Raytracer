@@ -336,8 +336,7 @@ Matrix4 Matrix4::Transposed()
 	return T;
 }
 
-Matrix4 Matrix4::Inversed()
-{
+Matrix4 Matrix4::Inversed() const {
 	Matrix4 output;
 	double det = Determinant();
 	for (int row = 0; row < 4; row++)
@@ -351,25 +350,25 @@ Matrix4 Matrix4::Inversed()
 	return output;
 }
 
-double Matrix4::Determinant()
-{
-	double det =
-		(*this)(0, 0) * this->Cofactor(0, 0) +
-		(*this)(0, 1) * this->Cofactor(0, 1) +
-		(*this)(0, 2) * this->Cofactor(0, 2) +
-		(*this)(0, 3) * this->Cofactor(0, 3);
+double Matrix4::Determinant() const {
+
+    double first = (*this)(0, 0) * this->Cofactor(0, 0);
+    double second = (*this)(0, 1) * this->Cofactor(0, 1);
+    double third = (*this)(0, 2) * this->Cofactor(0, 2);
+    double fourth = (*this)(0, 3) * this->Cofactor(0, 3);
+
+    double det = first + second + third + fourth;
 	return det;
 }
 
-double Matrix4::Minor(const int row, const int column)
+double Matrix4::Minor(const int row, const int column) const
 {
 	Matrix3 submatrix = Math::Submatrix((*this), row, column);
 	double sub_det = submatrix.Determinant();
 	return sub_det;
 }
 
-double Matrix4::Cofactor(const int row, const int column)
-{
+double Matrix4::Cofactor(const int row, const int column) const {
 	if ((row + column) % 2 == 0)
 	{
 		return this->Minor(row, column);

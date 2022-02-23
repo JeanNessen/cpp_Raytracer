@@ -23,7 +23,7 @@ Sphere::Sphere():
 //    return world_normal.normalized();
 //}
 
-Vector Sphere::LocalNormalAt(Point local_point) {
+Vector Sphere::LocalNormalAt(Point local_point) const{
     //Calculate Object Space normals
     return Vector{local_point - Point(0, 0, 0)};
 }

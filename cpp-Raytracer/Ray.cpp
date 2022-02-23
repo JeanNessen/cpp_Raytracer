@@ -60,20 +60,16 @@ std::vector<Intersection> Ray::Intersect(Shape& s) {
     s.saved_ray_direction = local_ray.direction;
     s.saved_ray_origin = local_ray.origin;
 
-    Shape* p = &s;
-
-    Sphere* sphere = dynamic_cast<Sphere*>(p);
-    Plane* plane = dynamic_cast<Plane*>(p);
 
     switch (s.type) {
         case ShapeType::sphere:
-            return local_ray.LocalIntersect(*sphere);
+            return local_ray.LocalIntersect(dynamic_cast<Sphere&>(s));
         case ShapeType::plane:
-            return local_ray.LocalIntersect(*plane);
+            return local_ray.LocalIntersect(dynamic_cast<Plane&>(s));
     }
 }
 
-std::vector<Intersection> Ray::LocalIntersect(Sphere s) {
+std::vector<Intersection> Ray::LocalIntersect(Sphere& s) {
     Tuple sphere_to_ray_tmp = origin - Point(0, 0, 0); //vector from the center of the sphere to the ray origin
     Vector sphere_to_ray{ sphere_to_ray_tmp.x, sphere_to_ray_tmp.y, sphere_to_ray_tmp.z };
 
@@ -96,7 +92,7 @@ std::vector<Intersection> Ray::LocalIntersect(Sphere s) {
     return std::vector<Intersection>{i1, i2};
 }
 
-std::vector<Intersection> Ray::LocalIntersect(Plane p) {
+std::vector<Intersection> Ray::LocalIntersect(Plane& p) {
     return std::vector<Intersection>();
 }
 

@@ -13,6 +13,7 @@ class Plane: public Shape {
 public:
     Plane();
 
+    Vector LocalNormalAt(Point local_point) const override;
 };
 
 
