@@ -16,11 +16,11 @@ public:
     double t{};
 
     //The object with which this intersection occurred
-    const Shape& object;
+    const std::shared_ptr<Shape> object;
 
     bool operator==(const Intersection& other) const;
 
-    Intersection(double t, const Shape& shape);
+    Intersection(double t, const std::shared_ptr<Shape> shape);
     //Intersection(const Intersection &other); //Copy constructor
 
 };

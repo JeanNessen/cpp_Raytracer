@@ -3,7 +3,7 @@
 //
 
 #include "Plane.h"
-//#include "Ray.h"
+
 
 Plane::Plane():
     Shape(ShapeType::plane)
@@ -12,7 +12,7 @@ Plane::Plane():
 }
 
 Vector Plane::LocalNormalAt(Point local_point) const{
-    return Vector();
+    return Vector(0, 1, 0);
 }
 
 

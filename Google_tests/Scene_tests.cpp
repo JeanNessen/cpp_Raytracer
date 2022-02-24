@@ -54,11 +54,11 @@ TEST(World, DefaultWorld)
     auto default_sphere_2_it = std::find(w.GetWorldObjects().begin(), w.GetWorldObjects().end(), sphere_2);
     EXPECT_NE(default_sphere_2_it, w.GetWorldObjects().end());*/
 
-    EXPECT_EQ(w.GetWorldObjects()[0].GetMaterial(), sphere_1.GetMaterial());
-    EXPECT_EQ(w.GetWorldObjects()[0].GetTransform(), sphere_1.GetTransform());
+    EXPECT_EQ(w.GetWorldObjects()[0]->GetMaterial(), sphere_1.GetMaterial());
+    EXPECT_EQ(w.GetWorldObjects()[0]->GetTransform(), sphere_1.GetTransform());
 
-    EXPECT_EQ(w.GetWorldObjects()[1].GetMaterial(), sphere_2.GetMaterial());
-    EXPECT_EQ(w.GetWorldObjects()[1].GetTransform(), sphere_2.GetTransform());
+    EXPECT_EQ(w.GetWorldObjects()[1]->GetMaterial(), sphere_2.GetMaterial());
+    EXPECT_EQ(w.GetWorldObjects()[1]->GetTransform(), sphere_2.GetTransform());
 }
 
 TEST(World, IntersectWorldWithRay)
@@ -79,7 +79,7 @@ TEST(World, ShadingAnIntersection)
 {
     World w = DefaultWorld();
     Ray r{Point(0, 0, -5), Vector(0, 0, 1)};
-    Sphere shape = w.GetWorldObjects()[0];
+    auto shape = w.GetWorldObjects()[0];
     Intersection i{4, shape};
 
     IntersectionComputations comps = PrepareComputations(i, r);
@@ -93,7 +93,7 @@ TEST(World, ShadingAnIntersectionFromInside)
     World w = DefaultWorld();
     w.GetWorldLights()[0] = PointLight{Color(1, 1, 1), Point(0, 0.25, 0)};
     Ray r{Point(0, 0, 0), Vector(0, 0, 1)};
-    Sphere shape = w.GetWorldObjects()[1];
+    auto shape = w.GetWorldObjects()[1];
     Intersection i{0.5, shape};
 
     IntersectionComputations comps = PrepareComputations(i, r);
@@ -124,15 +124,15 @@ TEST(World, ColorWhenRayHits)
 TEST(World, ColorWithIntersectionBehinRay)
 {
     World w = DefaultWorld();
-    Sphere &outer = w.GetWorldObjects()[0];
-    outer.GetMaterial().ambient = 1;
-    Sphere &inner = w.GetWorldObjects()[1];
-    inner.GetMaterial().ambient = 1;
+    auto outer = w.GetWorldObjects()[0];
+    outer->GetMaterial().ambient = 1;
+    auto inner = w.GetWorldObjects()[1];
+    inner->GetMaterial().ambient = 1;
     Ray r{Point(0, 0, 0.75), Vector(0, 0, -1)};
 
     Color c = w.ColorAt(r);
 
-    EXPECT_EQ(c, inner.GetMaterial().color);
+    EXPECT_EQ(c, inner->GetMaterial().color);
 }
 
 TEST(Camera, ConstructingACamera)
@@ -246,12 +246,12 @@ TEST(Lighting, ShadeHitIsGivenIntersectionInShadow)
     w.AddLight(PointLight{Color(1, 1, 1), Point(0, 0, -10)});
 
     //Add the first sphere
-    Sphere s1{};
+    std::shared_ptr<Sphere> s1 (new Sphere());
     w.AddObject(s1);
 
     //Add the second sphere
-    Sphere s2{};
-    s2.SetTransform(Math::Translation(0, 0, 10));
+    std::shared_ptr<Sphere> s2 (new Sphere());
+    s2->SetTransform(Math::Translation(0, 0, 10));
     w.AddObject(s2);
 
     Ray r{Point(0, 0, 5), Vector(0, 0, 1)};

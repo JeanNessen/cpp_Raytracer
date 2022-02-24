@@ -3,10 +3,9 @@
 //
 
 #include "IntersectionComputations.h"
-//#include "Intersection.h"
-//#include "Ray.h"
 
-IntersectionComputations::IntersectionComputations(double t, const Shape& object, Point point, Vector eye_v, Vector normal_v):
+
+IntersectionComputations::IntersectionComputations(double t, const std::shared_ptr<Shape> object, Point point, Vector eye_v, Vector normal_v):
         t(t),
         object(object),
         point(point),
@@ -25,18 +24,18 @@ IntersectionComputations::IntersectionComputations(double t, const Shape& object
     {
         inside = false;
     }
-    over_point = Point{this->point + this->normal_v * 0.00001};
+    over_point = Point{this->point + this->normal_v * EPSILON};
 }
 
 IntersectionComputations PrepareComputations(Intersection intersection, Ray ray) {
     //Copy intersection properties for convenience
     double comps_t{intersection.t};
-    const Shape& comps_object{intersection.object};
+    const std::shared_ptr<Shape> comps_object{intersection.object};
 
     //precompute needed values
     Point comps_point{ray.Position(intersection.t)};
     Vector comps_eye_v{-ray.direction.x, -ray.direction.y, -ray.direction.z};
-    Vector comps_normal_v{intersection.object.NormalAt(ray.Position(intersection.t))};
+    Vector comps_normal_v{intersection.object->NormalAt(ray.Position(intersection.t))};
 
     IntersectionComputations comps{
             comps_t,

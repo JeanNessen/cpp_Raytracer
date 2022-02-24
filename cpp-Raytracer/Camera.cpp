@@ -3,9 +3,6 @@
 //
 
 #include "Camera.h"
-//#include "Ray.h"
-#include <iostream>
-
 
 Camera::Camera(int h_size, int v_size, double fov):
     horizontal_size(h_size),

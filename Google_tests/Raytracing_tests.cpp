@@ -65,8 +65,8 @@ TEST(RayTracing, ComparingSpheres)
 
 TEST(RayTracing, ComparingIntersections)
 {
-    Sphere s1{};
-    Sphere s2{};
+    std::shared_ptr<Sphere> s1 (new Sphere());
+    std::shared_ptr<Sphere> s2 (new Sphere());
 
     Intersection i1{ 1.0f, s1 };
     Intersection i2{ 1.0f, s2 };
@@ -82,7 +82,7 @@ TEST(RayTracing, ComparingIntersections)
 TEST(RayTracing, RaySphereIntersection2Points)
 {
     Ray r{ Point{0,0,-5}, Vector{0,0,1} };
-    Sphere s{};
+    std::shared_ptr<Sphere> s (new Sphere());
 
     std::vector<Intersection> xs = r.Intersect(s);
 
@@ -94,7 +94,7 @@ TEST(RayTracing, RaySphereIntersection2Points)
 TEST(RayTracing, RayIntersectsSphereTangent)
 {
     Ray r{ Point(0, 1, -5), Vector(0, 0, 1) };
-    Sphere s{};
+    std::shared_ptr<Sphere> s (new Sphere());
 
     std::vector<Intersection> xs = r.Intersect(s);
 
@@ -106,7 +106,7 @@ TEST(RayTracing, RayIntersectsSphereTangent)
 TEST(RayTracing, RayMissesSphere)
 {
     Ray r{ Point(0, 2, -5), Vector(0, 0, 1) };
-    Sphere s{};
+    std::shared_ptr<Sphere> s (new Sphere());
 
     std::vector<Intersection> xs = r.Intersect(s);
 
@@ -116,7 +116,7 @@ TEST(RayTracing, RayMissesSphere)
 TEST(RayTracing, RayOriginInSphere)
 {
     Ray r{ Point(0, 0, 0), Vector(0, 0, 1) };
-    Sphere s{};
+    std::shared_ptr<Sphere> s (new Sphere());
 
     std::vector<Intersection> xs = r.Intersect(s);
 
@@ -128,7 +128,7 @@ TEST(RayTracing, RayOriginInSphere)
 TEST(RayTracing, RayOriginBehindSphere)
 {
     Ray r{ Point(0, 0, 5), Vector(0, 0, 1) };
-    Sphere s{};
+    std::shared_ptr<Sphere> s (new Sphere());
 
     std::vector<Intersection> xs = r.Intersect(s);
 
@@ -139,7 +139,7 @@ TEST(RayTracing, RayOriginBehindSphere)
 
 TEST(RayTracing, IntersectionEncapsulatesAnObject)
 {
-    Sphere s{};
+    std::shared_ptr<Sphere> s (new Sphere());
     Intersection I1{ 1.0f, s };
     Intersection I2{ 2.0f, s };
 
@@ -152,9 +152,9 @@ TEST(RayTracing, IntersectionEncapsulatesAnObject)
 
 TEST(RayTracing, Aggregating5Intersections)
 {
-    Sphere s1{};
-    Sphere s2{};
-    Sphere s3{};
+    std::shared_ptr<Sphere> s1 (new Sphere());
+    std::shared_ptr<Sphere> s2 (new Sphere());
+    std::shared_ptr<Sphere> s3 (new Sphere());
     Intersection I1{ 1.0f, s1 };
     Intersection I2{ 2.0f, s1 };
     Intersection I3{ 3.0f, s2 };
@@ -174,7 +174,7 @@ TEST(RayTracing, Aggregating5Intersections)
 TEST(RayTracing, IntersectSetsTheObjectOnTheIntersection)
 {
     Ray r{ Point(0, 0, 5), Vector(0, 0, 1) };
-    Sphere s{};
+    std::shared_ptr<Sphere> s (new Sphere());
     std::vector<Intersection> xs = r.Intersect(s);
 
     EXPECT_EQ(xs[0].object, s);
@@ -183,7 +183,7 @@ TEST(RayTracing, IntersectSetsTheObjectOnTheIntersection)
 
 TEST(RayTracing, HitWhenAllIntersectionsHavePositiveT)
 {
-    Sphere s{};
+    std::shared_ptr<Sphere> s (new Sphere());
     Intersection i1{ 1, s };
     Intersection i2{ 2, s };
     std::vector<Intersection> xs{ i2, i1 };
@@ -195,7 +195,7 @@ TEST(RayTracing, HitWhenAllIntersectionsHavePositiveT)
 
 TEST(RayTracing, HitWhenSomeIntersectionsHaveNegativeT)
 {
-    Sphere s{};
+    std::shared_ptr<Sphere> s(new Sphere());
     Intersection i1{ -1, s };
     Intersection i2{ 1, s };
     std::vector<Intersection> xs{ i2, i1 };
@@ -207,7 +207,7 @@ TEST(RayTracing, HitWhenSomeIntersectionsHaveNegativeT)
 
 TEST(RayTracing, HitWhenAllIntersectionsAreNegative)
 {
-    Sphere s{};
+    std::shared_ptr<Sphere> s (new Sphere());
     Intersection i1{ -1, s };
     Intersection i2{ -2, s };
     std::vector<Intersection> xs{ i2, i1 };
@@ -219,7 +219,7 @@ TEST(RayTracing, HitWhenAllIntersectionsAreNegative)
 
 TEST(RayTracing, HitIsAlwaysLowestNotNegativeIntersection)
 {
-    Sphere s{};
+    std::shared_ptr<Sphere> s (new Sphere());
     Intersection i1{ 5, s };
     Intersection i2{ 7, s };
     Intersection i3{ -3, s };
@@ -274,9 +274,9 @@ TEST(RayTracing, ChangingSphereTransform)
 TEST(RayTracing, IntersectingScaledSphereWithRay)
 {
     Ray r{ Point(0,0,-5), Vector(0,0,1) };
-    Sphere s{};
+    std::shared_ptr<Sphere> s (new Sphere());
 
-    s.SetTransform(Math::Scaling(2, 2, 2));
+    s->SetTransform(Math::Scaling(2, 2, 2));
     std::vector<Intersection> xs = r.Intersect(s);
 
     EXPECT_EQ(xs.size(), 2);
@@ -287,9 +287,9 @@ TEST(RayTracing, IntersectingScaledSphereWithRay)
 TEST(RayTracing, IntersectingScaledSphereWithRay2)
 {
     Ray r{ Point(0,0,-5), Vector(0,0,1) };
-    Sphere s{};
+    std::shared_ptr<Sphere> s (new Sphere());
 
-    s.SetTransform(Math::Scaling(0.5, 0.5, 0.5));
+    s->SetTransform(Math::Scaling(0.5, 0.5, 0.5));
     std::vector<Intersection> xs = r.Intersect(s);
 
     EXPECT_EQ(xs.size(), 2);
@@ -300,9 +300,9 @@ TEST(RayTracing, IntersectingScaledSphereWithRay2)
 TEST(RayTracing, IntersectingTranslatedSphereWithRay)
 {
     Ray r{ Point(0,0,-5), Vector(0,0,1) };
-    Sphere s{};
+    std::shared_ptr<Sphere> s (new Sphere());
 
-    s.SetTransform(Math::Translation(5, 0, 0));
+    s->SetTransform(Math::Translation(5, 0, 0));
     std::vector<Intersection> xs = r.Intersect(s);
 
     EXPECT_EQ(xs.size(), 0);
@@ -310,49 +310,49 @@ TEST(RayTracing, IntersectingTranslatedSphereWithRay)
 
 TEST(RayTracing, NormalOnSphereX)
 {
-    Sphere s{};
-    Vector n = s.NormalAt(Point(1, 0, 0));
+    std::shared_ptr<Sphere> s (new Sphere());
+    Vector n = s->NormalAt(Point(1, 0, 0));
 
     EXPECT_EQ(n, Vector(1, 0, 0));
 }
 
 TEST(RayTracing, NormalOnSphereY)
 {
-    Sphere s{};
-    Vector n = s.NormalAt(Point(0, 1, 0));
+    std::shared_ptr<Sphere> s (new Sphere());
+    Vector n = s->NormalAt(Point(0, 1, 0));
 
     EXPECT_EQ(n, Vector(0, 1, 0));
 }
 
 TEST(RayTracing, NormalOnSphereZ)
 {
-    Sphere s{};
-    Vector n = s.NormalAt(Point(0, 0, 1));
+    std::shared_ptr<Sphere> s (new Sphere());
+    Vector n = s->NormalAt(Point(0, 0, 1));
 
     EXPECT_EQ(n, Vector(0, 0, 1));
 }
 
 TEST(RayTracing, NormalNonaxial)
 {
-    Sphere s{};
-    Vector n = s.NormalAt(Point(std::sqrt(3)/3, std::sqrt(3)/3, std::sqrt(3)/3));
+    std::shared_ptr<Sphere> s (new Sphere());
+    Vector n = s->NormalAt(Point(std::sqrt(3)/3, std::sqrt(3)/3, std::sqrt(3)/3));
 
     EXPECT_EQ(n, Vector(std::sqrt(3)/3, std::sqrt(3)/3, std::sqrt(3)/3));
 }
 
 TEST(RayTracing, NormalVectorIsNormalized)
 {
-    Sphere s{};
-    Vector n = s.NormalAt(Point(std::sqrt(3)/3, std::sqrt(3)/3, std::sqrt(3)/3));
+    std::shared_ptr<Sphere> s (new Sphere());
+    Vector n = s->NormalAt(Point(std::sqrt(3)/3, std::sqrt(3)/3, std::sqrt(3)/3));
 
     EXPECT_EQ(n, n.normalized());
 }
 
 TEST(RayTracing, NormalOnTranslatedSphere)
 {
-    Sphere s{};
-    s.SetTransform(Math::Translation(0, 1, 0));
-    Vector n = s.NormalAt(Point(0, 1.70711, -0.70711));
+    std::shared_ptr<Sphere> s (new Sphere());
+    s->SetTransform(Math::Translation(0, 1, 0));
+    Vector n = s->NormalAt(Point(0, 1.70711, -0.70711));
 
     EXPECT_TRUE(Math::Equal(n, Vector(0, 0.70711, -0.70711)));
 }
@@ -371,7 +371,7 @@ TEST(RayTracing, NormalOnTransformedSphere)
 TEST(RayTracing, PrecomputingStateOfAnIntersection)
 {
     Ray r{Point(0, 0, -5), Vector(0, 0, 1)};
-    Sphere shape{};
+    std::shared_ptr<Sphere> shape (new Sphere());
     Intersection i{4, shape};
 
     IntersectionComputations comps = PrepareComputations(i, r);
@@ -386,7 +386,7 @@ TEST(RayTracing, PrecomputingStateOfAnIntersection)
 TEST(RayTracing, HitWhenIntersectionOccursOnOutside)
 {
     Ray r{Point(0, 0, -5), Vector(0, 0, 1)};
-    Sphere shape{};
+    std::shared_ptr<Sphere> shape (new Sphere());
     Intersection i{4, shape};
 
     IntersectionComputations comps = PrepareComputations(i, r);
@@ -397,7 +397,7 @@ TEST(RayTracing, HitWhenIntersectionOccursOnOutside)
 TEST(RayTracing, HitWhenIntersectionOccursOnInside)
 {
     Ray r{Point(0, 0, 0), Vector(0, 0, 1)};
-    Sphere shape{};
+    std::shared_ptr<Sphere> shape (new Sphere());
     Intersection i{1, shape};
 
     IntersectionComputations comps = PrepareComputations(i, r);
@@ -529,8 +529,8 @@ TEST(Lighting, SurfaceInShadow)
 TEST(Lighting, HitShouldOffsetPoint)
 {
     Ray r{Point(0, 0, -5), Vector(0, 0, 1)};
-    Sphere shape{};
-    shape.SetTransform(Math::Translation(0, 0, 1));
+    std::shared_ptr<Sphere> shape (new Sphere());
+    shape->SetTransform(Math::Translation(0, 0, 1));
     Intersection i{5, shape};
 
     IntersectionComputations comps = PrepareComputations(i, r);

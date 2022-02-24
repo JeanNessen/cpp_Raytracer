@@ -17,7 +17,7 @@ bool Intersection::operator==(const Intersection& other) const
     return true;
 }
 
-Intersection::Intersection(double t, const Shape& shape):
+Intersection::Intersection(double t, const std::shared_ptr<Shape> shape):
     t(t),
     object(shape)
 {

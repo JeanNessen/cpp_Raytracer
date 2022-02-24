@@ -1,6 +1,7 @@
 #pragma once
 #include "Math.h"
 #include <iostream>
+
 struct Color
 {
 	double red;

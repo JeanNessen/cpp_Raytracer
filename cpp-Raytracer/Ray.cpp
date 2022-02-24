@@ -1,8 +1,5 @@
 #include "Ray.h"
 
-#include <utility>
-#include <algorithm>
-
 Ray::Ray(Point origin, Vector direction):
 	origin(origin),
 	direction(direction)
@@ -31,45 +28,24 @@ Ray Ray::Transform(Matrix4 matrix)
 	return r;
 }
 
-//IntersectionComputations Ray::PrepareComputations(Intersection i) {
-//    //Copy intersection properties for convenience
-//    double comps_t{i.t};
-//    Sphere comps_object{i.object};
-//
-//    //precompute needed values
-//    Point comps_point{Position(i.t)};
-//    Vector comps_eye_v{-direction.x, -direction.y, -direction.z};
-//    Vector comps_normal_v{i.object.NormalAt(Position(i.t))};
-//
-//    IntersectionComputations comps{
-//            comps_t,
-//            comps_object,
-//            comps_point,
-//            comps_eye_v,
-//            comps_normal_v
-//    };
-//
-//    return comps;
-//}
-
-std::vector<Intersection> Ray::Intersect(Shape& s) {
+std::vector<Intersection> Ray::Intersect(std::shared_ptr<Shape> s) {
 
     //Transform the Ray before calculating intersections, to account for the transform of the intersected sphere
-    Ray local_ray{ Transform(s.GetTransform().Inversed()) };
+    Ray local_ray{ Transform(s->GetTransform().Inversed()) };
 
-    s.saved_ray_direction = local_ray.direction;
-    s.saved_ray_origin = local_ray.origin;
+    s->saved_ray_direction = local_ray.direction;
+    s->saved_ray_origin = local_ray.origin;
 
 
-    switch (s.type) {
+    switch (s->type) {
         case ShapeType::sphere:
-            return local_ray.LocalIntersect(dynamic_cast<Sphere&>(s));
+            return local_ray.LocalIntersect(std::dynamic_pointer_cast<Sphere>(s));
         case ShapeType::plane:
-            return local_ray.LocalIntersect(dynamic_cast<Plane&>(s));
+            return local_ray.LocalIntersect(std::dynamic_pointer_cast<Plane>(s));
     }
 }
 
-std::vector<Intersection> Ray::LocalIntersect(Sphere& s) {
+std::vector<Intersection> Ray::LocalIntersect(std::shared_ptr<Sphere> s) {
     Tuple sphere_to_ray_tmp = origin - Point(0, 0, 0); //vector from the center of the sphere to the ray origin
     Vector sphere_to_ray{ sphere_to_ray_tmp.x, sphere_to_ray_tmp.y, sphere_to_ray_tmp.z };
 
@@ -92,8 +68,15 @@ std::vector<Intersection> Ray::LocalIntersect(Sphere& s) {
     return std::vector<Intersection>{i1, i2};
 }
 
-std::vector<Intersection> Ray::LocalIntersect(Plane& p) {
-    return std::vector<Intersection>();
+std::vector<Intersection> Ray::LocalIntersect(std::shared_ptr<Plane> p) {
+    if(std::abs(direction.y) < EPSILON)
+    {
+        return{};
+    } else
+    {
+        double t{-origin.y / direction.y};
+        return std::vector<Intersection>{Intersection(t, p)};
+    }
 }
 
 
