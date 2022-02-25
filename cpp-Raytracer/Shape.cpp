@@ -41,6 +41,12 @@ Vector Shape::NormalAt(Point world_point) const{
     return world_normal.normalized();
 }
 
+Color Shape::StripeAtObject(Point world_point) const {
+    Point object_point{ transform.Inversed() * world_point};
+    Point pattern_point{GetMaterialConst().GetPattern()->GetTransform().Inversed() * object_point};
+    return GetMaterialConst().GetPattern()->PatternAt(pattern_point);
+}
+
 
 
 

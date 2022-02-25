@@ -27,6 +27,9 @@
 #include "../cpp-Raytracer/Material.h"
 #include "../cpp-Raytracer/Material.cpp"
 
+#include "../cpp-Raytracer/Pattern.h"
+#include "../cpp-Raytracer/Pattern.cpp"
+
 #include <limits>
 
 TEST(RayTracing, CreatingARay)
@@ -454,7 +457,8 @@ TEST(Lighting, EyeBetweenLightAndSurface)
     Vector eye_v{0, 0, -1};
     Vector normal_v{0, 0, -1};
     PointLight light{Color(1, 1, 1), Point(0, 0, -10)};
-    Color result = Lighting(m, light, position, eye_v, normal_v, false);
+    std::shared_ptr<Sphere> sphere (new Sphere());
+    Color result = Lighting(m, sphere, light, position, eye_v, normal_v, false);
 
     EXPECT_EQ(result, Color(1.9, 1.9, 1.9));
 }
@@ -467,7 +471,8 @@ TEST(Lighting, EyeBetweenLightAndSurfaceOffset45)
     Vector eye_v{0, static_cast<float>(std::sqrt(2)/2), static_cast<float>(std::sqrt(2)/2)};
     Vector normal_v{0, 0, -1};
     PointLight light{Color(1, 1, 1), Point(0,0, -10)};
-    Color result = Lighting(m, light, position, eye_v, normal_v, false);
+    std::shared_ptr<Sphere> sphere (new Sphere());
+    Color result = Lighting(m, sphere, light, position, eye_v, normal_v, false);
 
     EXPECT_EQ(result, Color(1.0, 1.0, 1.0));
 }
@@ -480,7 +485,8 @@ TEST(Lighting, EyeOppositeSurfaceOffset45)
     Vector eye_v{0, 0, -1};
     Vector normal_v{0, 0, -1};
     PointLight light{Color(1, 1, 1), Point(0,10, -10)};
-    Color result = Lighting(m, light, position, eye_v, normal_v, false);
+    std::shared_ptr<Sphere> sphere (new Sphere());
+    Color result = Lighting(m, sphere, light, position, eye_v, normal_v, false);
 
     EXPECT_EQ(result, Color(0.7364, 0.7364, 0.7364));
 }
@@ -493,7 +499,8 @@ TEST(Lighting, EyeInPathOfReflectionVector)
     Vector eye_v{0, static_cast<float>(-std::sqrt(2)/2), static_cast<float>(-std::sqrt(2)/2)};
     Vector normal_v{0, 0, -1};
     PointLight light{Color(1, 1, 1), Point(0,10, -10)};
-    Color result = Lighting(m, light, position, eye_v, normal_v, false);
+    std::shared_ptr<Sphere> sphere (new Sphere());
+    Color result = Lighting(m, sphere, light, position, eye_v, normal_v, false);
 
     EXPECT_EQ(result, Color(1.6364, 1.6364, 1.6364));
 }
@@ -506,7 +513,8 @@ TEST(Lighting, LightBehindSurface)
     Vector eye_v{0, 0, -1};
     Vector normal_v{0, 0, -1};
     PointLight light{Color(1, 1, 1), Point(0,0, 10)};
-    Color result = Lighting(m, light, position, eye_v, normal_v, false);
+    std::shared_ptr<Sphere> sphere (new Sphere());
+    Color result = Lighting(m, sphere, light, position, eye_v, normal_v, false);
 
     EXPECT_EQ(result, Color(0.1, 0.1, 0.1));
 }
@@ -520,8 +528,9 @@ TEST(Lighting, SurfaceInShadow)
     Vector normal_v{0, 0, -1};
     PointLight light{Color(1, 1, 1), Point(0, 0, -10)};
     bool in_shadow = true;
+    std::shared_ptr<Sphere> sphere (new Sphere());
 
-    Color result = Lighting(m, light, position, eye_v, normal_v, in_shadow);
+    Color result = Lighting(m, sphere, light, position, eye_v, normal_v, in_shadow);
 
     EXPECT_EQ(result, Color(0.1, 0.1, 0.1));
 }
@@ -537,4 +546,25 @@ TEST(Lighting, HitShouldOffsetPoint)
 
     EXPECT_TRUE(comps.over_point.z < -std::numeric_limits<float>::epsilon()/2);
     EXPECT_TRUE(comps.point.z > comps.over_point.z);
+}
+
+TEST(Lighting, LightingWithPatternApplied)
+{
+    Material m{};
+    std::shared_ptr<Pattern> pattern (new StripePattern(color::white, color::black));
+    m.SetPattern(pattern);
+    m.ambient = 1;
+    m.diffuse = 0;
+    m.specular = 0;
+    Vector eye_v{0, 0, -1};
+    Vector normal_v{0, 0, -1};
+    PointLight light{color::white, Point(0, 0, -10)};
+    std::shared_ptr<Sphere> sphere (new Sphere());
+    sphere->SetMaterial(m);
+
+    Color c1 = Lighting(m, sphere, light, Point(0.9, 0, 0), eye_v, normal_v, false);
+    Color c2 = Lighting(m, sphere, light, Point(1.1, 0, 0), eye_v, normal_v, false);
+
+    EXPECT_EQ(c1, color::white);
+    EXPECT_EQ(c2, color::black);
 }

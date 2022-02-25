@@ -69,6 +69,7 @@ std::vector<Intersection> World::IntersectWorld(Ray ray) {
 
 Color World::ShadeHit(IntersectionComputations comps) {
     return Lighting(comps.object->GetMaterialConst(),
+                    comps.object,
                     world_lights[0],
                     comps.over_point,
                     comps.eye_v,

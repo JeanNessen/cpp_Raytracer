@@ -4,10 +4,21 @@
 
 #include "Light.h"
 
-Color Lighting(Material m, PointLight light, Point position, Vector eye_v, Vector normal_v, bool in_shadow) {
+Color Lighting(Material m, std::shared_ptr<Shape> object, PointLight light, Point position, Vector eye_v, Vector normal_v, bool in_shadow) {
+
+    Color color;
+
+    //check if the material has a pattern
+    if(m.GetPattern())
+    {
+        color = object->StripeAtObject(position);
+    } else
+    {
+        color = m.color;
+    }
 
     //Combine surface color with lights intensity/color
-    Color effective_color = m.color * light.intensity;
+    Color effective_color = color * light.intensity;
 
     if(in_shadow)
     {

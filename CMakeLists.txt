@@ -7,11 +7,8 @@ add_executable(cpp_Raytracer cpp-Raytracer/main.cpp
         cpp-Raytracer/Math.cpp cpp-Raytracer/Math.h
         cpp-Raytracer/Canvas.cpp cpp-Raytracer/Canvas.h
         cpp-Raytracer/Color.cpp cpp-Raytracer/Color.h
-        cpp-Raytracer/Environment.cpp cpp-Raytracer/Environment.h
-        cpp-Raytracer/Projectile.cpp cpp-Raytracer/Projectile.h
         cpp-Raytracer/Ray.cpp cpp-Raytracer/Ray.h
         cpp-Raytracer/Sphere.cpp cpp-Raytracer/Sphere.h
-        cpp-Raytracer/Tracer.cpp cpp-Raytracer/Tracer.h
         cpp-Raytracer/Light.cpp cpp-Raytracer/Light.h
         cpp-Raytracer/Material.cpp cpp-Raytracer/Material.h
         cpp-Raytracer/World.cpp cpp-Raytracer/World.h
@@ -19,6 +16,6 @@ add_executable(cpp_Raytracer cpp-Raytracer/main.cpp
         cpp-Raytracer/IntersectionComputations.h
         cpp-Raytracer/Camera.cpp cpp-Raytracer/Camera.h
         cpp-Raytracer/Shape.cpp cpp-Raytracer/Shape.h
-        cpp-Raytracer/Plane.cpp cpp-Raytracer/Plane.h cpp-Raytracer/IntersectionComputations.cpp)
+        cpp-Raytracer/Plane.cpp cpp-Raytracer/Plane.h cpp-Raytracer/IntersectionComputations.cpp cpp-Raytracer/Pattern.cpp cpp-Raytracer/Pattern.h)
 
 add_subdirectory(Google_tests)

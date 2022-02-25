@@ -4,6 +4,8 @@
 
 #include "Material.h"
 
+#include <memory>
+
 bool Material::operator==(const Material &other) const {
     return (
             Math::Equal(ambient, other.ambient) &&
@@ -13,3 +15,31 @@ bool Material::operator==(const Material &other) const {
             color == other.color
             );
 }
+
+Material::Material(std::shared_ptr<Pattern> pattern, double ambient, double diffuse, double specular, double shininess, Color color):
+    ambient(ambient),
+    diffuse(diffuse),
+    specular(specular),
+    shininess(shininess),
+    color(color)
+{
+    this->pattern = pattern;
+}
+
+Material::Material(double ambient, double diffuse, double specular, double shininess, Color color):
+        ambient(ambient),
+        diffuse(diffuse),
+        specular(specular),
+        shininess(shininess),
+        color(color)
+{
+
+}
+
+void Material::SetPattern(std::shared_ptr<Pattern> pattern) {
+    this->pattern = pattern;
+}
+
+
+
+

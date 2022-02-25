@@ -144,6 +144,8 @@
 
 		//Scales a Point or Vector in Space
 		Matrix4 Scaling(const double x, const double y, const double z);
+        //Scales a Point or Vector uniformly in all dimensions
+        Matrix4 Scaling(const double s);
 
 		//Rotates a Point around the given Axis
 		Matrix4 Rotation_X(const double r);

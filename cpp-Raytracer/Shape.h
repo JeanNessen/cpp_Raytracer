@@ -44,6 +44,7 @@ public:
     virtual ~Shape()= default;
 
     Vector NormalAt(Point world_point) const;
+    Color StripeAtObject(Point world_point) const;
 
     Point saved_ray_origin;
     Vector saved_ray_direction;

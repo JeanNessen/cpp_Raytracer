@@ -126,3 +126,12 @@ TEST(Canvas, PPMPixelData)
     EXPECT_EQ(line2, "0 0 0 0 0 0 0 128 0 0 0 0 0 0 0");
     EXPECT_EQ(line3, "0 0 0 0 0 0 0 0 0 0 0 0 0 0 255");
 }
+
+TEST(Color, WhiteAndBlackGlobalColors)
+{
+    Color black = color::black;
+    Color white = color::white;
+
+    EXPECT_EQ(black, Color(0, 0, 0));
+    EXPECT_EQ(white, Color(1, 1, 1));
+}

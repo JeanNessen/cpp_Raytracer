@@ -183,6 +183,10 @@ Matrix4 Math::ViewTransform(Point from, Point to, Vector up) {
     return orientation * Math::Translation(-from.x, -from.y, -from.z);
 }
 
+Matrix4 Math::Scaling(const double s) {
+    return Scaling(s, s, s);
+}
+
 Tuple::Tuple(double x, double y, double z)
 {
 	this->x = x;

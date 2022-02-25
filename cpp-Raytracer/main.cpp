@@ -13,8 +13,13 @@ int main()
     w.AddLight(default_light);
 
 
+    //Set up the pattern for the floor
+    std::shared_ptr<Pattern> p(new CheckersPattern(color::white, color::black));
+    p->SetTransform(Math::Scaling(2));
+
     //Set up the floor
     std::shared_ptr<Plane> floor (new Plane());
+    floor->GetMaterial().SetPattern(p);
     floor->GetMaterial().color = Color(1, 0.9, 0.9);
     floor->GetMaterial().specular = 0.0f;
     w.AddObject(floor);
@@ -63,7 +68,7 @@ int main()
 
 
     //Initialize the Camera
-    Camera c{1920, 1080, M_PI/2};
+    Camera c{500, 500, M_PI/2};
 
     //Position the Camera
     c.SetTransform(Math::ViewTransform(Point(0, 1.5, -5), Point(0, 1, 0), Vector(0, 1, 0)));
