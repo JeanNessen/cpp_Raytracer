@@ -17,14 +17,15 @@ public:
     double specular = 0.9;
     double shininess = 200.0;
     Color color{1, 1, 1};
+    double reflective;
 
     std::shared_ptr<Pattern> GetPattern(){return pattern;}
     void SetPattern(std::shared_ptr<Pattern> pattern);
 
     bool operator==(const Material& other) const;
 
-     explicit Material(std::shared_ptr<Pattern> pattern, double ambient = 0.1, double diffuse = 0.9, double specular = 0.9, double shininess = 200.0, Color color = color::white);
-     explicit Material(double ambient = 0.1, double diffuse = 0.9, double specular = 0.9, double shininess = 200.0, Color color = color::white);
+     explicit Material(std::shared_ptr<Pattern> pattern, double ambient = 0.1, double diffuse = 0.9, double specular = 0.9, double shininess = 200.0, Color color = color::white, double reflective = 0);
+     explicit Material(double ambient = 0.1, double diffuse = 0.9, double specular = 0.9, double shininess = 200.0, Color color = color::white, double reflective = 0);
 
 private:
     std::shared_ptr<Pattern> pattern = nullptr;

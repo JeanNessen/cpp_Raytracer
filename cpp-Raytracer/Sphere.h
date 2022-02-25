@@ -3,6 +3,8 @@
 #include <vector>
 #include "Shape.h"
 
+
+
 class Sphere: public Shape
 {
 public:
@@ -11,3 +13,4 @@ public:
     Vector LocalNormalAt(Point local_point) const override;
 };
 
+using Sphere_ptr = std::shared_ptr<Sphere>;

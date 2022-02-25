@@ -14,14 +14,14 @@ World DefaultWorld() {
     PointLight default_light{Color(1, 1, 1), Point(-10, 10, -10)};
     w.AddLight(default_light);
 
-    std::shared_ptr<Sphere> default_sphere_1 (new Sphere());
+    Sphere_ptr default_sphere_1 (new Sphere());
     default_sphere_1->GetMaterial().color = Color(0.8, 1.0, 0.6);
     default_sphere_1->GetMaterial().diffuse = 0.7;
     default_sphere_1->GetMaterial().specular = 0.2;
 
     w.AddObject(default_sphere_1);
 
-    std::shared_ptr<Sphere> default_sphere_2 (new Sphere());
+    Sphere_ptr default_sphere_2 (new Sphere());
     default_sphere_2->SetTransform(Math::Scaling(0.5, 0.5, 0.5));
 
     w.AddObject(default_sphere_2);
@@ -33,7 +33,7 @@ void World::AddLight(PointLight light) {
     world_lights.push_back(light);
 }
 
-void World::AddObject(std::shared_ptr<Shape> obj) {
+void World::AddObject(Shape_ptr obj) {
     world_objects.push_back(obj);
 }
 
@@ -67,17 +67,20 @@ std::vector<Intersection> World::IntersectWorld(Ray ray) {
     return world_intersections;
 }
 
-Color World::ShadeHit(IntersectionComputations comps) {
-    return Lighting(comps.object->GetMaterialConst(),
+Color World::ShadeHit(IntersectionComputations comps, int remaining) {
+    Color surface = Lighting(comps.object->GetMaterialConst(),
                     comps.object,
                     world_lights[0],
                     comps.over_point,
                     comps.eye_v,
                     comps.normal_v,
                     IsShadowed(comps.over_point));
+    Color reflected = ReflectedColor(comps, remaining);
+
+    return surface + reflected;
 }
 
-Color World::ColorAt(Ray r) {
+Color World::ColorAt(Ray r, int remaining) {
 
     std::vector<Intersection> intersections = IntersectWorld(r);
 
@@ -85,7 +88,7 @@ Color World::ColorAt(Ray r) {
     {
         Intersection hit = *Hit(intersections);
         IntersectionComputations comps = PrepareComputations(hit, r);
-        Color color = ShadeHit(comps);
+        Color color = ShadeHit(comps, remaining);
         return color;
     }
     else
@@ -134,5 +137,18 @@ bool World::IsShadowed(Point p) {
     } else
     {
         return false;
+    }
+}
+
+Color World::ReflectedColor(IntersectionComputations comps, int remaining) {
+    if(comps.object->GetMaterial().reflective == 0 || remaining <= 0)
+    {
+        return color::black;
+    } else
+    {
+        Ray reflected_ray{comps.over_point, comps.reflect_v};
+        Color color = ColorAt(reflected_ray, remaining-1);
+
+        return color * comps.object->GetMaterial().reflective;
     }
 }

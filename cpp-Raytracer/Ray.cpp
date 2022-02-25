@@ -28,7 +28,7 @@ Ray Ray::Transform(Matrix4 matrix)
 	return r;
 }
 
-std::vector<Intersection> Ray::Intersect(std::shared_ptr<Shape> s) {
+std::vector<Intersection> Ray::Intersect(Shape_ptr s) {
 
     //Transform the Ray before calculating intersections, to account for the transform of the intersected sphere
     Ray local_ray{ Transform(s->GetTransform().Inversed()) };
@@ -45,7 +45,7 @@ std::vector<Intersection> Ray::Intersect(std::shared_ptr<Shape> s) {
     }
 }
 
-std::vector<Intersection> Ray::LocalIntersect(std::shared_ptr<Sphere> s) {
+std::vector<Intersection> Ray::LocalIntersect(Sphere_ptr s) {
     Tuple sphere_to_ray_tmp = origin - Point(0, 0, 0); //vector from the center of the sphere to the ray origin
     Vector sphere_to_ray{ sphere_to_ray_tmp.x, sphere_to_ray_tmp.y, sphere_to_ray_tmp.z };
 
@@ -68,7 +68,7 @@ std::vector<Intersection> Ray::LocalIntersect(std::shared_ptr<Sphere> s) {
     return std::vector<Intersection>{i1, i2};
 }
 
-std::vector<Intersection> Ray::LocalIntersect(std::shared_ptr<Plane> p) {
+std::vector<Intersection> Ray::LocalIntersect(Plane_ptr p) {
     if(std::abs(direction.y) < EPSILON)
     {
         return{};

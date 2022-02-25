@@ -21,7 +21,7 @@ public:
 	//Returns the distances at which the Ray intersects the given sphere
     //Returns empty vector if no intersection
     //Returns std::vector of length 2 on any kind of intersection
-    std::vector<Intersection> Intersect(std::shared_ptr<Shape> s);
+    std::vector<Intersection> Intersect(Shape_ptr s);
 
 	//Transforms the Ray according to the given transformation Matrix
 	Ray Transform(Matrix4 matrix);
@@ -30,8 +30,8 @@ public:
 	const Point origin;
 	const Vector direction;
 
-    std::vector<Intersection> LocalIntersect(std::shared_ptr<Sphere> s);
-    std::vector<Intersection> LocalIntersect(std::shared_ptr<Plane> p);
+    std::vector<Intersection> LocalIntersect(Sphere_ptr s);
+    std::vector<Intersection> LocalIntersect(Plane_ptr p);
 
 private:
 

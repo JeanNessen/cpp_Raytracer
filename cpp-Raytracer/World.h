@@ -19,23 +19,24 @@ private:
 
     std::vector<PointLight> world_lights{};
 
-    std::vector<std::shared_ptr<Shape>> world_objects{};
+    std::vector<Shape_ptr> world_objects{};
 
 public:
 
     std::vector<PointLight>& GetWorldLights(){ return world_lights; }
     void AddLight(PointLight light);
 
-    std::vector<std::shared_ptr<Shape>> GetWorldObjects(){ return world_objects; }
-    void AddObject(std::shared_ptr<Shape> obj);
+    std::vector<Shape_ptr> GetWorldObjects(){ return world_objects; }
+    void AddObject(Shape_ptr obj);
 
     std::vector<Intersection> IntersectWorld(Ray ray);
 
     bool IsShadowed(Point p);
+    Color ReflectedColor(IntersectionComputations comps, int remaining = 5);
 
-    Color ShadeHit(IntersectionComputations comps);
+    Color ShadeHit(IntersectionComputations comps, int remaining = 5);
 
-    Color ColorAt(Ray r);
+    Color ColorAt(Ray r, int remaining = 5);
 
     Canvas Render(Camera c);
 };

@@ -12,26 +12,30 @@ bool Material::operator==(const Material &other) const {
             Math::Equal(diffuse, other.diffuse) &&
             Math::Equal(shininess, other.shininess) &&
             Math::Equal(specular, other.specular) &&
-            color == other.color
+            color == other.color &&
+            pattern == other.pattern &&
+            Math::Equal(reflective, other.reflective)
             );
 }
 
-Material::Material(std::shared_ptr<Pattern> pattern, double ambient, double diffuse, double specular, double shininess, Color color):
+Material::Material(std::shared_ptr<Pattern> pattern, double ambient, double diffuse, double specular, double shininess, Color color, double reflective):
     ambient(ambient),
     diffuse(diffuse),
     specular(specular),
     shininess(shininess),
-    color(color)
+    color(color),
+    reflective(reflective)
 {
     this->pattern = pattern;
 }
 
-Material::Material(double ambient, double diffuse, double specular, double shininess, Color color):
+Material::Material(double ambient, double diffuse, double specular, double shininess, Color color, double reflective):
         ambient(ambient),
         diffuse(diffuse),
         specular(specular),
         shininess(shininess),
-        color(color)
+        color(color),
+        reflective(reflective)
 {
 
 }

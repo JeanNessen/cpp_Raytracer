@@ -5,7 +5,7 @@
 #include "IntersectionComputations.h"
 
 
-IntersectionComputations::IntersectionComputations(double t, const std::shared_ptr<Shape> object, Point point, Vector eye_v, Vector normal_v):
+IntersectionComputations::IntersectionComputations(double t, const Shape_ptr object, Point point, Vector eye_v, Vector normal_v):
         t(t),
         object(object),
         point(point),
@@ -25,12 +25,13 @@ IntersectionComputations::IntersectionComputations(double t, const std::shared_p
         inside = false;
     }
     over_point = Point{this->point + this->normal_v * EPSILON};
+
 }
 
 IntersectionComputations PrepareComputations(Intersection intersection, Ray ray) {
     //Copy intersection properties for convenience
     double comps_t{intersection.t};
-    const std::shared_ptr<Shape> comps_object{intersection.object};
+    const Shape_ptr comps_object{intersection.object};
 
     //precompute needed values
     Point comps_point{ray.Position(intersection.t)};
@@ -44,6 +45,8 @@ IntersectionComputations PrepareComputations(Intersection intersection, Ray ray)
             comps_eye_v,
             comps_normal_v
     };
+
+    comps.reflect_v = ray.direction.Reflect(comps_normal_v);
 
     return comps;
 }

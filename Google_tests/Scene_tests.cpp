@@ -246,11 +246,11 @@ TEST(Lighting, ShadeHitIsGivenIntersectionInShadow)
     w.AddLight(PointLight{Color(1, 1, 1), Point(0, 0, -10)});
 
     //Add the first sphere
-    std::shared_ptr<Sphere> s1 (new Sphere());
+    Sphere_ptr s1 (new Sphere());
     w.AddObject(s1);
 
     //Add the second sphere
-    std::shared_ptr<Sphere> s2 (new Sphere());
+    Sphere_ptr s2 (new Sphere());
     s2->SetTransform(Math::Translation(0, 0, 10));
     w.AddObject(s2);
 

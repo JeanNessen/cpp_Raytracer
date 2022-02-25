@@ -8,12 +8,14 @@
 #include "Math.h"
 #include "Material.h"
 
+
 enum ShapeType{
     sphere,
     plane
 };
 
 class Shape {
+
 
 protected:
     Matrix4 transform;
@@ -50,5 +52,7 @@ public:
     Vector saved_ray_direction;
 
 };
+
+using Shape_ptr = std::shared_ptr<Shape>;
 
 #endif //CPP_RAYTRACER_SHAPE_H

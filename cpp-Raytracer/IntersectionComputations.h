@@ -12,14 +12,15 @@
 //Data structure to hold precalculated Computations about an Intersection
 struct IntersectionComputations {
     double t;
-    const std::shared_ptr<Shape> object;
+    const Shape_ptr object;
     Point point;
     Vector eye_v;
     Vector normal_v;
+    Vector reflect_v;
     bool inside;
     Point over_point;
 
-    IntersectionComputations(double t, const std::shared_ptr<Shape> object, Point point, Vector eye_v, Vector normal_v);
+    IntersectionComputations(double t, const Shape_ptr object, Point point, Vector eye_v, Vector normal_v);
 };
 
 IntersectionComputations PrepareComputations(Intersection intersection, Ray ray);

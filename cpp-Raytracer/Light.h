@@ -23,6 +23,6 @@ struct PointLight{
     bool operator==(const PointLight& other) const;
 };
 
-Color Lighting(Material m, std::shared_ptr<Shape> object, PointLight light, Point position, Vector eye_v, Vector normal_v, bool in_shadow);
+Color Lighting(Material m, Shape_ptr object, PointLight light, Point position, Vector eye_v, Vector normal_v, bool in_shadow);
 
 #endif //CPP_RAYTRACER_LIGHT_H

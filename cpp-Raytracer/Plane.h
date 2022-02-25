@@ -16,5 +16,7 @@ public:
     Vector LocalNormalAt(Point local_point) const override;
 };
 
+using Plane_ptr = std::shared_ptr<Plane>;
+
 
 #endif //CPP_RAYTRACER_PLANE_H

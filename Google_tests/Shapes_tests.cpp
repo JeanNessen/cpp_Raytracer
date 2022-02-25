@@ -56,7 +56,7 @@ TEST(Spheres, AssigningAMaterial)
 TEST(Spheres, IntersectingAScaledSphereWithARay)
 {
     Ray r{Point(0, 0, -5), Vector(0, 0, 1)};
-    std::shared_ptr<Sphere> s (new Sphere());
+    Sphere_ptr s (new Sphere());
 
     s->SetTransform(Math::Scaling(2, 2, 2));
     std::vector<Intersection> xs = r.Intersect(s);
@@ -68,7 +68,7 @@ TEST(Spheres, IntersectingAScaledSphereWithARay)
 TEST(Spheres, IntersectingATranslatedSphereWithARay)
 {
     Ray r{Point(0, 0, -5), Vector(0, 0, 1)};
-    std::shared_ptr<Sphere> s(new Sphere());
+    Sphere_ptr s(new Sphere());
 
     s->SetTransform(Math::Translation(5, 0, 0));
     std::vector<Intersection> xs = r.Intersect(s);
@@ -114,7 +114,7 @@ TEST(Planes, AssigningAMaterial)
 TEST(Planes, IntersectingAScaledPlaneWithARay)
 {
     Ray r{Point(0, 0, -5), Vector(0, 0, 1)};
-    std::shared_ptr<Plane> p (new Plane());
+    Plane_ptr p (new Plane());
 
     p->SetTransform(Math::Scaling(2, 2, 2));
     std::vector<Intersection> xs = r.Intersect(p);
@@ -126,7 +126,7 @@ TEST(Planes, IntersectingAScaledPlaneWithARay)
 TEST(Planes, IntersectingATranslatedPlaneWithARay)
 {
     Ray r{Point(0, 0, -5), Vector(0, 0, 1)};
-    std::shared_ptr<Plane> p (new Plane());
+    Plane_ptr p (new Plane());
 
     p->SetTransform(Math::Translation(5, 0, 0));
     std::vector<Intersection> xs = r.Intersect(p);
@@ -152,7 +152,7 @@ TEST(Planes, TheNormalOfAPlaneIsConstantEverywhere)
 
 TEST(Planes, IntersectWithARayParallelToThePlane)
 {
-    std::shared_ptr<Plane> p (new Plane());
+    Plane_ptr p (new Plane());
     Ray r{Point(0, 10, 10), Vector(0, 0, 1)};
 
     std::vector<Intersection> xs = r.LocalIntersect(p);
@@ -162,7 +162,7 @@ TEST(Planes, IntersectWithARayParallelToThePlane)
 
 TEST(Planes, IntersectWithACoplanarRay)
 {
-    std::shared_ptr<Plane> p (new Plane());
+    Plane_ptr p (new Plane());
     Ray r{Point(0, 0, 0), Vector(0, 0, 1)};
 
     std::vector<Intersection> xs = r.LocalIntersect(p);
@@ -172,7 +172,7 @@ TEST(Planes, IntersectWithACoplanarRay)
 
 TEST(Planes, ARayIntersectingAPlaneFormAbove)
 {
-    std::shared_ptr<Plane> p (new Plane());
+    Plane_ptr p (new Plane());
     Ray r{Point(0, 1, 0), Vector(0, -1, 0)};
 
     std::vector<Intersection> xs = r.LocalIntersect(p);
@@ -184,7 +184,7 @@ TEST(Planes, ARayIntersectingAPlaneFormAbove)
 
 TEST(Planes, ARayIntersectingAPlaneFormBelow)
 {
-    std::shared_ptr<Plane> p (new Plane());
+    Plane_ptr p (new Plane());
     Ray r{Point(0, -1, 0), Vector(0, 1, 0)};
 
     std::vector<Intersection> xs = r.LocalIntersect(p);
