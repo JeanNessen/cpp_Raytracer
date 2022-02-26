@@ -9,7 +9,7 @@ int main()
     World w{};
 
     //Initialize the light
-    PointLight default_light{Color(1, 1, 1), Point(-10, 10, -10)};
+    PointLight default_light{color::white, Point(-5, 3, -5)};
     w.AddLight(default_light);
 
 
@@ -22,34 +22,47 @@ int main()
     floor->GetMaterial().SetPattern(p);
     floor->GetMaterial().color = Color(1, 0.9, 0.9);
     floor->GetMaterial().specular = 0.6f;
-    floor->GetMaterial().reflective = 0.1f;
+    floor->GetMaterial().reflective = 0.05f;
     w.AddObject(floor);
 
 
-    //Set up the right wall
-    Sphere_ptr right_wall( new Sphere());
-    right_wall->SetTransform(Math::Translation(0, 0, 5) *
-                            Math::Rotation_Y(M_PI / 4) * Math::Rotation_X(M_PI / 2) *
-                            Math::Scaling(10, 0.01, 10));
-    right_wall->SetMaterial(floor->GetMaterial());
-    //w.AddObject(right_wall);
+    //Set up the back wall
+    Plane_ptr back_wall( new Plane());
+    back_wall->SetTransform(Math::Translation(0, 0, 10) *
+                                Math::Rotation_X(M_PI / 2));
+    back_wall->GetMaterial().specular = 0;
+    w.AddObject(back_wall);
+
+    //Set up the wall behind the camera
+    Plane_ptr cam_wall( new Plane());
+    cam_wall->SetTransform(Math::Translation(0, 0, -10) *
+                            Math::Rotation_X(-M_PI / 2));
+    cam_wall->GetMaterial().specular = 0;
+    w.AddObject(cam_wall);
 
 
     //Set up the left wall
-    Sphere_ptr left_wall(new Sphere());
-    left_wall->SetTransform( Math::Translation(0, 0, 5) *
-                            Math::Rotation_Y(-M_PI /4) * Math::Rotation_X(M_PI/ 2) *
-                            Math::Scaling(10, 0.01, 10));
-    left_wall->SetMaterial(floor->GetMaterial());
-    //w.AddObject(left_wall);
+    Plane_ptr left_wall( new Plane());
+    left_wall->SetTransform(Math::Translation(10, 0, 0) *
+                           Math::Rotation_Z(M_PI / 2));
+    left_wall->GetMaterial().specular = 0;
+    w.AddObject(left_wall);
+
+    //Set up the right wall
+    Plane_ptr right_wall( new Plane());
+    right_wall->SetTransform(Math::Translation(-10, 0, 0) *
+                            Math::Rotation_Z(-M_PI / 2));
+    right_wall->GetMaterial().specular = 0;
+    w.AddObject(right_wall);
 
     //Set up the spheres
     Sphere_ptr sphere_01(new Sphere());
     sphere_01->GetMaterial().color = Color(1, 0, 0);
     sphere_01->GetMaterial().diffuse = 0.7f;
     sphere_01->GetMaterial().specular = 0.2f;
-    sphere_01->GetMaterial().reflective = 0.7f;
-    sphere_01->SetTransform(Math::Translation(-1, 1, -2));
+    sphere_01->GetMaterial().reflective = 0.15f;
+    sphere_01->GetMaterial().shininess = 150;
+    sphere_01->SetTransform(Math::Translation(-3, 1, 0));
     w.AddObject(sphere_01);
 
 
@@ -57,8 +70,8 @@ int main()
     sphere_02->GetMaterial().color = Color(0, 1, 0);
     sphere_02->GetMaterial().diffuse = 0.7f;
     sphere_02->GetMaterial().specular = 0.2f;
-    sphere_02->GetMaterial().reflective = 0.6f;
-    sphere_02->SetTransform(Math::Translation(1.5, 0.5, -1) * Math::Scaling(0.25, 0.25, 0.25));
+    sphere_02->GetMaterial().reflective = 0.15f;
+    sphere_02->SetTransform(Math::Translation(1.5, 0.25, 1) * Math::Scaling(0.25, 0.25, 0.25));
     w.AddObject(sphere_02);
 
 
@@ -66,8 +79,8 @@ int main()
     sphere_03->GetMaterial().color = Color(0, 0, 1);
     sphere_03->GetMaterial().diffuse = 0.7f;
     sphere_03->GetMaterial().specular = 0.2f;
-    sphere_03->GetMaterial().reflective = 0.5f;
-    sphere_03->SetTransform(Math::Translation(0, 1, 1));
+    sphere_03->GetMaterial().reflective = 0.15f;
+    sphere_03->SetTransform(Math::Translation(0, 1, 3));
     w.AddObject(sphere_03);
 
 

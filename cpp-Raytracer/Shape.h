@@ -5,6 +5,7 @@
 #ifndef CPP_RAYTRACER_SHAPE_H
 #define CPP_RAYTRACER_SHAPE_H
 
+#include <memory>
 #include "Math.h"
 #include "Material.h"
 

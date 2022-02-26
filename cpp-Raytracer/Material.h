@@ -6,6 +6,7 @@
 #define CPP_RAYTRACER_MATERIAL_H
 
 
+#include <memory>
 #include "Color.h"
 #include "Pattern.h"
 
