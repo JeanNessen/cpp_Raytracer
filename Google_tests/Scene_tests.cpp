@@ -176,6 +176,7 @@ TEST(Camera, ConstructingRayThroughCenterOfCanvas)
 TEST(Camera, ConstructingRayThroughCorneOfCanvas)
 {
     Camera c{201, 101, M_PI/2};
+    c.SetFocalLength(1);
 
     Ray r = c.RayForPixel(0, 0);
 
@@ -203,9 +204,9 @@ TEST(Camera, RenderingAWorldWithACamera)
     Vector up{0, 1, 0};
     c.SetTransform(Math::ViewTransform(from, to, up));
 
-    Canvas image = w.Render(c);
+    Canvas image = w.RenderMultiThread(c);
 
-    EXPECT_EQ(image.pixel_at(5, 5), Color(0.38066, 0.47583, 0.2855));
+    EXPECT_EQ(image.PixelAt(5, 5), Color(0.38066, 0.47583, 0.2855));
 }
 
 TEST(World, NoShadowWhenNothingIsCollinearWithPointAndLight)

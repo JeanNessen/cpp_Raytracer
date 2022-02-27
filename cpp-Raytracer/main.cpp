@@ -8,6 +8,7 @@ int main()
 {
     //Initialize the World
     World w{};
+    w.SetRecursionDepth(1);
 
     //Initialize the light
     PointLight default_light{color::white, Point(-5, 3, -5)};
@@ -94,15 +95,17 @@ int main()
 
 
     //Initialize the Camera
-    Camera c{50, 50, 3*(M_PI/4)};
+    Camera c{1920, 1080, 3*(M_PI/4)};
 
     //Position the Camera
     c.SetTransform(Math::ViewTransform(Point(0, 1.5, -5), Point(0, 1, 0), Vector(0, 1, 0)));
 
     c.SetSamplesPerPixel(10);
+    c.depth_of_field = true;
+    c.anti_aliasing = true;
 
-    //Render the image
-    Canvas image = w.Render(c);
+    //RenderMultiThread the image
+    Canvas image = w.RenderMultiThread(c);
 
     image.to_ppm();
 

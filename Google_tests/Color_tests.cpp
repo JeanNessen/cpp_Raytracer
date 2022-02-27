@@ -71,9 +71,9 @@ TEST(Canvas, CanvasCreation)
 {
     Canvas c{ 10, 20 };
     Color red{ 1.0f, 0, 0 };
-    c.write_pixel(2, 3, red);
+    c.WritePixel(2, 3, red);
 
-    EXPECT_EQ(c.pixel_at(2, 3), red);
+    EXPECT_EQ(c.PixelAt(2, 3), red);
 }
 
 TEST(Canvas, PPMHeader)
@@ -100,9 +100,9 @@ TEST(Canvas, PPMPixelData)
     Color c2{ 0, 0.5, 0 };
     Color c3{ -0.5, 0, 1 };
 
-    c.write_pixel(0, 0, c1);
-    c.write_pixel(2, 1, c2);
-    c.write_pixel(4, 2, c3);
+    c.WritePixel(0, 0, c1);
+    c.WritePixel(2, 1, c2);
+    c.WritePixel(4, 2, c3);
 
     std::string ppm = c.to_ppm();
     std::stringstream ppmStream(ppm);

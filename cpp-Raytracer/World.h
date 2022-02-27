@@ -16,6 +16,7 @@
 
 class World {
 private:
+    static int recursion_depth;
 
     std::vector<PointLight> world_lights{};
 
@@ -27,6 +28,9 @@ private:
 
 public:
 
+    int GetRecursionDepth(){ return recursion_depth; }
+    void SetRecursionDepth(int new_depth){ recursion_depth = new_depth; }
+
     std::vector<PointLight>& GetWorldLights(){ return world_lights; }
     void AddLight(PointLight light);
 
@@ -36,13 +40,14 @@ public:
     std::vector<Intersection> IntersectWorld(Ray ray);
 
     bool IsShadowed(Point p);
-    Color ReflectedColor(IntersectionComputations comps, int remaining = 5);
+    Color ReflectedColor(IntersectionComputations comps, int remaining = recursion_depth);
 
-    Color ShadeHit(IntersectionComputations comps, int remaining = 5);
+    Color ShadeHit(IntersectionComputations comps, int remaining = recursion_depth);
 
     Color ColorAt(Ray r, int remaining = 5);
 
-    Canvas Render(Camera c);
+    Canvas RenderMultiThread(Camera c);
+    Canvas RenderSingleThread(Camera c);
 };
 
 World DefaultWorld();

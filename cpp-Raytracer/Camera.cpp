@@ -33,9 +33,9 @@ void Camera::CalculatePixelSize() {
 }
 
 Ray Camera::RayForPixel(int x, int y) {
-    //The offset from the edge of the canvas to the CENTER of the pixel
-    double x_offset = (double(x) + 0.5f) * pixel_size;
-    double y_offset = (double(y) + 0.5f) * pixel_size;
+    //The offset from the edge of the canvas to a point in the pixel
+    double x_offset = CalculatePixelOffset(x);
+    double y_offset = CalculatePixelOffset(y);
 
     //The untransformed coordinates of the pixel in world space
     double world_x = half_width - x_offset;
@@ -44,47 +44,41 @@ Ray Camera::RayForPixel(int x, int y) {
     //Using the camera matrix, transform the canvas point and the origin, and then compute the rays direction vector, the canvas is at z = -1
     Point pixel{transform.Inversed() * Point(world_x, world_y, -focal_length)};
 
-    //Origin for pinhole camera
-    Point origin{transform.Inversed() * Point(0, 0, 0)};
-
-    //Origin for camera with aperture
-    //Point origin{transform.Inversed() * GetRandomPointOnAperture()};
+    Point origin = CalculateRayOrigin();
 
     Vector direction{Vector{pixel - origin}.normalized()};
 
-    return Ray(origin, direction);
+    return {origin, direction};
 }
 
-
-
-Point Camera::GetRandomPointOnAperture() {
-    std::random_device dev;
-    std::uniform_real_distribution<double> distribution(0.0, aperture_size);
-    std::mt19937 generator(dev());
-    double x = distribution(generator) - (aperture_size / 2);
-    double y = distribution(generator) - (aperture_size / 2);
-
-    return {x, y, 0};
+double Camera::CalculatePixelOffset(int pixel) const {
+    double offset;
+    //If Anti Aliasing is enabled the ray will pass through a random point inside the pixel.
+    if(anti_aliasing)
+    {
+        offset = (double(pixel) + GetRandomDouble(0, 1)) * pixel_size;
+    }
+    //If Anti Aliasing is disabled the ray will pass through the center of the pixel.
+    else
+    {
+        offset = (double(pixel) + 0.5f) * pixel_size;
+    }
+    return offset;
 }
 
-Ray Camera::RandomRayForPixel(int x, int y) {
-    //The offset from the edge of the canvas to the CENTER of the pixel
-    double x_offset = (double(x) + GetRandomDouble(0, 1)) * pixel_size;
-    double y_offset = (double(y) + GetRandomDouble(0, 1)) * pixel_size;
-
-    //The untransformed coordinates of the pixel in world space
-    double world_x = half_width - x_offset;
-    double world_y = half_height - y_offset;
-
-    //Using the camera matrix, transform the canvas point and the origin, and then compute the rays direction vector, the canvas is at z = -1
-    Point pixel{transform.Inversed() * Point(world_x, world_y, -focal_length)};
-
-    //Origin for camera with aperture
-    Point origin{transform.Inversed() * GetRandomPointOnAperture()};
-
-    Vector direction{Vector{pixel - origin}.normalized()};
-
-    return Ray(origin, direction);
+Point Camera::CalculateRayOrigin() {
+    Point origin;
+    //If Depth of field is enabled, the ray will originate from a random point on the aperture
+    if(depth_of_field)
+    {
+        origin = Point{transform.Inversed() * GetRandomPointOnAperture()};
+    }
+    //If Depth of field is disabled, the ray will originate from (0, 0, 0)
+    else
+    {
+        origin = Point{transform.Inversed() * Point(0, 0, 0)};
+    }
+    return origin;
 }
 
 double Camera::GetRandomDouble(double min, double max) {
@@ -93,4 +87,14 @@ double Camera::GetRandomDouble(double min, double max) {
     std::mt19937 generator(dev());
     double a = distribution(generator);
     return a;
+}
+
+Point Camera::GetRandomPointOnAperture() const {
+    std::random_device dev;
+    std::uniform_real_distribution<double> distribution(0.0, aperture_size);
+    std::mt19937 generator(dev());
+    double x = distribution(generator) - (aperture_size / 2);
+    double y = distribution(generator) - (aperture_size / 2);
+
+    return {x, y, 0};
 }

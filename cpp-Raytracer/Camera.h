@@ -22,8 +22,13 @@ private:
     double half_width, half_height;
 
     void CalculatePixelSize();
+    Point CalculateRayOrigin();
+    double CalculatePixelOffset(int pixel) const;
 
 public:
+    bool anti_aliasing = false;
+    bool depth_of_field = false;
+
     Camera(int h_size, int v_size, double fov);
 
     int GetHSize() const{return horizontal_size;}
@@ -49,11 +54,13 @@ public:
 
     double GetPixelSize() const{return pixel_size;}
 
-    Ray RayForPixel(int x, int y);
-    Ray RandomRayForPixel(int x, int y);
 
-    Point GetRandomPointOnAperture();
+    Ray RayForPixel(int x, int y);
+
+    Point GetRandomPointOnAperture() const;
     static double GetRandomDouble(double min, double max);
+
+
 };
 
 

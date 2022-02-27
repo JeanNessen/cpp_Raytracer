@@ -7,6 +7,10 @@
 #include <memory>
 #include <iostream>
 #include <chrono>
+#include <omp.h>
+
+//static variables
+int World::recursion_depth = 5;
 
 World DefaultWorld() {
     World w{};
@@ -93,36 +97,99 @@ Color World::ColorAt(Ray r, int remaining) {
     }
     else
     {
-        return Color(0, 0, 0);
+        return color::black;
     }
 
 }
 
-Canvas World::Render(Camera c) {
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "openmp-use-default-none"
+Canvas World::RenderMultiThread(Camera c) {
     auto start = std::chrono::high_resolution_clock::now();
-    int ray_count = 0;
-
-    Canvas image{c.GetHSize(), c.GetVSize()};
 
     int remaining_lines = c.GetVSize();
 
-    for (int y = 0; y < c.GetVSize()-1; ++y) {
-        for (int x = 0; x < c.GetHSize(); ++x) {
-            //Ray ray = c.RayForPixel(x, y);
-            //Color color = ColorAt(ray);
-            Color color = GetColorForPixel(c, x, y);
-            image.write_pixel(x, y, color);
-            ++ray_count;
+    int number_of_threads_total = 0;
+    int number_of_threads_used = 0;
+
+    std::vector<Canvas> parallel_results;
+
+    Canvas canvas_sum{c.GetHSize(), c.GetVSize()};
+#pragma omp parallel
+    {
+        #pragma omp atomic
+        number_of_threads_total++;
+    };
+    omp_set_num_threads(number_of_threads_total / 2);
+
+#pragma omp parallel
+    {
+        number_of_threads_used = omp_get_num_threads();
+        if (omp_get_thread_num() == 0)
+        {
+            std::cout << "Starting render using " << number_of_threads_used << " threads." << std::endl;
         }
-        PrintProgressUpdate(remaining_lines, c);
-        --remaining_lines;
-    }
+
+        int ray_count = 0;
+        Canvas image{c.GetHSize(), c.GetVSize()};
+
+        for (int y = 0; y < c.GetVSize()-1; ++y) {
+            for (int x = 0; x < c.GetHSize(); ++x) {
+                Color color = GetColorForPixel(c, x, y);
+                image.WritePixel(x, y, color);
+                ++ray_count;
+            }
+
+            if(omp_get_thread_num() == 0)
+            {
+                PrintProgressUpdate(remaining_lines, c);
+                --remaining_lines;
+            }
+
+        }
+    #pragma omp critical
+        parallel_results.push_back(image);
+        canvas_sum += image;
+    };
+
+    Canvas canvas_average = canvas_sum / parallel_results.size();
 
     auto stop = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
     double seconds = duration.count() / 1000.0f;
 
-    std::cout << ray_count << " rays rendered in " << seconds << " seconds." << std::endl;
+    std::cout << " Finished in " << seconds << " seconds with " << c.GetSamplesPerPixel() * number_of_threads_used << " samples per pixel on " << number_of_threads_used << " threads." << std::endl;
+
+    return canvas_average;
+}
+#pragma clang diagnostic pop
+
+Canvas World::RenderSingleThread(Camera c) {
+
+    auto start = std::chrono::high_resolution_clock::now();
+
+    std::cout << "Starting render using one thread." << std::endl;
+
+    int remaining_lines = c.GetVSize();
+
+    int ray_count = 0;
+    Canvas image{c.GetHSize(), c.GetVSize()};
+
+    for (int y = 0; y < c.GetVSize()-1; ++y) {
+        for (int x = 0; x < c.GetHSize(); ++x) {
+            Color color = GetColorForPixel(c, x, y);
+            image.WritePixel(x, y, color);
+            ++ray_count;
+        }
+            PrintProgressUpdate(remaining_lines, c);
+            --remaining_lines;
+        }
+
+    auto stop = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
+    double seconds = duration.count() / 1000.0f;
+
+    std::cout << " Finished in " << seconds << " seconds with " << c.GetSamplesPerPixel()  << " samples per pixel on one" << " thread." << std::endl;
 
     return image;
 }
@@ -162,7 +229,7 @@ Color World::GetColorForPixel(Camera c, int x, int y) {
     Color color_sum{};
 
     for (int i = 0; i < c.GetSamplesPerPixel() ; ++i) {
-        Ray r = c.RandomRayForPixel(x, y);
+        Ray r = c.RayForPixel(x, y);
         Color pixel_color = ColorAt(r);
         color_sum = color_sum + pixel_color;
     }
@@ -177,3 +244,5 @@ void World::PrintProgressUpdate(int remaining_lines, Camera c) {
     std::cout.precision(3);
     std::cout << "Progress: " << progress_percentage << "%" << std::endl;
 }
+
+

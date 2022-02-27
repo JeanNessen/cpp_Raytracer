@@ -9,9 +9,13 @@ class Canvas
 public:
 	
 	Canvas(int width, int height);
-	Color pixel_at(int x, int y);
-	void write_pixel(int x, int y, Color col);
+	Color PixelAt(int x, int y) const;
+	void WritePixel(int x, int y, Color col);
 	std::string to_ppm();
+
+    Canvas operator+(const Canvas& other);
+    Canvas& operator+=(const Canvas& other);
+    Canvas operator/(const double& other);
 
 
 private:

@@ -11,12 +11,12 @@ Canvas::Canvas(int width, int height):
 	}
 }
 
-Color Canvas::pixel_at(int x, int y)
+Color Canvas::PixelAt(int x, int y) const
 {
 	return grid[y][x];
 }
 
-void Canvas::write_pixel(int x, int y, Color col)
+void Canvas::WritePixel(int x, int y, Color col)
 {
 	grid[y][x] = col;
 }
@@ -39,9 +39,9 @@ std::string Canvas::to_ppm()
 		std::string line;
 		for (int x = 0; x < width; ++x)
 		{
-			int red = pixel_at(x, y).RGBRed();
-			int green = pixel_at(x, y).RGBGreen();
-			int blue = pixel_at(x, y).RGBBlue();
+			int red = PixelAt(x, y).RGBRed();
+			int green = PixelAt(x, y).RGBGreen();
+			int blue = PixelAt(x, y).RGBBlue();
 			std::string colorString = std::to_string(red) + " " + std::to_string(green) + " " + std::to_string(blue);
 			if (x != width - 1)
 			{
@@ -58,4 +58,36 @@ std::string Canvas::to_ppm()
 	
 
 	return header + body;
+}
+
+Canvas Canvas::operator+(const Canvas &other) {
+    Canvas sum{width, height};
+    for (int x = 0; x < width; ++x) {
+        for (int y = 0; y < height; ++y) {
+            Color color_sum = PixelAt(x, y) + other.PixelAt(x, y);
+            sum.WritePixel(x, y, color_sum);
+        }
+    }
+    return sum;
+}
+
+Canvas& Canvas::operator+=(const Canvas &other) {
+    for (int x = 0; x < width; ++x) {
+        for (int y = 0; y < height; ++y) {
+            Color color_sum = PixelAt(x, y) + other.PixelAt(x, y);
+            WritePixel(x, y, color_sum);
+        }
+    }
+    return *this;
+}
+
+Canvas Canvas::operator/(const double& other) {
+    Canvas quotient{width, height};
+    for (int x = 0; x < width; ++x) {
+        for (int y = 0; y < height; ++y) {
+            Color color_quotient = PixelAt(x, y) / other;
+            quotient.WritePixel(x, y, color_quotient);
+        }
+    }
+    return quotient;
 }
