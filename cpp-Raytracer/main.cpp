@@ -3,6 +3,7 @@
 #include "World.h"
 
 
+
 int main()
 {
     //Initialize the World
@@ -98,7 +99,7 @@ int main()
     //Position the Camera
     c.SetTransform(Math::ViewTransform(Point(0, 1.5, -5), Point(0, 1, 0), Vector(0, 1, 0)));
 
-    c.SetSamplesPerPixel(500);
+    c.SetSamplesPerPixel(10);
 
     //Render the image
     Canvas image = w.Render(c);

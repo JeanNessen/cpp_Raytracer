@@ -23,6 +23,8 @@ private:
 
     Color GetColorForPixel(Camera c, int x, int y);
 
+    void PrintProgressUpdate(int remaining_lines, Camera c);
+
 public:
 
     std::vector<PointLight>& GetWorldLights(){ return world_lights; }

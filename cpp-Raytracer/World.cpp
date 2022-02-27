@@ -104,6 +104,8 @@ Canvas World::Render(Camera c) {
 
     Canvas image{c.GetHSize(), c.GetVSize()};
 
+    int remaining_lines = c.GetVSize();
+
     for (int y = 0; y < c.GetVSize()-1; ++y) {
         for (int x = 0; x < c.GetHSize(); ++x) {
             //Ray ray = c.RayForPixel(x, y);
@@ -112,6 +114,8 @@ Canvas World::Render(Camera c) {
             image.write_pixel(x, y, color);
             ++ray_count;
         }
+        PrintProgressUpdate(remaining_lines, c);
+        --remaining_lines;
     }
 
     auto stop = std::chrono::high_resolution_clock::now();
@@ -164,4 +168,12 @@ Color World::GetColorForPixel(Camera c, int x, int y) {
     }
     Color color_average = color_sum / c.GetSamplesPerPixel();
     return color_average;
+}
+
+void World::PrintProgressUpdate(int remaining_lines, Camera c) {
+    double remaining_percentage = double(remaining_lines) / double(c.GetVSize());
+    double progress_percentage = 100 - remaining_percentage * 100;
+
+    std::cout.precision(3);
+    std::cout << "Progress: " << progress_percentage << "%" << std::endl;
 }
