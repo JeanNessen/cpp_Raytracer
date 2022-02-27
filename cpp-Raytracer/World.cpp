@@ -106,8 +106,9 @@ Canvas World::Render(Camera c) {
 
     for (int y = 0; y < c.GetVSize()-1; ++y) {
         for (int x = 0; x < c.GetHSize(); ++x) {
-            Ray ray = c.RayForPixel(x, y);
-            Color color = ColorAt(ray);
+            //Ray ray = c.RayForPixel(x, y);
+            //Color color = ColorAt(ray);
+            Color color = GetColorForPixel(c, x, y);
             image.write_pixel(x, y, color);
             ++ray_count;
         }
@@ -151,4 +152,16 @@ Color World::ReflectedColor(IntersectionComputations comps, int remaining) {
 
         return color * comps.object->GetMaterial().reflective;
     }
+}
+
+Color World::GetColorForPixel(Camera c, int x, int y) {
+    Color color_sum{};
+
+    for (int i = 0; i < c.GetSamplesPerPixel() ; ++i) {
+        Ray r = c.RandomRayForPixel(x, y);
+        Color pixel_color = ColorAt(r);
+        color_sum = color_sum + pixel_color;
+    }
+    Color color_average = color_sum / c.GetSamplesPerPixel();
+    return color_average;
 }

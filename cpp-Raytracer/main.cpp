@@ -28,7 +28,7 @@ int main()
 
     //Set up the back wall
     Plane_ptr back_wall( new Plane());
-    back_wall->SetTransform(Math::Translation(0, 0, 10) *
+    back_wall->SetTransform(Math::Translation(0, 0, 20) *
                                 Math::Rotation_X(M_PI / 2));
     back_wall->GetMaterial().specular = 0;
     w.AddObject(back_wall);
@@ -62,7 +62,7 @@ int main()
     sphere_01->GetMaterial().specular = 0.2f;
     sphere_01->GetMaterial().reflective = 0.15f;
     sphere_01->GetMaterial().shininess = 150;
-    sphere_01->SetTransform(Math::Translation(-3, 1, 0));
+    sphere_01->SetTransform(Math::Translation(-5, 1, 10));
     w.AddObject(sphere_01);
 
 
@@ -71,7 +71,7 @@ int main()
     sphere_02->GetMaterial().diffuse = 0.7f;
     sphere_02->GetMaterial().specular = 0.2f;
     sphere_02->GetMaterial().reflective = 0.15f;
-    sphere_02->SetTransform(Math::Translation(1.5, 0.25, 1) * Math::Scaling(0.25, 0.25, 0.25));
+    sphere_02->SetTransform(Math::Translation(-3, 0.25, 5) * Math::Scaling(0.25, 0.25, 0.25));
     w.AddObject(sphere_02);
 
 
@@ -80,15 +80,25 @@ int main()
     sphere_03->GetMaterial().diffuse = 0.7f;
     sphere_03->GetMaterial().specular = 0.2f;
     sphere_03->GetMaterial().reflective = 0.15f;
-    sphere_03->SetTransform(Math::Translation(0, 1, 3));
+    sphere_03->SetTransform(Math::Translation(0, 1, 0));
     w.AddObject(sphere_03);
+
+    Sphere_ptr sphere_04(new Sphere());
+    sphere_04->GetMaterial().color = Color(0, 1, 1);
+    sphere_04->GetMaterial().diffuse = 0.7f;
+    sphere_04->GetMaterial().specular = 0.2f;
+    sphere_04->GetMaterial().reflective = 0.15f;
+    sphere_04->SetTransform(Math::Translation(2, 1, 5));
+    w.AddObject(sphere_04);
 
 
     //Initialize the Camera
-    Camera c{1920, 1080, M_PI/2};
+    Camera c{50, 50, 3*(M_PI/4)};
 
     //Position the Camera
     c.SetTransform(Math::ViewTransform(Point(0, 1.5, -5), Point(0, 1, 0), Vector(0, 1, 0)));
+
+    c.SetSamplesPerPixel(500);
 
     //Render the image
     Canvas image = w.Render(c);

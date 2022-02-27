@@ -16,6 +16,8 @@ struct Color
 	Color operator-(const Color& other) const;
 	Color operator*(const Color& other) const;
 	Color operator*(const double& other) const;
+    Color operator/(const double& other) const;
+
 
 	int RGBRed() { return ConvertdoubleToIntInRange(red); }
 	int RGBGreen() { return ConvertdoubleToIntInRange(green); }

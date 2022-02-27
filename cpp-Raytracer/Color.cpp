@@ -68,4 +68,8 @@ std::ostream &operator<<(std::ostream &os, const Color &c) {
     return os;
 }
 
+Color Color::operator/(const double &other) const {
+    return {red / other, green / other, blue / other};
+}
+
 

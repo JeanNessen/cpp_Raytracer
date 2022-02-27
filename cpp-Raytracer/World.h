@@ -21,6 +21,8 @@ private:
 
     std::vector<Shape_ptr> world_objects{};
 
+    Color GetColorForPixel(Camera c, int x, int y);
+
 public:
 
     std::vector<PointLight>& GetWorldLights(){ return world_lights; }
