@@ -91,3 +91,20 @@ Canvas Canvas::operator/(const double& other) {
     }
     return quotient;
 }
+
+bool Canvas::operator==(const Canvas &other) const {
+
+    for (int x = 0; x < width; ++x) {
+        for (int y = 0; y < height; ++y) {
+            if (PixelAt(x, y) != other.PixelAt(x, y))
+            {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+bool Canvas::operator!=(const Canvas &other) const {
+    return !(*this == other);
+}

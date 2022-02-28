@@ -127,6 +127,36 @@ TEST(Canvas, PPMPixelData)
     EXPECT_EQ(line3, "0 0 0 0 0 0 0 0 0 0 0 0 0 0 255");
 }
 
+TEST(Canvas, AddingTwoCanvases)
+{
+    Canvas c1{2, 2};
+    c1.WritePixel(0, 0, Color(1, 1, 1));
+    c1.WritePixel(1, 1, Color(0.5, 0.5, 0.5));
+
+    Canvas c2{2, 2};
+    c2.WritePixel(0, 0, Color(0.75, 0.75, 0.75));
+
+    Canvas c3 = c1 + c2;
+
+    EXPECT_EQ(c3.PixelAt(0, 0), Color(1.75, 1.75, 1.75));
+    EXPECT_EQ(c3.PixelAt(1, 1), Color(0.5, 0.5, 0.5));
+}
+
+TEST(Canvas, ComparingTwoCanvases)
+{
+    Canvas c1{2, 2};
+    c1.WritePixel(0, 0, Color(1, 1, 1));
+    c1.WritePixel(1, 1, Color(0.5, 0.5, 0.5));
+
+    Canvas c2{2, 2};
+    c2.WritePixel(0, 0, Color(0.75, 0.75, 0.75));
+
+    Canvas c3 = c1;
+
+    EXPECT_EQ(c1, c3);
+    EXPECT_NE(c1, c2);
+}
+
 TEST(Color, WhiteAndBlackGlobalColors)
 {
     Color black = color::black;

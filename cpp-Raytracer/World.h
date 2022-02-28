@@ -24,7 +24,7 @@ private:
 
     Color GetColorForPixel(Camera c, int x, int y);
 
-    void PrintProgressUpdate(int remaining_lines, Camera c);
+    void PrintProgressUpdate(int lines_total, int lines_remaining, Camera c);
 
 public:
 
@@ -44,7 +44,7 @@ public:
 
     Color ShadeHit(IntersectionComputations comps, int remaining = recursion_depth);
 
-    Color ColorAt(Ray r, int remaining = 5);
+    Color ColorAt(Ray r, int remaining = recursion_depth);
 
     Canvas RenderMultiThread(Camera c);
     Canvas RenderSingleThread(Camera c);

@@ -16,6 +16,8 @@ public:
     Canvas operator+(const Canvas& other);
     Canvas& operator+=(const Canvas& other);
     Canvas operator/(const double& other);
+    bool operator==(const Canvas& other) const;
+    bool operator!=(const Canvas& other) const;
 
 
 private:
