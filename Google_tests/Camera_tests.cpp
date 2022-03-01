@@ -16,8 +16,3 @@ TEST(Camera, RandomCanvasPointIsRandom)
 
     EXPECT_NE(p1, p2);
 }
-
-TEST(Camera, RandomRayForPixel)
-{
-
-}
