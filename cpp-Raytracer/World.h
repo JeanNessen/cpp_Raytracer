@@ -46,7 +46,6 @@ public:
 
     Color ColorAt(Ray r, int remaining = recursion_depth);
 
-    Canvas RenderMultiThread(Camera c);
     Canvas RenderSingleThread(Camera c);
 };
 

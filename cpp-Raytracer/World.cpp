@@ -7,7 +7,6 @@
 #include <memory>
 #include <iostream>
 #include <chrono>
-#include <omp.h>
 
 //static variables
 int World::recursion_depth = 5;
@@ -102,69 +101,6 @@ Color World::ColorAt(Ray r, int remaining) {
 
 }
 
-#pragma clang diagnostic push
-#pragma ide diagnostic ignored "openmp-use-default-none"
-Canvas World::RenderMultiThread(Camera c) {
-    auto start = std::chrono::high_resolution_clock::now();
-
-    int total_lines = c.GetVSize() * c.GetSamplesPerPixel();
-    int remaining_lines = total_lines;
-
-    int number_of_threads_total = 0;
-    int number_of_threads_used = 0;
-
-    std::vector<Canvas> parallel_results;
-
-    Canvas canvas_sum{c.GetHSize(), c.GetVSize()};
-#pragma omp parallel
-    {
-        #pragma omp atomic
-        number_of_threads_total++;
-    };
-    omp_set_num_threads(number_of_threads_total / 2);
-
-#pragma omp parallel
-    {
-        number_of_threads_used = omp_get_num_threads();
-        if (omp_get_thread_num() == 0) {
-            std::cout << "Starting render using " << number_of_threads_used << " threads." << std::endl;
-        }
-
-
-        std::unique_ptr<Canvas> image(new Canvas(c.GetHSize(), c.GetVSize()));
-
-        #pragma omp for
-        for(int i = 0; i < c.GetSamplesPerPixel(); ++i) {
-            image = std::make_unique<Canvas>(c.GetHSize(), c.GetVSize());
-            for (int y = 0; y < c.GetVSize() - 1; ++y) {
-                for (int x = 0; x < c.GetHSize(); ++x) {
-                    Color color = GetColorForPixel(c, x, y);
-                    image->WritePixel(x, y, color);
-
-                }
-                PrintProgressUpdate(total_lines, remaining_lines, c);
-                --remaining_lines;
-            }
-            parallel_results.push_back(*image);
-        }
-
-    }
-
-    for (const Canvas &can: parallel_results) {
-        canvas_sum += can;
-    }
-
-    Canvas canvas_average = canvas_sum / parallel_results.size();
-
-    auto stop = std::chrono::high_resolution_clock::now();
-    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
-    double seconds = duration.count() / 1000.0f;
-
-    std::cout << " Finished in " << seconds << " seconds with " << c.GetSamplesPerPixel() << " samples per pixel on " << number_of_threads_used << " threads." << std::endl;
-
-    return canvas_average;
-}
-#pragma clang diagnostic pop
 
 Canvas World::RenderSingleThread(Camera c) {
 

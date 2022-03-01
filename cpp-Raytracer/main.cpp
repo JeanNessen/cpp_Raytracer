@@ -115,7 +115,7 @@ int main()
 
 
     //Initialize the Camera
-    Camera c{500, 500, 3*(M_PI/4)};
+    Camera c{100, 100, 3*(M_PI/4)};
 
     //Position the Camera
     c.SetTransform(Math::ViewTransform(Point(0, 3, -5), Point(0, 1, 1), Vector(0, 1, 0)));
@@ -127,7 +127,7 @@ int main()
     c.SetFocalLength(8);
 
     //RenderMultiThread the image
-    Canvas image = w.RenderMultiThread(c);
+    Canvas image = w.RenderSingleThread(c);
 
     image.to_ppm();
 

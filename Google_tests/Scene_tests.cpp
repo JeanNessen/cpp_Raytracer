@@ -204,7 +204,7 @@ TEST(Camera, RenderingAWorldWithACamera)
     Vector up{0, 1, 0};
     c.SetTransform(Math::ViewTransform(from, to, up));
 
-    Canvas image = w.RenderMultiThread(c);
+    Canvas image = w.RenderSingleThread(c);
 
     EXPECT_EQ(image.PixelAt(5, 5), Color(0.38066, 0.47583, 0.2855));
 }
