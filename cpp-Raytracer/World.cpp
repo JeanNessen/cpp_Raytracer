@@ -8,7 +8,6 @@
 #include <iostream>
 #include <chrono>
 
-
 //static variables
 int World::recursion_depth = 5;
 
@@ -129,6 +128,7 @@ Canvas World::RenderSingleThread(Camera c) {
 
     return image_average;
 }
+
 
 Canvas World::RenderPass(Camera c) {
     Canvas image{c.GetHSize(), c.GetVSize()};
