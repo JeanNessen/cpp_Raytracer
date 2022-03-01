@@ -4,9 +4,9 @@
 
 #include "World.h"
 
-#include <memory>
 #include <iostream>
 #include <chrono>
+
 
 //static variables
 int World::recursion_depth = 5;
@@ -47,7 +47,8 @@ std::vector<Intersection> World::IntersectWorld(Ray ray) {
     //Add all the intersections to the vector
     for (const auto& obj: world_objects) {
         std::vector<Intersection> intersections = ray.Intersect(obj);
-        for (Intersection i: intersections) {
+
+        for (auto i: intersections) {
             world_intersections_ptr.push_back(std::make_unique<Intersection>(i));
         }
     }

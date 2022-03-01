@@ -18,24 +18,12 @@ bool Material::operator==(const Material &other) const {
             );
 }
 
-Material::Material(std::shared_ptr<Pattern> pattern, double ambient, double diffuse, double specular, double shininess, Color color, double reflective):
-    ambient(ambient),
-    diffuse(diffuse),
-    specular(specular),
-    shininess(shininess),
-    color(color),
-    reflective(reflective)
+Material::Material(std::shared_ptr<Pattern> pattern)
 {
     this->pattern = pattern;
 }
 
-Material::Material(double ambient, double diffuse, double specular, double shininess, Color color, double reflective):
-        ambient(ambient),
-        diffuse(diffuse),
-        specular(specular),
-        shininess(shininess),
-        color(color),
-        reflective(reflective)
+Material::Material()
 {
 
 }

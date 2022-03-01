@@ -29,9 +29,28 @@ bool CheckSpot(Point spot, const std::vector<Point>& taken_spots)
     return spot_is_free;
 }
 
-void PlaceSpheres()
+void PlaceSpheres(World w)
 {
+    std::vector<Point> taken_spots;
 
+    for (int i = 0; i < 50; ++i) {
+        Sphere_ptr sphere(new Sphere());
+        sphere->GetMaterial().color = Color(GetRandomDouble(0, 1), GetRandomDouble(0, 1), GetRandomDouble(0, 1));
+        sphere->GetMaterial().diffuse = 0.7f;
+        sphere->GetMaterial().specular = 0.2f;
+        sphere->GetMaterial().reflective = 0.15f;
+        sphere->GetMaterial().shininess = 150;
+        double sphere_scaling_s = GetRandomDouble(0.25, 0.5);
+        Matrix4 scaling = Math::Scaling(sphere_scaling_s);
+        Point spot{GetRandomDouble(-5, 5), 0.5, GetRandomDouble(-5, 20)};
+        while(!CheckSpot(spot, taken_spots))
+        {
+            spot = Point{GetRandomDouble(-4, 4), sphere_scaling_s, GetRandomDouble(-2, 20)};
+        }
+        taken_spots.push_back(spot);
+        sphere->SetTransform(Math::Translation(spot.x, spot.y, spot.z) * scaling);
+        w.AddObject(sphere);
+    }
 }
 
 int main()
@@ -57,38 +76,22 @@ int main()
     floor->GetMaterial().reflective = 0.05f;
     w.AddObject(floor);
 
-    std::vector<Point> taken_spots;
-
-    for (int i = 0; i < 50; ++i) {
-        Sphere_ptr sphere(new Sphere());
-        sphere->GetMaterial().color = Color(GetRandomDouble(0, 1), GetRandomDouble(0, 1), GetRandomDouble(0, 1));
-        sphere->GetMaterial().diffuse = 0.7f;
-        sphere->GetMaterial().specular = 0.2f;
-        sphere->GetMaterial().reflective = 0.15f;
-        sphere->GetMaterial().shininess = 150;
-        double sphere_scaling_s = GetRandomDouble(0.25, 0.5);
-        Matrix4 scaling = Math::Scaling(sphere_scaling_s);
-        Point spot{GetRandomDouble(-5, 5), 0.5, GetRandomDouble(-5, 20)};
-        while(!CheckSpot(spot, taken_spots))
-        {
-            spot = Point{GetRandomDouble(-4, 4), sphere_scaling_s, GetRandomDouble(-2, 20)};
-        }
-        taken_spots.push_back(spot);
-        sphere->SetTransform(Math::Translation(spot.x, spot.y, spot.z) * scaling);
-        w.AddObject(sphere);
-    }
+    Sphere_ptr sphere{new Sphere()};
+    sphere->GetMaterial().color = color::red;
+    sphere->SetTransform(Math::Translation(0, 1, 1));
+    w.AddObject(sphere);
 
     //Initialize the Camera
 
-    Camera c{100, 100, 3*(M_PI/4)};
+    Camera c{500, 500, 3*(M_PI/4)};
 
 
     //Position the Camera
     c.SetTransform(Math::ViewTransform(Point(0, 3, -5), Point(0, 1, 1), Vector(0, 1, 0)));
 
-    c.SetSamplesPerPixel(1);
-    c.depth_of_field = false;
-    c.anti_aliasing = false;
+    c.SetSamplesPerPixel(3);
+    c.depth_of_field = true;
+    c.anti_aliasing = true;
     c.SetApertureSize(0.08);
     c.SetFocalLength(8);
 
