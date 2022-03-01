@@ -101,35 +101,47 @@ Color World::ColorAt(Ray r, int remaining) {
 
 }
 
-
 Canvas World::RenderSingleThread(Camera c) {
 
     auto start = std::chrono::high_resolution_clock::now();
 
     std::cout << "Starting render using one thread." << std::endl;
 
-    int remaining_lines = c.GetVSize();
+    Canvas image_sum{c.GetHSize(), c.GetVSize()};
 
-    int ray_count = 0;
-    Canvas image{c.GetHSize(), c.GetVSize()};
-
-
-    for (int y = 0; y < c.GetVSize()-1; ++y) {
-        for (int x = 0; x < c.GetHSize(); ++x) {
-            Color color = GetColorForPixel(c, x, y);
-            image.WritePixel(x, y, color);
-            ++ray_count;
-        }
-        PrintProgressUpdate(0, remaining_lines, c);
-        --remaining_lines;
+    //Do one render pass per sample
+    for (int i = 0; i < c.GetSamplesPerPixel(); ++i) {
+        std::cout << "Starting render pass " << i+1 << " of " << c.GetSamplesPerPixel() << "." << std::endl;
+        image_sum += RenderPass(c);
+        std::cout << "Finished render pass " << i+1 << "." << std::endl;
     }
+
+    Canvas image_average = image_sum / c.GetSamplesPerPixel();
+
+
 
     auto stop = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
     double seconds = duration.count() / 1000.0f;
 
-    std::cout << " Finished in " << seconds << " seconds with " << c.GetSamplesPerPixel()  << " samples per pixel on one" << " thread." << std::endl;
+    std::cout << "Finished in " << seconds << " seconds with " << c.GetSamplesPerPixel()  << " samples per pixel on one" << " thread." << std::endl;
 
+    return image_average;
+}
+
+
+Canvas World::RenderPass(Camera c) {
+    Canvas image{c.GetHSize(), c.GetVSize()};
+
+    int lines_remaining = c.GetVSize();
+
+    for (int y = 0; y < c.GetVSize()-1; ++y) {
+        for (int x = 0; x < c.GetHSize(); ++x) {
+            Color color = GetColorForPixel(c, x, y);
+            image.WritePixel(x, y, color);
+        }
+        PrintProgressUpdate(c.GetVSize(), --lines_remaining, c);
+    }
     return image;
 }
 
@@ -171,7 +183,7 @@ Color World::GetColorForPixel(Camera c, int x, int y) {
 }
 
 void World::PrintProgressUpdate(int lines_total, int lines_remaining, Camera c) {
-    if (lines_remaining % 100 == 0)
+    if (lines_remaining % 10 == 0)
     {
         double remaining_percentage = double(lines_remaining) / double(lines_total);
         double progress_percentage = 100 - remaining_percentage * 100;
@@ -180,5 +192,7 @@ void World::PrintProgressUpdate(int lines_total, int lines_remaining, Camera c) 
         std::cout << "Progress: " << progress_percentage << "%" << std::endl;
     }
 }
+
+
 
 

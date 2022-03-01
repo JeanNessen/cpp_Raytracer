@@ -2,8 +2,7 @@ cmake_minimum_required(VERSION 3.21)
 project(cpp_Raytracer)
 
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++20 ")
-
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++20")
 
     add_executable(cpp_Raytracer cpp-Raytracer/main.cpp
         cpp-Raytracer/Math.cpp cpp-Raytracer/Math.h

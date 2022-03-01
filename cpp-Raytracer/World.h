@@ -24,11 +24,13 @@ private:
 
     Color GetColorForPixel(Camera c, int x, int y);
 
+    Canvas RenderPass(Camera c);
+
     void PrintProgressUpdate(int lines_total, int lines_remaining, Camera c);
 
 public:
 
-    int GetRecursionDepth(){ return recursion_depth; }
+    static int GetRecursionDepth(){ return recursion_depth; }
     void SetRecursionDepth(int new_depth){ recursion_depth = new_depth; }
 
     std::vector<PointLight>& GetWorldLights(){ return world_lights; }
