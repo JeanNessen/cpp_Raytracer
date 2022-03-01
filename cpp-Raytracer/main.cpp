@@ -1,5 +1,4 @@
 #include "Canvas.h"
-//#include "Sphere.h"
 #include "World.h"
 #include <random>
 
@@ -30,13 +29,16 @@ bool CheckSpot(Point spot, const std::vector<Point>& taken_spots)
     return spot_is_free;
 }
 
+void PlaceSpheres()
+{
+
+}
+
 int main()
 {
     //Initialize the World
     World w{};
     w.SetRecursionDepth(2);
-
-    std::cout << w.GetRecursionDepth() << std::endl;
 
     //Initialize the light
     PointLight default_light{color::white, Point(-5, 10, -5)};
@@ -76,58 +78,20 @@ int main()
         w.AddObject(sphere);
     }
 
-
-//    //Set up the spheres
-//    Sphere_ptr sphere_01(new Sphere());
-//    sphere_01->GetMaterial().color = Color(1, 0, 0);
-//    sphere_01->GetMaterial().diffuse = 0.7f;
-//    sphere_01->GetMaterial().specular = 0.2f;
-//    sphere_01->GetMaterial().reflective = 0.15f;
-//    sphere_01->GetMaterial().shininess = 150;
-//    sphere_01->SetTransform(Math::Translation(-5, 1, 10));
-//    w.AddObject(sphere_01);
-//
-//
-//    Sphere_ptr sphere_02{new Sphere()};
-//    sphere_02->GetMaterial().color = Color(0, 1, 0);
-//    sphere_02->GetMaterial().diffuse = 0.7f;
-//    sphere_02->GetMaterial().specular = 0.2f;
-//    sphere_02->GetMaterial().reflective = 0.15f;
-//    sphere_02->SetTransform(Math::Translation(-3, 0.25, 5) * Math::Scaling(0.25, 0.25, 0.25));
-//    w.AddObject(sphere_02);
-//
-//
-//    Sphere_ptr sphere_03(new Sphere());
-//    sphere_03->GetMaterial().color = Color(0, 0, 1);
-//    sphere_03->GetMaterial().diffuse = 0.7f;
-//    sphere_03->GetMaterial().specular = 0.2f;
-//    sphere_03->GetMaterial().reflective = 0.15f;
-//    sphere_03->SetTransform(Math::Translation(0, 1, 0));
-//    w.AddObject(sphere_03);
-//
-//    Sphere_ptr sphere_04(new Sphere());
-//    sphere_04->GetMaterial().color = Color(0, 1, 1);
-//    sphere_04->GetMaterial().diffuse = 0.7f;
-//    sphere_04->GetMaterial().specular = 0.2f;
-//    sphere_04->GetMaterial().reflective = 0.15f;
-//    sphere_04->SetTransform(Math::Translation(2, 1, 5));
-//    w.AddObject(sphere_04);
-
-
     //Initialize the Camera
-    Camera c{500, 500, 3*(M_PI/4)};
+    Camera c{1000, 1000, 3*(M_PI/4)};
 
     //Position the Camera
     c.SetTransform(Math::ViewTransform(Point(0, 3, -5), Point(0, 1, 1), Vector(0, 1, 0)));
 
-    c.SetSamplesPerPixel(5);
-    c.depth_of_field = true;
-    c.anti_aliasing = true;
+    c.SetSamplesPerPixel(1);
+    c.depth_of_field = false;
+    c.anti_aliasing = false;
     c.SetApertureSize(0.08);
     c.SetFocalLength(8);
 
     //RenderMultiThread the image
-    Canvas image = w.RenderMultiThread(c);
+    Canvas image = w.RenderSingleThread(c);
 
     image.to_ppm();
 
