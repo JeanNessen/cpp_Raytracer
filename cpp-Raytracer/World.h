@@ -44,6 +44,8 @@ public:
     bool IsShadowed(Point p);
     Color ReflectedColor(IntersectionComputations comps, int remaining = recursion_depth);
 
+    Color RefractedColor(IntersectionComputations comps, int remaining = recursion_depth);
+
     Color ShadeHit(IntersectionComputations comps, int remaining = recursion_depth);
 
     Color ColorAt(Ray r, int remaining = recursion_depth);

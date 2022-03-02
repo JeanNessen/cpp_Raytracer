@@ -79,9 +79,21 @@ Color World::ShadeHit(IntersectionComputations comps, int remaining) {
                     comps.eye_v,
                     comps.normal_v,
                     IsShadowed(comps.over_point));
-    Color reflected = ReflectedColor(comps, remaining);
 
-    return surface + reflected;
+    Color reflected = ReflectedColor(comps, remaining);
+    Color refracted = RefractedColor(comps, remaining);
+
+    Material material = comps.object->GetMaterial();
+    if (material.reflective > 0 && material.transparency > 0)
+    {
+        double reflectance = Schlick(comps);
+        return surface + reflected * reflectance + refracted * (1-reflectance);
+    }
+    else
+    {
+        return surface + reflected + refracted;
+
+    }
 }
 
 Color World::ColorAt(Ray r, int remaining) {
@@ -191,6 +203,40 @@ void World::PrintProgressUpdate(int lines_total, int lines_remaining, Camera c) 
 
         std::cout.precision(4);
         std::cout << "Progress: " << progress_percentage << "%" << std::endl;
+    }
+}
+
+Color World::RefractedColor(IntersectionComputations comps, int remaining)
+{
+    //Aplly snells law to check for total internal reflection
+    double n_ratio = comps.n1 / comps.n2;
+    double cos_i = Math::Dot(comps.eye_v, comps.normal_v);
+    double sin2_t = std::pow(n_ratio, 2) * (1 - std::pow(cos_i, 2));
+
+
+
+    if (comps.object->GetMaterial().transparency == 0)
+    {
+        return color::black;
+    }
+    else if(remaining == 0)
+    {
+        return color::black;
+    }
+    else if(sin2_t > 1)
+    {
+        return color::black;
+    }
+    else
+    {
+        double cos_t = sqrt(1 - sin2_t);
+
+        Vector direction {comps.normal_v * (n_ratio * cos_i - cos_t) -
+                comps.eye_v * n_ratio};
+
+        Ray refracted_ray{comps.under_point, direction};
+
+        return ColorAt(refracted_ray, remaining-1) * comps.object->GetMaterial().transparency;
     }
 }
 
