@@ -46,4 +46,11 @@ public:
 
 };
 
+class TestPattern: public Pattern {
+    public:
+    TestPattern(Color a, Color b);
+
+    Color PatternAt(Point p) const override;
+};
+
 #endif //CPP_RAYTRACER_PATTERN_H

@@ -250,6 +250,10 @@ std::ostream &operator<<(std::ostream &os, const Tuple &t) {
     return os;
 }
 
+bool Tuple::operator!=(const Tuple &other) const {
+    return !(*this == other);
+}
+
 Matrix4::Matrix4(
 	double n00, double n01, double n02, double n03,
 	double n10, double n11, double n12, double n13,

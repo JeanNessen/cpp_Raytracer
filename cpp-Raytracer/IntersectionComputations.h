@@ -18,12 +18,21 @@ struct IntersectionComputations {
     Vector normal_v;
     Vector reflect_v;
     bool inside;
-    Point over_point;
+    Point over_point, under_point;
+    double n1, n2;
 
-    IntersectionComputations(double t, const Shape_ptr object, Point point, Vector eye_v, Vector normal_v);
+    IntersectionComputations(double t, const Shape_ptr object, Point point, Vector eye_v, Vector normal_v, double n1, double n2);
+
+private:
+
 };
 
-IntersectionComputations PrepareComputations(Intersection intersection, Ray ray);
+IntersectionComputations PrepareComputations(Intersection intersection, Ray ray, std::vector<Intersection> xs = {});
+
+std::vector<double> FindRefractiveIndices(const Intersection& intersection, std::vector<Intersection> xs);
+
+double Schlick(IntersectionComputations comps);
+
 
 #endif //CPP_RAYTRACER_COMP_H
 

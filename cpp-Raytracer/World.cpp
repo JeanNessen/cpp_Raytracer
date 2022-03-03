@@ -4,10 +4,9 @@
 
 #include "World.h"
 
-#include <memory>
 #include <iostream>
 #include <chrono>
-#include <omp.h>
+
 
 //static variables
 int World::recursion_depth = 5;
@@ -48,7 +47,8 @@ std::vector<Intersection> World::IntersectWorld(Ray ray) {
     //Add all the intersections to the vector
     for (const auto& obj: world_objects) {
         std::vector<Intersection> intersections = ray.Intersect(obj);
-        for (Intersection i: intersections) {
+
+        for (auto i: intersections) {
             world_intersections_ptr.push_back(std::make_unique<Intersection>(i));
         }
     }
@@ -79,9 +79,21 @@ Color World::ShadeHit(IntersectionComputations comps, int remaining) {
                     comps.eye_v,
                     comps.normal_v,
                     IsShadowed(comps.over_point));
-    Color reflected = ReflectedColor(comps, remaining);
 
-    return surface + reflected;
+    Color reflected = ReflectedColor(comps, remaining);
+    Color refracted = RefractedColor(comps, remaining);
+
+    Material material = comps.object->GetMaterial();
+    if (material.reflective > 0 && material.transparency > 0)
+    {
+        double reflectance = Schlick(comps);
+        return surface + reflected * reflectance + refracted * (1-reflectance);
+    }
+    else
+    {
+        return surface + reflected + refracted;
+
+    }
 }
 
 Color World::ColorAt(Ray r, int remaining) {
@@ -102,98 +114,47 @@ Color World::ColorAt(Ray r, int remaining) {
 
 }
 
-#pragma clang diagnostic push
-#pragma ide diagnostic ignored "openmp-use-default-none"
-Canvas World::RenderMultiThread(Camera c) {
-    auto start = std::chrono::high_resolution_clock::now();
-
-    int total_lines = c.GetVSize() * c.GetSamplesPerPixel();
-    int remaining_lines = total_lines;
-
-    int number_of_threads_total = 0;
-    int number_of_threads_used = 0;
-
-    std::vector<Canvas> parallel_results;
-
-    Canvas canvas_sum{c.GetHSize(), c.GetVSize()};
-#pragma omp parallel
-    {
-        #pragma omp atomic
-        number_of_threads_total++;
-    };
-    omp_set_num_threads(number_of_threads_total / 2);
-
-#pragma omp parallel
-    {
-        number_of_threads_used = omp_get_num_threads();
-        if (omp_get_thread_num() == 0) {
-            std::cout << "Starting render using " << number_of_threads_used << " threads." << std::endl;
-        }
-
-
-        std::unique_ptr<Canvas> image(new Canvas(c.GetHSize(), c.GetVSize()));
-
-        #pragma omp for
-        for(int i = 0; i < c.GetSamplesPerPixel(); ++i) {
-            image = std::make_unique<Canvas>(c.GetHSize(), c.GetVSize());
-            for (int y = 0; y < c.GetVSize() - 1; ++y) {
-                for (int x = 0; x < c.GetHSize(); ++x) {
-                    Color color = GetColorForPixel(c, x, y);
-                    image->WritePixel(x, y, color);
-
-                }
-                PrintProgressUpdate(total_lines, remaining_lines, c);
-                --remaining_lines;
-            }
-            parallel_results.push_back(*image);
-        }
-
-    }
-
-    for (const Canvas &can: parallel_results) {
-        canvas_sum += can;
-    }
-
-    Canvas canvas_average = canvas_sum / parallel_results.size();
-
-    auto stop = std::chrono::high_resolution_clock::now();
-    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
-    double seconds = duration.count() / 1000.0f;
-
-    std::cout << " Finished in " << seconds << " seconds with " << c.GetSamplesPerPixel() << " samples per pixel on " << number_of_threads_used << " threads." << std::endl;
-
-    return canvas_average;
-}
-#pragma clang diagnostic pop
-
 Canvas World::RenderSingleThread(Camera c) {
 
     auto start = std::chrono::high_resolution_clock::now();
 
     std::cout << "Starting render using one thread." << std::endl;
 
-    int remaining_lines = c.GetVSize();
+    Canvas image_sum{c.GetHSize(), c.GetVSize()};
 
-    int ray_count = 0;
-    Canvas image{c.GetHSize(), c.GetVSize()};
-
-
-    for (int y = 0; y < c.GetVSize()-1; ++y) {
-        for (int x = 0; x < c.GetHSize(); ++x) {
-            Color color = GetColorForPixel(c, x, y);
-            image.WritePixel(x, y, color);
-            ++ray_count;
-        }
-        PrintProgressUpdate(0, remaining_lines, c);
-        --remaining_lines;
+    //Do one render pass per sample
+    for (int i = 0; i < c.GetSamplesPerPixel(); ++i) {
+        std::cout << "Starting render pass " << i+1 << " of " << c.GetSamplesPerPixel() << "." << std::endl;
+        image_sum += RenderPass(c);
+        std::cout << "Finished render pass " << i+1 << "." << std::endl;
     }
+
+    Canvas image_average = image_sum / c.GetSamplesPerPixel();
+
+
 
     auto stop = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
     double seconds = duration.count() / 1000.0f;
 
-    std::cout << " Finished in " << seconds << " seconds with " << c.GetSamplesPerPixel()  << " samples per pixel on one" << " thread." << std::endl;
+    std::cout << "Finished in " << seconds << " seconds with " << c.GetSamplesPerPixel()  << " samples per pixel on one" << " thread." << std::endl;
 
+    return image_average;
+}
+
+
+Canvas World::RenderPass(Camera c) {
+    Canvas image{c.GetHSize(), c.GetVSize()};
+
+    int lines_remaining = c.GetVSize();
+
+    for (int y = 0; y < c.GetVSize()-1; ++y) {
+        for (int x = 0; x < c.GetHSize(); ++x) {
+            Color color = GetColorForPixel(c, x, y);
+            image.WritePixel(x, y, color);
+        }
+        PrintProgressUpdate(c.GetVSize(), --lines_remaining, c);
+    }
     return image;
 }
 
@@ -235,7 +196,7 @@ Color World::GetColorForPixel(Camera c, int x, int y) {
 }
 
 void World::PrintProgressUpdate(int lines_total, int lines_remaining, Camera c) {
-    if (lines_remaining % 100 == 0)
+    if (lines_remaining % 10 == 0)
     {
         double remaining_percentage = double(lines_remaining) / double(lines_total);
         double progress_percentage = 100 - remaining_percentage * 100;
@@ -244,5 +205,41 @@ void World::PrintProgressUpdate(int lines_total, int lines_remaining, Camera c) 
         std::cout << "Progress: " << progress_percentage << "%" << std::endl;
     }
 }
+
+Color World::RefractedColor(IntersectionComputations comps, int remaining)
+{
+    //Aplly snells law to check for total internal reflection
+    double n_ratio = comps.n1 / comps.n2;
+    double cos_i = Math::Dot(comps.eye_v, comps.normal_v);
+    double sin2_t = std::pow(n_ratio, 2) * (1 - std::pow(cos_i, 2));
+
+
+
+    if (comps.object->GetMaterial().transparency == 0)
+    {
+        return color::black;
+    }
+    else if(remaining == 0)
+    {
+        return color::black;
+    }
+    else if(sin2_t > 1)
+    {
+        return color::black;
+    }
+    else
+    {
+        double cos_t = sqrt(1 - sin2_t);
+
+        Vector direction {comps.normal_v * (n_ratio * cos_i - cos_t) -
+                comps.eye_v * n_ratio};
+
+        Ray refracted_ray{comps.under_point, direction};
+
+        return ColorAt(refracted_ray, remaining-1) * comps.object->GetMaterial().transparency;
+    }
+}
+
+
 
 

@@ -57,3 +57,11 @@ Color CheckersPattern::PatternAt(Point p) const {
         return b;
     }
 }
+
+TestPattern::TestPattern(Color a, Color b) : Pattern(a, b) {
+
+}
+
+Color TestPattern::PatternAt(Point p) const {
+    return Color(p.x, p.y, p.z);
+}

@@ -14,6 +14,7 @@
 		Tuple(double x, double y, double z, double w);
 
 		bool operator==(const Tuple& other) const;
+        bool operator!=(const Tuple& other) const;
 		Tuple operator+(const Tuple& other) const;
 		Tuple operator-(const Tuple& other) const;
 		Tuple operator*(const double& other) const;
