@@ -345,28 +345,53 @@ Matrix4 Matrix4::Transposed()
 }
 
 Matrix4 Matrix4::Inversed() const {
-	Matrix4 output;
-	double det = Determinant();
-	for (int row = 0; row < 4; row++)
-	{
-		for (int col = 0; col < 4; col++)
-		{
-			double c = Cofactor(row, col);
-			output(col, row) = c / det;
-		}
-	}
+
+    double out_00 = n[1][1] * n[2][2] * n[3][3] + n[2][1] * n[3][2] * n[1][3] + n[3][1] * n[1][2] * n[2][3] -
+                    n[1][1] * n[3][2] * n[2][3] - n[2][1] * n[1][2] * n[3][3] - n[3][1] * n[2][2] * n[1][3];
+
+    double out_01 = n[0][1] * n[3][2] * n[2][3] + n[2][0] * n[1][2] * n[3][3] + n[3][0] * n[2][2] * n[1][3] -
+                    n[1][0] * n[2][2] * n[3][3] - n[2][0] * n[2][3] * n[1][3] - n[3][0] * n[1][2] * n[2][3];
+
+//	double det = Determinant();
+//	for (int row = 0; row < 4; row++)
+//	{
+//		for (int col = 0; col < 4; col++)
+//		{
+//			double c = Cofactor(row, col);
+//			output(col, row) = c / det;
+//		}
+//	}
 	return output;
 }
 
 double Matrix4::Determinant() const {
+//determinant calculation from http://www.cg.info.hiroshima-cu.ac.jp/~miyazaki/knowledge/teche23.html
+    double determinant =    n[0][0] * n[1][1] * n[2][2] * n[3][3] + n[0][0] * n[2][1] * n[3][2] * n[1][3] + n[0][0] * n[3][1] * n[1][2] * n[2][3] +
 
-    double first = (*this)(0, 0) * this->Cofactor(0, 0);
-    double second = (*this)(0, 1) * this->Cofactor(0, 1);
-    double third = (*this)(0, 2) * this->Cofactor(0, 2);
-    double fourth = (*this)(0, 3) * this->Cofactor(0, 3);
+                            n[1][0] * n[0][1] * n[3][2] * n[2][3] + n[1][0] * n[2][1] * n[0][2] * n[3][3] + n[1][0] * n[3][1] * n[2][2] * n[0][3] +
 
-    double det = first + second + third + fourth;
-	return det;
+                            n[2][0] * n[0][1] * n[1][2] * n[3][3] + n[2][0] * n[1][1] * n[3][2] * n[0][3] + n[2][0] * n[3][1] * n[0][2] * n[1][3] +
+
+                            n[3][0] * n[0][1] * n[2][2] * n[1][3] + n[3][0] * n[1][1] * n[0][2] * n[2][3] + n[3][0] * n[2][1] * n[1][2] * n[0][3] -
+
+                            n[0][0] * n[1][1] * n[3][2] * n[2][3] - n[0][0] * n[2][1] * n[1][2] * n[3][3] - n[0][0] * n[3][1] * n[2][2] * n[1][3] -
+
+                            n[1][0] * n[0][1] * n[2][2] * n[3][3] - n[1][0] * n[2][1] * n[3][2] * n[0][3] - n[1][0] * n[3][1] * n[0][2] * n[2][3] -
+
+                            n[2][0] * n[0][1] * n[3][2] * n[1][3] - n[2][0] * n[1][1] * n[0][2] * n[3][3] - n[2][0] * n[3][1] * n[1][2] * n[0][3] -
+
+                            n[3][0] * n[0][1] * n[1][2] * n[2][3] - n[3][0] * n[1][1] * n[2][2] * n[0][3] - n[3][0] * n[2][1] * n[0][2] * n[1][3];
+
+
+
+
+//    double first = (*this)(0, 0) * this->Cofactor(0, 0);
+//    double second = (*this)(0, 1) * this->Cofactor(0, 1);
+//    double third = (*this)(0, 2) * this->Cofactor(0, 2);
+//    double fourth = (*this)(0, 3) * this->Cofactor(0, 3);
+//
+//    double det = first + second + third + fourth;
+	return determinant;
 }
 
 double Matrix4::Minor(const int row, const int column) const
