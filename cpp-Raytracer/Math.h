@@ -111,6 +111,9 @@
 
 		Matrix4 operator*(const Matrix4& A) const;
 		Tuple operator*(const Tuple& b) const;
+		Matrix4 operator*(const double& b) const;
+
+		friend std::ostream& operator<<(std::ostream& os, const Matrix4& c);
 
 		Matrix4 Transposed();
 		Matrix4 Inversed() const;

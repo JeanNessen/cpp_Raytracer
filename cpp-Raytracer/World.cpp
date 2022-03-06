@@ -6,6 +6,8 @@
 
 #include <iostream>
 #include <chrono>
+#include <omp.h>
+#include <algorithm>
 
 
 //static variables
@@ -147,6 +149,7 @@ Canvas World::RenderPass(Camera c) {
     Canvas image{c.GetHSize(), c.GetVSize()};
 
     int lines_remaining = c.GetVSize();
+
 
     for (int y = 0; y < c.GetVSize()-1; ++y) {
         for (int x = 0; x < c.GetHSize(); ++x) {
