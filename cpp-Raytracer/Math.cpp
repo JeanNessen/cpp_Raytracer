@@ -187,6 +187,12 @@ Matrix4 Math::Scaling(const double s) {
     return Scaling(s, s, s);
 }
 
+double Math::GetRandomDouble(double min, double max) {
+    //Faster random number generator is used, as distribution is not important here.
+    //https://cboard.cprogramming.com/c-programming/3264-best-way-generate-random-double.html
+    return ( ( double )rand() * ( max - min ) ) / ( double )RAND_MAX + min;
+}
+
 Tuple::Tuple(double x, double y, double z)
 {
 	this->x = x;
@@ -369,56 +375,56 @@ Matrix4 Matrix4::Transposed()
 Matrix4 Matrix4::Inversed() const {
 	//http://www.cg.info.hiroshima-cu.ac.jp/~miyazaki/knowledge/teche23.html
 
-	double out_00 = (*this)(1, 1) * (*this)(2, 2) * (*this)(3, 3) + (*this)(1, 2) * (*this)(2, 3) * (*this)(3, 1) + (*this)(1, 3) * (*this)(2, 1) * (*this)(3, 2) -
-					(*this)(1, 1) * (*this)(2, 3) * (*this)(3, 2) - (*this)(1, 2) * (*this)(2, 1) * (*this)(3, 3) - (*this)(1, 3) * (*this)(2, 2) * (*this)(3, 1);
+	double out_00 = n[1][1] * n[2][2] * n[3][3] + n[2][1] * n[3][2] * n[1][3] + n[3][1] * n[1][2] * n[2][3] -
+                    n[1][1] * n[3][2] * n[2][3] - n[2][1] * n[1][2] * n[3][3] - n[3][1] * n[2][2] * n[1][3];
 
-    double out_01 = (*this)(0, 1) * (*this)(2, 3) * (*this)(3, 2) + (*this)(0, 2) * (*this)(2, 1) * (*this)(3, 3) + (*this)(0, 3) * (*this)(2, 2) * (*this)(3, 1) -
-					(*this)(0, 1) * (*this)(2, 2) * (*this)(3, 3) - (*this)(0, 2) * (*this)(2, 3) * (*this)(3, 1) - (*this)(0, 3) * (*this)(2, 1) * (*this)(3, 2);
+    double out_01 = n[1][0] * n[3][2] * n[2][3] + n[2][0] * n[1][2] * n[3][3] + n[3][0] * n[2][2] * n[1][3] -
+                    n[1][0] * n[2][2] * n[3][3] - n[2][0] * n[3][2] * n[1][3] - n[3][0] * n[1][2] * n[2][3];
 
-	double out_02 = (*this)(0, 1) * (*this)(1, 2) * (*this)(3, 3) + (*this)(0, 2) * (*this)(1, 3) * (*this)(3, 1) + (*this)(0, 3) * (*this)(1, 1) * (*this)(3, 2) -
-					(*this)(0, 1) * (*this)(1, 3) * (*this)(3, 2) - (*this)(0, 2) * (*this)(1, 1) * (*this)(3, 3) - (*this)(0, 3) * (*this)(1, 2) * (*this)(3, 1);
+	double out_02 = n[1][0] * n[2][1] * n[3][3] + n[2][0] * n[3][1] * n[1][3] + n[3][0] * n[1][1] * n[2][3] -
+                    n[1][0] * n[3][1] * n[2][3] - n[2][0] * n[1][1] * n[3][3] - n[3][0] * n[2][1] * n[1][3];
 
-	double out_03 = (*this)(0, 1) * (*this)(1, 3) * (*this)(2, 2) + (*this)(0, 2) * (*this)(1, 1) * (*this)(2, 3) + (*this)(0, 3) * (*this)(1, 2) * (*this)(2, 1) -
-					(*this)(0, 1) * (*this)(1, 2) * (*this)(2, 3) - (*this)(0, 2) * (*this)(1, 3) * (*this)(2, 1) - (*this)(0, 3) * (*this)(1, 1) * (*this)(2, 2);
-
-
-	double out_10 = (*this)(1, 0) * (*this)(2, 3) * (*this)(3, 2) + (*this)(1, 2) * (*this)(2, 0) * (*this)(3, 3) + (*this)(1, 3) * (*this)(2, 2) * (*this)(3, 0) -
-					(*this)(1, 0) * (*this)(2, 2) * (*this)(3, 3) - (*this)(1, 2) * (*this)(2, 3) * (*this)(3, 0) - (*this)(1, 3) * (*this)(2, 0) * (*this)(3, 2);
-
-	double out_11 = (*this)(0, 0) * (*this)(2, 2) * (*this)(3, 3) + (*this)(0, 2) * (*this)(2, 3) * (*this)(3, 0) + (*this)(0, 3) * (*this)(2, 0) * (*this)(3, 2) -
-					(*this)(0, 0) * (*this)(2, 3) * (*this)(3, 2) - (*this)(0, 2) * (*this)(2, 0) * (*this)(3, 3) - (*this)(0, 3) * (*this)(2, 2) * (*this)(3, 0);
-
-	double out_12 = (*this)(0, 0) * (*this)(1, 3) * (*this)(3, 2) + (*this)(0, 2) * (*this)(1, 0) * (*this)(3, 3) + (*this)(0, 3) * (*this)(1, 2) * (*this)(3, 0) -
-					(*this)(0, 0) * (*this)(1, 2) * (*this)(3, 3) - (*this)(0, 2) * (*this)(1, 3) * (*this)(3, 0) - (*this)(0, 3) * (*this)(1, 0) * (*this)(3, 2);
-
-	double out_13 = (*this)(0, 0) * (*this)(1, 2) * (*this)(2, 3) + (*this)(0, 2) * (*this)(1, 3) * (*this)(2, 0) + (*this)(0, 3) * (*this)(1, 0) * (*this)(2, 2) -
-					(*this)(0, 0) * (*this)(1, 3) * (*this)(2, 2) - (*this)(0, 2) * (*this)(1, 0) * (*this)(2, 3) - (*this)(0, 3) * (*this)(1, 2) * (*this)(2, 0);
+	double out_03 = n[1][0] * n[3][1] * n[2][2] + n[2][0] * n[1][1] * n[3][2] + n[3][0] * n[2][1] * n[1][2] -
+                    n[1][0] * n[2][1] * n[3][2] - n[2][0] * n[3][1] * n[1][2] - n[3][0] * n[1][1] * n[2][2];
 
 
-	double out_20 = (*this)(1, 0) * (*this)(2, 1) * (*this)(3, 3) + (*this)(1, 1) * (*this)(2, 3) * (*this)(3, 0) + (*this)(1, 3) * (*this)(2, 0) * (*this)(3, 1) -
-					(*this)(1, 0) * (*this)(2, 3) * (*this)(3, 1) - (*this)(1, 1) * (*this)(2, 0) * (*this)(3, 3) - (*this)(1, 3) * (*this)(2, 1) * (*this)(3, 0);
+	double out_10 = n[0][1] * n[3][2] * n[2][3] + n[2][1] * n[0][2] * n[3][3] + n[3][1] * n[2][2] * n[0][3] -
+                    n[0][1] * n[2][2] * n[3][3] - n[2][1] * n[3][2] * n[0][3] - n[3][1] * n[0][2] * n[2][3];
 
-	double out_21 = (*this)(0, 0) * (*this)(2, 3) * (*this)(3, 1) + (*this)(0, 1) * (*this)(2, 0) * (*this)(3, 3) + (*this)(0, 3) * (*this)(2, 1) * (*this)(3, 0) -
-					(*this)(0, 0) * (*this)(2, 1) * (*this)(3, 3) - (*this)(0, 1) * (*this)(2, 3) * (*this)(3, 0) - (*this)(0, 3) * (*this)(2, 0) * (*this)(3, 1);
+	double out_11 = n[0][0] * n[2][2] * n[3][3] + n[2][0] * n[3][2] * n[0][3] + n[3][0] * n[0][2] * n[2][3] -
+                    n[0][0] * n[3][2] * n[2][3] - n[2][0] * n[0][2] * n[3][3] - n[3][0] * n[2][2] * n[0][3];
 
-	double out_22 = (*this)(0, 0) * (*this)(1, 1) * (*this)(3, 3) + (*this)(0, 1) * (*this)(1, 3) * (*this)(3, 0) + (*this)(0, 3) * (*this)(1, 0) * (*this)(3, 1) -
-					(*this)(0, 0) * (*this)(1, 3) * (*this)(3, 1) - (*this)(0, 1) * (*this)(1, 0) * (*this)(3, 3) - (*this)(0, 3) * (*this)(1, 1) * (*this)(3, 0);
+	double out_12 = n[0][0] * n[3][1] * n[2][3] + n[2][0] * n[0][1] * n[3][3] + n[3][0] * n[2][1] * n[0][3] -
+                    n[0][0] * n[2][1] * n[3][3] - n[2][0] * n[3][1] * n[0][3] - n[3][0] * n[0][1] * n[2][3];
 
-	double out_23 = (*this)(0, 0) * (*this)(1, 3) * (*this)(2, 1) + (*this)(0, 1) * (*this)(1, 0) * (*this)(2, 3) + (*this)(0, 3) * (*this)(1, 1) * (*this)(2, 0) -
-					(*this)(0, 0) * (*this)(1, 1) * (*this)(2, 3) - (*this)(0, 1) * (*this)(1, 3) * (*this)(2, 0) - (*this)(0, 3) * (*this)(1, 0) * (*this)(2, 1);
+	double out_13 = n[0][0] * n[2][1] * n[3][2] + n[2][0] * n[3][1] * n[0][2] + n[3][0] * n[0][1] * n[2][2] -
+                    n[0][0] * n[3][1] * n[2][2] - n[2][0] * n[0][1] * n[3][2] - n[3][0] * n[2][1] * n[0][2];
 
 
-	double out_30 = (*this)(1, 0) * (*this)(2, 2) * (*this)(3, 1) + (*this)(1, 1) * (*this)(2, 0) * (*this)(3, 2) + (*this)(1, 2) * (*this)(2, 1) * (*this)(3, 0) -
-					(*this)(1, 0) * (*this)(2, 1) * (*this)(3, 2) - (*this)(1, 1) * (*this)(2, 2) * (*this)(3, 0) - (*this)(1, 2) * (*this)(2, 0) * (*this)(3, 1);
+	double out_20 = n[0][1] * n[1][2] * n[3][3] + n[1][1] * n[3][2] * n[0][3] + n[3][1] * n[0][2] * n[1][3] -
+                    n[0][1] * n[3][2] * n[1][3] - n[1][1] * n[0][2] * n[3][3] - n[3][1] * n[1][2] * n[0][3];
 
-	double out_31 = (*this)(0, 0) * (*this)(2, 1) * (*this)(3, 2) + (*this)(0, 1) * (*this)(2, 2) * (*this)(3, 0) + (*this)(0, 2) * (*this)(2, 0) * (*this)(3, 1) -
-					(*this)(0, 0) * (*this)(2, 2) * (*this)(3, 1) - (*this)(0, 1) * (*this)(2, 0) * (*this)(3, 2) - (*this)(0, 2) * (*this)(2, 1) * (*this)(3, 0);
+	double out_21 = n[0][0] * n[3][2] * n[1][3] + n[1][0] * n[0][2] * n[3][3] + n[3][0] * n[1][2] * n[0][3] -
+					n[0][0] * n[1][2] * n[3][3] - n[1][0] * n[3][2] * n[0][3] - n[3][0] * n[0][2] * n[1][3];
 
-	double out_32 = (*this)(0, 0) * (*this)(1, 2) * (*this)(3, 1) + (*this)(0, 1) * (*this)(1, 0) * (*this)(3, 2) + (*this)(0, 2) * (*this)(1, 1) * (*this)(3, 0) -
-					(*this)(0, 0) * (*this)(1, 1) * (*this)(3, 2) - (*this)(0, 1) * (*this)(1, 2) * (*this)(3, 0) - (*this)(0, 2) * (*this)(1, 0) * (*this)(3, 1);
+	double out_22 = n[0][0] * n[1][1] * n[3][3] + n[1][0] * n[3][1] * n[0][3] + n[3][0] * n[0][1] * n[1][3] -
+					n[0][0] * n[3][1] * n[1][3] - n[1][0] * n[0][1] * n[3][3] - n[3][0] * n[1][1] * n[0][3];
 
-	double out_33 = (*this)(0, 0) * (*this)(1, 1) * (*this)(2, 2) + (*this)(0, 1) * (*this)(1, 2) * (*this)(2, 0) + (*this)(0, 2) * (*this)(1, 0) * (*this)(2, 1) -
-					(*this)(0, 0) * (*this)(1, 2) * (*this)(2, 1) - (*this)(0, 1) * (*this)(1, 0) * (*this)(2, 2) - (*this)(0, 2) * (*this)(1, 1) * (*this)(2, 0);
+	double out_23 = n[0][0] * n[3][1] * n[1][2] + n[1][0] * n[0][1] * n[3][2] + n[3][0] * n[1][1] * n[0][2] -
+					n[0][0] * n[1][1] * n[3][2] - n[1][0] * n[3][1] * n[0][2] - n[3][0] * n[0][1] * n[1][2];
+
+
+	double out_30 = n[0][1] * n[2][2] * n[1][3] + n[1][1] * n[0][2] * n[2][3] + n[2][1] * n[1][2] * n[0][3] -
+					n[0][1] * n[1][2] * n[2][3] - n[1][1] * n[2][2] * n[0][3] - n[2][1] * n[0][2] * n[1][3];
+
+	double out_31 = n[0][0] * n[1][2] * n[2][3] + n[1][0] * n[2][2] * n[0][3] + n[2][0] * n[0][2] * n[1][3] -
+					n[0][0] * n[2][2] * n[1][3] - n[1][0] * n[0][2] * n[2][3] - n[2][0] * n[1][2] * n[0][3];
+
+	double out_32 = n[0][0] * n[2][1] * n[1][3] + n[1][0] * n[0][1] * n[2][3] + n[2][0] * n[1][1] * n[0][3] -
+					n[0][0] * n[1][1] * n[2][3] - n[1][0] * n[2][1] * n[0][3] - n[2][0] * n[0][1] * n[1][3];
+
+	double out_33 = n[0][0] * n[1][1] * n[2][2] + n[1][0] * n[2][1] * n[0][2] + n[2][0] * n[0][1] * n[1][2] -
+					n[0][0] * n[2][1] * n[1][2] - n[1][0] * n[0][1] * n[2][2] - n[2][0] * n[1][1] * n[0][2];
 
 	Matrix4 A{
 		out_00, out_01, out_02, out_03,
@@ -429,16 +435,16 @@ Matrix4 Matrix4::Inversed() const {
 	Matrix4 output = A * (1 / Determinant());
 
 
-	//Matrix4 output{};
-	//double det = Determinant();
-	//for (int row = 0; row < 4; row++)
-	//{
-	//	for (int col = 0; col < 4; col++)
-	//	{
-	//		double c = Cofactor(row, col);
-	//		output(col, row) = c / det;
-	//	}
-	//}
+//	Matrix4 output{};
+//	double det = Determinant();
+//	for (int row = 0; row < 4; row++)
+//	{
+//		for (int col = 0; col < 4; col++)
+//		{
+//			double c = Cofactor(row, col);
+//			output(col, row) = c / det;
+//		}
+//	}
 	return output;
 }
 
@@ -462,13 +468,13 @@ double Matrix4::Determinant() const {
 
 
 
-
+////
 //    double first = (*this)(0, 0) * this->Cofactor(0, 0);
 //    double second = (*this)(0, 1) * this->Cofactor(0, 1);
 //    double third = (*this)(0, 2) * this->Cofactor(0, 2);
 //    double fourth = (*this)(0, 3) * this->Cofactor(0, 3);
 //
-//    double det = first + second + third + fourth;
+//    double determinant = first + second + third + fourth;
 	return determinant;
 }
 

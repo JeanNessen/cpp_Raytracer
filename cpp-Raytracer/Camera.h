@@ -7,6 +7,7 @@
 
 #include "Math.h"
 #include "Ray.h"
+#include <random>
 
 class Camera {
 private:
@@ -24,6 +25,11 @@ private:
     void CalculatePixelSize();
     Point CalculateRayOrigin();
     double CalculatePixelOffset(int pixel) const;
+
+    static std::random_device dev;
+    std::mt19937 generator;
+
+
 
 public:
     bool anti_aliasing = false;
@@ -58,7 +64,6 @@ public:
     Ray RayForPixel(int x, int y);
 
     Point GetRandomPointOnAperture() const;
-    static double GetRandomDouble(double min, double max);
 
 
 };

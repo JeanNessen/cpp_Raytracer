@@ -130,7 +130,9 @@
 	};
 
 	namespace Math {
-		bool Equal(const double a, const double b);
+        double GetRandomDouble(double min, double max);
+
+        bool Equal(const double a, const double b);
 		bool Equal(const Tuple a, const Tuple b);
 
 		double Dot(const Vector& a, const Vector& b);

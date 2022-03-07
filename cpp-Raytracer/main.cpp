@@ -57,7 +57,7 @@ int main()
 {
     //Initialize the World
     World w{};
-    w.SetRecursionDepth(5);
+    w.SetRecursionDepth(2);
 
     //Initialize the light
     PointLight default_light{color::white, Point(-5, 10, -5)};
@@ -79,13 +79,13 @@ int main()
     Sphere_ptr blue_sphere{new Sphere()};
     blue_sphere->GetMaterial().color = color::blue;
     blue_sphere->SetTransform(Math::Translation(0.5, 1, 3) * Math::Scaling(0.25));
-    w.AddObject(blue_sphere);
+    //w.AddObject(blue_sphere);
 
 
     Sphere_ptr glass_sphere{new Sphere()};
     glass_sphere->GetMaterial().color = color::black;
     glass_sphere->GetMaterial().transparency = 1;
-    glass_sphere->GetMaterial().refractive_index = 2;
+    glass_sphere->GetMaterial().refractive_index = 1.51;
     glass_sphere->GetMaterial().reflective = 1;
     glass_sphere->GetMaterial().diffuse = 0.25;
     glass_sphere->GetMaterial().ambient = 0.25;
@@ -96,17 +96,17 @@ int main()
 
     //Initialize the Camera
 
-    Camera c{1000, 1000, 3*(M_PI/4)};
+    Camera c{250, 250, 3*(M_PI/4)};
 
 
     //Position the Camera
     c.SetTransform(Math::ViewTransform(Point(0.5543, 3.0865, -5), Point(0, 1, 1), Vector(0, 1, 0)));
 
-    c.SetSamplesPerPixel(1);
-    c.depth_of_field = false;
-    c.anti_aliasing = false;
+    c.SetSamplesPerPixel(100);
+    c.depth_of_field = true;
+    c.anti_aliasing = true;
     c.SetApertureSize(0.08);
-    c.SetFocalLength(8);
+    c.SetFocalLength(6.5);
 
     //RenderMultiThread the image
     Canvas image = w.RenderSingleThread(c);
