@@ -149,6 +149,8 @@ Canvas World::RenderPass(Camera c) {
     int lines_remaining = c.GetVSize();
 
     for (int y = 0; y < c.GetVSize()-1; ++y) {
+    #pragma omp parallel
+        #pragma omp for
         for (int x = 0; x < c.GetHSize(); ++x) {
             Color color = GetColorForPixel(c, x, y);
             image.WritePixel(x, y, color);
