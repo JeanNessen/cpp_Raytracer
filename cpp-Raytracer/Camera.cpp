@@ -56,7 +56,7 @@ double Camera::CalculatePixelOffset(int pixel) const {
     //If Anti Aliasing is enabled the ray will pass through a random point inside the pixel.
     if(anti_aliasing)
     {
-        offset = (double(pixel) + GetRandomDouble(0, 1)) * pixel_size;
+        offset = (double(pixel) + Math::GetRandomDouble(0, 1)) * pixel_size;
     }
     //If Anti Aliasing is disabled the ray will pass through the center of the pixel.
     else
@@ -81,20 +81,11 @@ Point Camera::CalculateRayOrigin() {
     return origin;
 }
 
-double Camera::GetRandomDouble(double min, double max) {
-    std::random_device dev;
-    std::uniform_real_distribution<double> distribution(min, max);
-    std::mt19937 generator(dev());
-    double a = distribution(generator);
-    return a;
-}
+
 
 Point Camera::GetRandomPointOnAperture() const {
-    std::random_device dev;
-    std::uniform_real_distribution<double> distribution(0.0, aperture_size);
-    std::mt19937 generator(dev());
-    double x = distribution(generator) - (aperture_size / 2);
-    double y = distribution(generator) - (aperture_size / 2);
+    double x = Math::GetRandomDouble(0, aperture_size) - (aperture_size / 2);
+    double y = Math::GetRandomDouble(0, aperture_size) - (aperture_size / 2);
 
     return {x, y, 0};
 }

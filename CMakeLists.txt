@@ -1,7 +1,6 @@
 cmake_minimum_required(VERSION 3.21)
 project(cpp_Raytracer)
 
-
 set(CMAKE_CXX_STANDARD 20)
 
     add_executable(cpp_Raytracer cpp-Raytracer/main.cpp
@@ -17,6 +16,8 @@ set(CMAKE_CXX_STANDARD 20)
         cpp-Raytracer/IntersectionComputations.h
         cpp-Raytracer/Camera.cpp cpp-Raytracer/Camera.h
         cpp-Raytracer/Shape.cpp cpp-Raytracer/Shape.h
-        cpp-Raytracer/Plane.cpp cpp-Raytracer/Plane.h cpp-Raytracer/IntersectionComputations.cpp cpp-Raytracer/Pattern.cpp cpp-Raytracer/Pattern.h)
+        cpp-Raytracer/Plane.cpp cpp-Raytracer/Plane.h 
+        cpp-Raytracer/IntersectionComputations.cpp 
+        cpp-Raytracer/Pattern.cpp cpp-Raytracer/Pattern.h)
 
 add_subdirectory(Google_tests)
