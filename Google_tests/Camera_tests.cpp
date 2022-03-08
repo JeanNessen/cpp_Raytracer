@@ -4,12 +4,12 @@
 
 #include "gtest/gtest.h"
 
-#include "../cpp-Raytracer/Camera.h"
-//#include "../cpp-Raytracer/Camera.cpp"
+#include "../cpp-Raytracer/CCamera.h"
+//#include "../cpp-Raytracer/CCamera.cpp"
 
 TEST(Camera, RandomCanvasPointIsRandom)
 {
-    Camera c{10, 10, M_PI/2};
+    CCamera c{10, 10, M_PI / 2};
 
     Point p1 = c.GetRandomPointOnAperture();
     Point p2 = c.GetRandomPointOnAperture();

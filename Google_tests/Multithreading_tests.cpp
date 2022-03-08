@@ -4,4 +4,4 @@
 
 #include "gtest/gtest.h"
 
-#include "../cpp-Raytracer/World.h"
+#include "../cpp-Raytracer/CWorld.h"

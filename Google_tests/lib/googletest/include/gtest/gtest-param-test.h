@@ -372,9 +372,9 @@ inline internal::ParamGenerator<bool> Bool() {
 // the parameter values tuple("cat", BLACK), tuple("cat", WHITE),
 // tuple("dog", BLACK), and tuple("dog", WHITE):
 //
-// enum Color { BLACK, GRAY, WHITE };
+// enum CColor { BLACK, GRAY, WHITE };
 // class AnimalTest
-//     : public testing::TestWithParam<std::tuple<const char*, Color> > {...};
+//     : public testing::TestWithParam<std::tuple<const char*, CColor> > {...};
 //
 // TEST_P(AnimalTest, AnimalLooksNice) {...}
 //

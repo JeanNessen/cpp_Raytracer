@@ -5,24 +5,24 @@
 #ifndef CPP_RAYTRACER_LIGHT_H
 #define CPP_RAYTRACER_LIGHT_H
 
-#include "Color.h"
-#include "Material.h"
+#include "CColor.h"
+#include "CMaterial.h"
 #include "Math.h"
-#include "Shape.h"
+#include "CShape.h"
 
-struct PointLight{
-    Color intensity{};
+struct SPointLight{
+    CColor intensity{};
     Point position;
 
-    PointLight(Color i, Point p)
+    SPointLight(CColor i, Point p)
     {
         intensity = i;
         position = p;
     }
 
-    bool operator==(const PointLight& other) const;
+    bool operator==(const SPointLight& other) const;
 };
 
-Color Lighting(Material m, Shape_ptr object, PointLight light, Point position, Vector eye_v, Vector normal_v, bool in_shadow);
+CColor Lighting(CMaterial m, Shape_ptr object, SPointLight light, Point position, Vector eye_v, Vector normal_v, bool in_shadow);
 
 #endif //CPP_RAYTRACER_LIGHT_H

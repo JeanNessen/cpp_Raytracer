@@ -349,7 +349,7 @@ TEST(Matricies, Matrix4ScalarMultiplication)
         8, 8, 8, 8
     };
 
-    //EXPECT_EQ(A * b, target);
+    EXPECT_EQ(A * b, target);
 }
 
 TEST(Matricies, Matrix4Identity)

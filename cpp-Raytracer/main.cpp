@@ -1,19 +1,10 @@
-#include "Canvas.h"
-#include "World.h"
+#include "CCanvas.h"
+#include "CWorld.h"
 #include <random>
-
-double GetRandomDouble(double min, double max)
-{
-    std::random_device dev;
-    std::uniform_real_distribution<double> distribution(min, max);
-    std::mt19937 generator(dev());
-    double a = distribution(generator);
-    return a;
-}
 
 bool CheckSpot(Point spot, const std::vector<Point>& taken_spots)
 {
-    double max_distance = 0.8;
+    double max_distance = 0.5;
     bool spot_is_free = true;
     for(Point s: taken_spots)
     {
@@ -29,23 +20,23 @@ bool CheckSpot(Point spot, const std::vector<Point>& taken_spots)
     return spot_is_free;
 }
 
-void PlaceSpheres(World w)
+void PlaceSpheres(CWorld &w)
 {
     std::vector<Point> taken_spots;
 
-    for (int i = 0; i < 50; ++i) {
-        Sphere_ptr sphere(new Sphere());
-        sphere->GetMaterial().color = Color(GetRandomDouble(0, 1), GetRandomDouble(0, 1), GetRandomDouble(0, 1));
+    for (int i = 0; i < 100; ++i) {
+        Sphere_ptr sphere(new CSphere());
+        sphere->GetMaterial().color = CColor(Math::GetRandomDouble(0, 1), Math::GetRandomDouble(0, 1), Math::GetRandomDouble(0, 1));
         sphere->GetMaterial().diffuse = 0.7f;
         sphere->GetMaterial().specular = 0.2f;
-        sphere->GetMaterial().reflective = 0.15f;
+        sphere->GetMaterial().reflective = 0.1;
         sphere->GetMaterial().shininess = 150;
-        double sphere_scaling_s = GetRandomDouble(0.25, 0.5);
+        double sphere_scaling_s = Math::GetRandomDouble(0.1, 0.25);
         Matrix4 scaling = Math::Scaling(sphere_scaling_s);
-        Point spot{GetRandomDouble(-5, 5), 0.5, GetRandomDouble(-5, 20)};
+        Point spot{Math::GetRandomDouble(-5, 5), sphere_scaling_s, Math::GetRandomDouble(10, 20)};
         while(!CheckSpot(spot, taken_spots))
         {
-            spot = Point{GetRandomDouble(-4, 4), sphere_scaling_s, GetRandomDouble(-2, 20)};
+            spot = Point{Math::GetRandomDouble(-5, 5), sphere_scaling_s, Math::GetRandomDouble(10, 20)};
         }
         taken_spots.push_back(spot);
         sphere->SetTransform(Math::Translation(spot.x, spot.y, spot.z) * scaling);
@@ -55,61 +46,58 @@ void PlaceSpheres(World w)
 
 int main()
 {
-    //Initialize the World
-    World w{};
-    w.SetRecursionDepth(2);
+    //Initialize the CWorld
+    CWorld w{};
+    w.SetRecursionDepth(5);
 
     //Initialize the light
-    PointLight default_light{color::white, Point(-5, 10, -5)};
+    SPointLight default_light{color::white, Point(-5, 10, -5)};
     w.AddLight(default_light);
 
 
     //Set up the pattern for the floor
-    std::shared_ptr<Pattern> p(new CheckersPattern(Color(0.8, 0.8, 0.8), Color(0.4, 0.4, 0.4)));
+    std::shared_ptr<CPattern> p(new CCheckersPattern(CColor(0.8, 0.8, 0.8), CColor(0.4, 0.4, 0.4)));
     p->SetTransform(Math::Scaling(2));
 
     //Set up the floor
-    Plane_ptr floor (new Plane());
+    Plane_ptr floor (new CPlane());
     floor->GetMaterial().SetPattern(p);
-    floor->GetMaterial().color = Color(1, 0.9, 0.9);
+    floor->GetMaterial().color = CColor(1, 0.9, 0.9);
     floor->GetMaterial().specular = 0.6f;
     floor->GetMaterial().reflective = 0.05f;
     w.AddObject(floor);
 
-    Sphere_ptr blue_sphere{new Sphere()};
-    blue_sphere->GetMaterial().color = color::blue;
-    blue_sphere->SetTransform(Math::Translation(0.5, 1, 3) * Math::Scaling(0.25));
-    //w.AddObject(blue_sphere);
+    PlaceSpheres(w);
 
 
-    Sphere_ptr glass_sphere{new Sphere()};
+    Sphere_ptr glass_sphere{new CSphere()};
     glass_sphere->GetMaterial().color = color::black;
     glass_sphere->GetMaterial().transparency = 1;
-    glass_sphere->GetMaterial().refractive_index = 1.51;
+    glass_sphere->GetMaterial().refractive_index = 1.5;
     glass_sphere->GetMaterial().reflective = 1;
     glass_sphere->GetMaterial().diffuse = 0.25;
     glass_sphere->GetMaterial().ambient = 0.25;
     glass_sphere->GetMaterial().specular = 1;
     glass_sphere->GetMaterial().shininess = 300;
-    glass_sphere->SetTransform(Math::Translation(0, 1, 1));
+    glass_sphere->SetTransform(Math::Translation(0, 1, 1) * Math::Scaling(0.75));
     w.AddObject(glass_sphere);
 
-    //Initialize the Camera
+    //Initialize the CCamera
 
-    Camera c{250, 250, 3*(M_PI/4)};
+    CCamera c{1600, 1000, 3 * (M_PI / 4)};
 
 
-    //Position the Camera
-    c.SetTransform(Math::ViewTransform(Point(0.5543, 3.0865, -5), Point(0, 1, 1), Vector(0, 1, 0)));
+    //Position the CCamera
+    c.SetTransform(Math::ViewTransform(Point(0.0543, 1.5865, -5), Point(0, 1, 1), Vector(0, 1, 0)));
 
-    c.SetSamplesPerPixel(100);
+    c.SetSamplesPerPixel(20);
     c.depth_of_field = true;
     c.anti_aliasing = true;
     c.SetApertureSize(0.08);
-    c.SetFocalLength(6.5);
+    c.SetFocalLength(6.2);
 
     //RenderMultiThread the image
-    Canvas image = w.RenderSingleThread(c);
+    CCanvas image = w.RenderSingleThread(c);
 
     image.to_ppm();
 

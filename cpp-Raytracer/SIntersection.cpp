@@ -2,9 +2,11 @@
 // Created by Jean-Luc von Nessen on 03.02.22.
 //
 
-#include "Intersection.h"
+#include "SIntersection.h"
 
-bool Intersection::operator==(const Intersection& other) const
+#include <utility>
+
+bool SIntersection::operator==(const SIntersection& other) const
 {
     if (t != other.t)
     {
@@ -17,30 +19,15 @@ bool Intersection::operator==(const Intersection& other) const
     return true;
 }
 
-Intersection::Intersection(double t, const Shape_ptr shape):
+SIntersection::SIntersection(double t, Shape_ptr  shape):
     t(t),
-    object(shape)
+    object(std::move(shape))
 {
 }
 
-
-
-
-std::vector<Intersection> Intersections(std::initializer_list<Intersection> args)
+SIntersection* Hit(std::vector<SIntersection> &intersections)
 {
-    std::vector<Intersection> intersections;
-
-    for (auto i : args)
-    {
-        intersections.push_back(i);
-    }
-
-    return intersections;
-}
-
-Intersection* Hit(std::vector<Intersection> &intersections)
-{
-    Intersection *hit = nullptr;
+    SIntersection *hit = nullptr;
     for (int i = 0; i < intersections.size(); i++)
     {
         if (intersections[i].t < 0)

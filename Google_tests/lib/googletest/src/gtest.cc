@@ -2017,7 +2017,7 @@ inline uint32_t CreateCodePointFromUtf16SurrogatePair(wchar_t first,
 // (i.e. outside of Unicode range U+0 to U+10FFFF) they will be output
 // as '(Invalid Unicode 0xXXXXXXXX)'. If the string is in UTF16 encoding
 // and contains invalid UTF-16 surrogate pairs, values in those pairs
-// will be encoded as individual Unicode characters from Basic Normal Plane.
+// will be encoded as individual Unicode characters from Basic Normal CPlane.
 std::string WideStringToUtf8(const wchar_t* str, int num_chars) {
   if (num_chars == -1)
     num_chars = static_cast<int>(wcslen(str));

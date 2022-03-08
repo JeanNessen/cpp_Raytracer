@@ -7,23 +7,23 @@
 
 #include "gtest/gtest.h"
 
-#include "../cpp-Raytracer/World.h"
-#include "../cpp-Raytracer/World.cpp"
+#include "../cpp-Raytracer/CWorld.h"
+#include "../cpp-Raytracer/CWorld.cpp"
 
-#include "../cpp-Raytracer/Camera.h"
-#include "../cpp-Raytracer/Camera.cpp"
+#include "../cpp-Raytracer/CCamera.h"
+#include "../cpp-Raytracer/CCamera.cpp"
 
-#include "../cpp-Raytracer/Canvas.h"
+#include "../cpp-Raytracer/CCanvas.h"
 
-#include "../cpp-Raytracer/Intersection.h"
-//#include "../cpp-Raytracer/Intersection.cpp"
+#include "../cpp-Raytracer/SIntersection.h"
+//#include "../cpp-Raytracer/SIntersection.cpp"
 
-#include "../cpp-Raytracer/IntersectionComputations.h"
-//#include "../cpp-Raytracer/IntersectionComputations.cpp"
+#include "../cpp-Raytracer/SIntersectionComputations.h"
+//#include "../cpp-Raytracer/SIntersectionComputations.cpp"
 
 TEST(World, WorldCreation)
 {
-    World w{};
+    CWorld w{};
 
     EXPECT_TRUE(w.GetWorldLights().empty());
     EXPECT_TRUE(w.GetWorldObjects().empty());
@@ -31,17 +31,17 @@ TEST(World, WorldCreation)
 
 TEST(World, DefaultWorld)
 {
-    PointLight light{Color(1, 1, 1), Point(-10, 10, -10)};
+    SPointLight light{CColor(1, 1, 1), Point(-10, 10, -10)};
 
-    Sphere sphere_1{};
-    sphere_1.GetMaterial().color = Color{0.8, 1.0, 0.6};
+    CSphere sphere_1{};
+    sphere_1.GetMaterial().color = CColor{0.8, 1.0, 0.6};
     sphere_1.GetMaterial().diffuse = 0.7;
     sphere_1.GetMaterial().specular = 0.2;
 
-    Sphere sphere_2{};
+    CSphere sphere_2{};
     sphere_2.SetTransform(Math::Scaling(0.5, 0.5, 0.5));
 
-    World w = DefaultWorld();
+    CWorld w = DefaultWorld();
 
     //Check if the default world contains the correct light
     auto default_light_it = std::find(w.GetWorldLights().begin(), w.GetWorldLights().end(), light);
@@ -63,10 +63,10 @@ TEST(World, DefaultWorld)
 
 TEST(World, IntersectWorldWithRay)
 {
-    World w = DefaultWorld();
-    Ray r{Point(0, 0, -5), Vector(0, 0, 1)};
+    CWorld w = DefaultWorld();
+    CRay r{Point(0, 0, -5), Vector(0, 0, 1)};
 
-    std::vector<Intersection> xs = w.IntersectWorld(r);
+    std::vector<SIntersection> xs = w.IntersectWorld(r);
 
     EXPECT_EQ(xs.size(), 4);
     EXPECT_EQ(xs[0].t, 4);
@@ -77,60 +77,60 @@ TEST(World, IntersectWorldWithRay)
 
 TEST(World, ShadingAnIntersection)
 {
-    World w = DefaultWorld();
-    Ray r{Point(0, 0, -5), Vector(0, 0, 1)};
+    CWorld w = DefaultWorld();
+    CRay r{Point(0, 0, -5), Vector(0, 0, 1)};
     auto shape = w.GetWorldObjects()[0];
-    Intersection i{4, shape};
+    SIntersection i{4, shape};
 
-    IntersectionComputations comps = PrepareComputations(i, r);
-    Color c = w.ShadeHit(comps);
+    SIntersectionComputations comps = PrepareComputations(i, r);
+    CColor c = w.ShadeHit(comps);
 
-    EXPECT_EQ(c, Color(0.38066, 0.47583, 0.2855));
+    EXPECT_EQ(c, CColor(0.38066, 0.47583, 0.2855));
 }
 
 TEST(World, ShadingAnIntersectionFromInside)
 {
-    World w = DefaultWorld();
-    w.GetWorldLights()[0] = PointLight{Color(1, 1, 1), Point(0, 0.25, 0)};
-    Ray r{Point(0, 0, 0), Vector(0, 0, 1)};
+    CWorld w = DefaultWorld();
+    w.GetWorldLights()[0] = SPointLight{CColor(1, 1, 1), Point(0, 0.25, 0)};
+    CRay r{Point(0, 0, 0), Vector(0, 0, 1)};
     auto shape = w.GetWorldObjects()[1];
-    Intersection i{0.5, shape};
+    SIntersection i{0.5, shape};
 
-    IntersectionComputations comps = PrepareComputations(i, r);
-    Color c = w.ShadeHit(comps);
-    EXPECT_EQ(c, Color(0.90498, 0.90498, 0.90498));
+    SIntersectionComputations comps = PrepareComputations(i, r);
+    CColor c = w.ShadeHit(comps);
+    EXPECT_EQ(c, CColor(0.90498, 0.90498, 0.90498));
 }
 
 TEST(World, ColorWhenRayMisses)
 {
-    World w = DefaultWorld();
-    Ray r{Point(0, 0, -5), Vector(0, 1, 0)};
+    CWorld w = DefaultWorld();
+    CRay r{Point(0, 0, -5), Vector(0, 1, 0)};
 
-    Color c = w.ColorAt(r);
+    CColor c = w.CalculateColorAt(r);
 
-    EXPECT_EQ(c, Color(0, 0, 0));
+    EXPECT_EQ(c, CColor(0, 0, 0));
 }
 
 TEST(World, ColorWhenRayHits)
 {
-    World w = DefaultWorld();
-    Ray r{Point(0, 0, -5), Vector(0, 0, 1)};
+    CWorld w = DefaultWorld();
+    CRay r{Point(0, 0, -5), Vector(0, 0, 1)};
 
-    Color c = w.ColorAt(r);
+    CColor c = w.CalculateColorAt(r);
 
-    EXPECT_EQ(c, Color(0.38066, 0.47583, 0.2855));
+    EXPECT_EQ(c, CColor(0.38066, 0.47583, 0.2855));
 }
 
 TEST(World, ColorWithIntersectionBehinRay)
 {
-    World w = DefaultWorld();
+    CWorld w = DefaultWorld();
     auto outer = w.GetWorldObjects()[0];
     outer->GetMaterial().ambient = 1;
     auto inner = w.GetWorldObjects()[1];
     inner->GetMaterial().ambient = 1;
-    Ray r{Point(0, 0, 0.75), Vector(0, 0, -1)};
+    CRay r{Point(0, 0, 0.75), Vector(0, 0, -1)};
 
-    Color c = w.ColorAt(r);
+    CColor c = w.CalculateColorAt(r);
 
     EXPECT_EQ(c, inner->GetMaterial().color);
 }
@@ -141,7 +141,7 @@ TEST(Camera, ConstructingACamera)
     int v_size{120};
     float fov{M_PI / 2};
 
-    Camera c{h_size, v_size, fov};
+    CCamera c{h_size, v_size, fov};
 
     EXPECT_EQ(c.GetHSize(), 160);
     EXPECT_EQ(c.GetVSize(), 120);
@@ -151,23 +151,23 @@ TEST(Camera, ConstructingACamera)
 
 TEST(Camera, PixelSizeHorizontalCanvas)
 {
-    Camera c{200, 125, M_PI/2};
+    CCamera c{200, 125, M_PI / 2};
 
     EXPECT_TRUE(Math::Equal(c.GetPixelSize(), 0.01));
 }
 
 TEST(Camera, PixelSizeVerticalCanvas)
 {
-    Camera c{125, 200, M_PI/2};
+    CCamera c{125, 200, M_PI / 2};
 
     EXPECT_TRUE(Math::Equal(c.GetPixelSize(), 0.01));
 }
 
 TEST(Camera, ConstructingRayThroughCenterOfCanvas)
 {
-    Camera c{201, 101, M_PI/2};
+    CCamera c{201, 101, M_PI / 2};
 
-    Ray r = c.RayForPixel(100, 50);
+    CRay r = c.RayForPixel(100, 50);
 
     EXPECT_TRUE(Math::Equal(r.origin, Point(0, 0, 0)));
     EXPECT_TRUE(Math::Equal(r.direction, Vector(0, 0, -1)));
@@ -175,10 +175,10 @@ TEST(Camera, ConstructingRayThroughCenterOfCanvas)
 
 TEST(Camera, ConstructingRayThroughCorneOfCanvas)
 {
-    Camera c{201, 101, M_PI/2};
+    CCamera c{201, 101, M_PI / 2};
     c.SetFocalLength(1);
 
-    Ray r = c.RayForPixel(0, 0);
+    CRay r = c.RayForPixel(0, 0);
 
     EXPECT_TRUE(Math::Equal(r.origin, Point(0, 0, 0)));
     EXPECT_TRUE(Math::Equal(r.direction, Vector(0.66519, 0.33259, -0.66851)));
@@ -186,10 +186,10 @@ TEST(Camera, ConstructingRayThroughCorneOfCanvas)
 
 TEST(Camera, ConsturctingRayWhenCameraIsTransformed)
 {
-    Camera c{201, 101, M_PI/2};
+    CCamera c{201, 101, M_PI / 2};
 
     c.SetTransform(Math::Rotation_Y(M_PI/4) * Math::Translation(0, -2, 5));
-    Ray r = c.RayForPixel(100, 50);
+    CRay r = c.RayForPixel(100, 50);
 
     EXPECT_TRUE(Math::Equal(r.origin, Point(0, 2, -5)));
     EXPECT_TRUE(Math::Equal(r.direction, Vector(std::sqrt(2)/2, 0, -sqrt(2)/2)));
@@ -197,69 +197,69 @@ TEST(Camera, ConsturctingRayWhenCameraIsTransformed)
 
 TEST(Camera, RenderingAWorldWithACamera)
 {
-    World w = DefaultWorld();
-    Camera c{11, 11, M_PI/2};
+    CWorld w = DefaultWorld();
+    CCamera c{11, 11, M_PI / 2};
     Point from{0, 0, -5};
     Point to{0, 0, 0};
     Vector up{0, 1, 0};
     c.SetTransform(Math::ViewTransform(from, to, up));
 
-    Canvas image = w.RenderSingleThread(c);
+    CCanvas image = w.RenderSingleThread(c);
 
-    EXPECT_EQ(image.PixelAt(5, 5), Color(0.38066, 0.47583, 0.2855));
+    EXPECT_EQ(image.PixelAt(5, 5), CColor(0.38066, 0.47583, 0.2855));
 }
 
 TEST(World, NoShadowWhenNothingIsCollinearWithPointAndLight)
 {
-    World w = DefaultWorld();
+    CWorld w = DefaultWorld();
     Point p{0, 10, 0};
 
-    EXPECT_FALSE(w.IsShadowed(p));
+    EXPECT_FALSE(w.CalculateShadow(p));
 }
 
 TEST(World, ShadowWhenObjectIsBetweenPointAndLight)
 {
-    World w = DefaultWorld();
+    CWorld w = DefaultWorld();
     Point p{10, -10, 10};
 
-    EXPECT_TRUE(w.IsShadowed(p));
+    EXPECT_TRUE(w.CalculateShadow(p));
 }
 
 TEST(World, NoShadowWhenObjectIsBehindLight)
 {
-    World w = DefaultWorld();
+    CWorld w = DefaultWorld();
     Point p{-20, 20, -20};
 
-    EXPECT_FALSE(w.IsShadowed(p));
+    EXPECT_FALSE(w.CalculateShadow(p));
 }
 
 TEST(World, NoShadowWhenObjectIsBehindPoint)
 {
-    World w = DefaultWorld();
+    CWorld w = DefaultWorld();
     Point p{-2, 2,-2};
 
-    EXPECT_FALSE(w.IsShadowed(p));
+    EXPECT_FALSE(w.CalculateShadow(p));
 }
 
 TEST(Lighting, ShadeHitIsGivenIntersectionInShadow)
 {
-    World w{};
-    w.AddLight(PointLight{Color(1, 1, 1), Point(0, 0, -10)});
+    CWorld w{};
+    w.AddLight(SPointLight{CColor(1, 1, 1), Point(0, 0, -10)});
 
     //Add the first sphere
-    Sphere_ptr s1 (new Sphere());
+    Sphere_ptr s1 (new CSphere());
     w.AddObject(s1);
 
     //Add the second sphere
-    Sphere_ptr s2 (new Sphere());
+    Sphere_ptr s2 (new CSphere());
     s2->SetTransform(Math::Translation(0, 0, 10));
     w.AddObject(s2);
 
-    Ray r{Point(0, 0, 5), Vector(0, 0, 1)};
-    Intersection i{4, s2};
+    CRay r{Point(0, 0, 5), Vector(0, 0, 1)};
+    SIntersection i{4, s2};
 
-    IntersectionComputations comps = PrepareComputations(i, r);
-    Color c = w.ShadeHit(comps);
+    SIntersectionComputations comps = PrepareComputations(i, r);
+    CColor c = w.ShadeHit(comps);
 
-    EXPECT_EQ(c, Color(0.1, 0.1, 0.1));
+    EXPECT_EQ(c, CColor(0.1, 0.1, 0.1));
 }

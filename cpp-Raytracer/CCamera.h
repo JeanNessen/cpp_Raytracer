@@ -2,14 +2,14 @@
 // Created by Jean-Luc von Nessen on 13.02.22.
 //
 
-#ifndef CPP_RAYTRACER_CAMERA_H
-#define CPP_RAYTRACER_CAMERA_H
+#ifndef CPP_RAYTRACER_CCAMERA_H
+#define CPP_RAYTRACER_CCAMERA_H
 
 #include "Math.h"
-#include "Ray.h"
+#include "CRay.h"
 #include <random>
 
-class Camera {
+class CCamera {
 private:
     int horizontal_size;
     int vertical_size;
@@ -35,7 +35,7 @@ public:
     bool anti_aliasing = false;
     bool depth_of_field = false;
 
-    Camera(int h_size, int v_size, double fov);
+    CCamera(int h_size, int v_size, double fov);
 
     int GetHSize() const{return horizontal_size;}
     void SetHSize(int h){horizontal_size = h;}
@@ -61,7 +61,7 @@ public:
     double GetPixelSize() const{return pixel_size;}
 
 
-    Ray RayForPixel(int x, int y);
+    CRay RayForPixel(int x, int y);
 
     Point GetRandomPointOnAperture() const;
 
@@ -69,4 +69,4 @@ public:
 };
 
 
-#endif //CPP_RAYTRACER_CAMERA_H
+#endif //CPP_RAYTRACER_CCAMERA_H

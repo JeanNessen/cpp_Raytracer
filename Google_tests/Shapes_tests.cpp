@@ -6,29 +6,29 @@
 
 #include "gtest/gtest.h"
 
-#include "../cpp-Raytracer/Shape.h"
-#include "../cpp-Raytracer/Shape.cpp"
+#include "../cpp-Raytracer/CShape.h"
+#include "../cpp-Raytracer/CShape.cpp"
 
-#include "../cpp-Raytracer/Sphere.h"
-//#include "../cpp-Raytracer/Sphere.cpp"
+#include "../cpp-Raytracer/CSphere.h"
+//#include "../cpp-Raytracer/CSphere.cpp"
 
-#include "../cpp-Raytracer/Plane.h"
-#include "../cpp-Raytracer/Plane.cpp"
+#include "../cpp-Raytracer/CPlane.h"
+#include "../cpp-Raytracer/CPlane.cpp"
 
-#include "../cpp-Raytracer/Ray.h"
+#include "../cpp-Raytracer/CRay.h"
 
 #include <vector>
 
 TEST(Spheres, TheDefaultTransformation)
 {
-    Sphere s{};
+    CSphere s{};
 
     EXPECT_EQ(s.GetTransform(), Math::identiy_matrix);
 }
 
 TEST(Spheres, AssigningATransformation)
 {
-    Sphere s{};
+    CSphere s{};
 
     s.SetTransform(Math::Translation(2, 3, 4));
 
@@ -37,15 +37,15 @@ TEST(Spheres, AssigningATransformation)
 
 TEST(Spheres, TheDefaultMaterial)
 {
-    Sphere s{};
+    CSphere s{};
 
-    EXPECT_EQ(s.GetMaterial(), Material{});
+    EXPECT_EQ(s.GetMaterial(), CMaterial{});
 }
 
 TEST(Spheres, AssigningAMaterial)
 {
-    Sphere s{};
-    Material m{};
+    CSphere s{};
+    CMaterial m{};
     m.ambient = 1;
 
     s.SetMaterial(m);
@@ -55,11 +55,11 @@ TEST(Spheres, AssigningAMaterial)
 
 TEST(Spheres, IntersectingAScaledSphereWithARay)
 {
-    Ray r{Point(0, 0, -5), Vector(0, 0, 1)};
-    Sphere_ptr s (new Sphere());
+    CRay r{Point(0, 0, -5), Vector(0, 0, 1)};
+    Sphere_ptr s (new CSphere());
 
     s->SetTransform(Math::Scaling(2, 2, 2));
-    std::vector<Intersection> xs = r.Intersect(s);
+    std::vector<SIntersection> xs = r.Intersect(s);
 
     EXPECT_EQ(s->saved_ray_origin, Point(0, 0, -2.5));
     EXPECT_EQ(s->saved_ray_direction, Vector(0, 0, 0.5));
@@ -67,11 +67,11 @@ TEST(Spheres, IntersectingAScaledSphereWithARay)
 
 TEST(Spheres, IntersectingATranslatedSphereWithARay)
 {
-    Ray r{Point(0, 0, -5), Vector(0, 0, 1)};
-    Sphere_ptr s(new Sphere());
+    CRay r{Point(0, 0, -5), Vector(0, 0, 1)};
+    Sphere_ptr s(new CSphere());
 
     s->SetTransform(Math::Translation(5, 0, 0));
-    std::vector<Intersection> xs = r.Intersect(s);
+    std::vector<SIntersection> xs = r.Intersect(s);
 
     EXPECT_EQ(s->saved_ray_origin, Point(-5, 0, -5));
     EXPECT_EQ(s->saved_ray_direction, Vector(0, 0, 1));
@@ -79,14 +79,14 @@ TEST(Spheres, IntersectingATranslatedSphereWithARay)
 
 TEST(Planes, TheDefaultTransformation)
 {
-    Plane p{};
+    CPlane p{};
 
     EXPECT_EQ(p.GetTransform(), Math::identiy_matrix);
 }
 
 TEST(Planes, AssigningATransformation)
 {
-    Plane p{};
+    CPlane p{};
 
     p.SetTransform(Math::Translation(2, 3, 4));
 
@@ -95,15 +95,15 @@ TEST(Planes, AssigningATransformation)
 
 TEST(Planes, TheDefaultMaterial)
 {
-    Plane p{};
+    CPlane p{};
 
-    EXPECT_EQ(p.GetMaterial(), Material{});
+    EXPECT_EQ(p.GetMaterial(), CMaterial{});
 }
 
 TEST(Planes, AssigningAMaterial)
 {
-    Plane p{};
-    Material m{};
+    CPlane p{};
+    CMaterial m{};
     m.ambient = 1;
 
     p.SetMaterial(m);
@@ -113,11 +113,11 @@ TEST(Planes, AssigningAMaterial)
 
 TEST(Planes, IntersectingAScaledPlaneWithARay)
 {
-    Ray r{Point(0, 0, -5), Vector(0, 0, 1)};
-    Plane_ptr p (new Plane());
+    CRay r{Point(0, 0, -5), Vector(0, 0, 1)};
+    Plane_ptr p (new CPlane());
 
     p->SetTransform(Math::Scaling(2, 2, 2));
-    std::vector<Intersection> xs = r.Intersect(p);
+    std::vector<SIntersection> xs = r.Intersect(p);
 
     EXPECT_EQ(p->saved_ray_origin, Point(0, 0, -2.5));
     EXPECT_EQ(p->saved_ray_direction, Vector(0, 0, 0.5));
@@ -125,11 +125,11 @@ TEST(Planes, IntersectingAScaledPlaneWithARay)
 
 TEST(Planes, IntersectingATranslatedPlaneWithARay)
 {
-    Ray r{Point(0, 0, -5), Vector(0, 0, 1)};
-    Plane_ptr p (new Plane());
+    CRay r{Point(0, 0, -5), Vector(0, 0, 1)};
+    Plane_ptr p (new CPlane());
 
     p->SetTransform(Math::Translation(5, 0, 0));
-    std::vector<Intersection> xs = r.Intersect(p);
+    std::vector<SIntersection> xs = r.Intersect(p);
 
     EXPECT_EQ(p->saved_ray_origin, Point(-5, 0, -5));
     EXPECT_EQ(p->saved_ray_direction, Vector(0, 0, 1));
@@ -137,7 +137,7 @@ TEST(Planes, IntersectingATranslatedPlaneWithARay)
 
 TEST(Planes, TheNormalOfAPlaneIsConstantEverywhere)
 {
-    Plane p{};
+    CPlane p{};
 
     Vector n1 = p.LocalNormalAt(Point(0, 0, 0));
     Vector n2 = p.LocalNormalAt(Point(10, 0, -10));
@@ -152,30 +152,30 @@ TEST(Planes, TheNormalOfAPlaneIsConstantEverywhere)
 
 TEST(Planes, IntersectWithARayParallelToThePlane)
 {
-    Plane_ptr p (new Plane());
-    Ray r{Point(0, 10, 10), Vector(0, 0, 1)};
+    Plane_ptr p (new CPlane());
+    CRay r{Point(0, 10, 10), Vector(0, 0, 1)};
 
-    std::vector<Intersection> xs = r.LocalIntersect(p);
+    std::vector<SIntersection> xs = r.LocalIntersect(p);
 
     EXPECT_TRUE(xs.empty());
 }
 
 TEST(Planes, IntersectWithACoplanarRay)
 {
-    Plane_ptr p (new Plane());
-    Ray r{Point(0, 0, 0), Vector(0, 0, 1)};
+    Plane_ptr p (new CPlane());
+    CRay r{Point(0, 0, 0), Vector(0, 0, 1)};
 
-    std::vector<Intersection> xs = r.LocalIntersect(p);
+    std::vector<SIntersection> xs = r.LocalIntersect(p);
 
     EXPECT_TRUE(xs.empty());
 }
 
 TEST(Planes, ARayIntersectingAPlaneFormAbove)
 {
-    Plane_ptr p (new Plane());
-    Ray r{Point(0, 1, 0), Vector(0, -1, 0)};
+    Plane_ptr p (new CPlane());
+    CRay r{Point(0, 1, 0), Vector(0, -1, 0)};
 
-    std::vector<Intersection> xs = r.LocalIntersect(p);
+    std::vector<SIntersection> xs = r.LocalIntersect(p);
 
     EXPECT_EQ(xs.size(), 1);
     EXPECT_EQ(xs[0].t, 1);
@@ -184,10 +184,10 @@ TEST(Planes, ARayIntersectingAPlaneFormAbove)
 
 TEST(Planes, ARayIntersectingAPlaneFormBelow)
 {
-    Plane_ptr p (new Plane());
-    Ray r{Point(0, -1, 0), Vector(0, 1, 0)};
+    Plane_ptr p (new CPlane());
+    CRay r{Point(0, -1, 0), Vector(0, 1, 0)};
 
-    std::vector<Intersection> xs = r.LocalIntersect(p);
+    std::vector<SIntersection> xs = r.LocalIntersect(p);
 
     EXPECT_EQ(xs.size(), 1);
     EXPECT_EQ(xs[0].t, 1);

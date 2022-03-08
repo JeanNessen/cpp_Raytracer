@@ -4,9 +4,9 @@
 
 #include "Light.h"
 
-Color Lighting(Material m, Shape_ptr object, PointLight light, Point position, Vector eye_v, Vector normal_v, bool in_shadow) {
+CColor Lighting(CMaterial m, Shape_ptr object, SPointLight light, Point position, Vector eye_v, Vector normal_v, bool in_shadow) {
 
-    Color color;
+    CColor color;
 
     //check if the material has a pattern
     if(m.GetPattern())
@@ -18,12 +18,12 @@ Color Lighting(Material m, Shape_ptr object, PointLight light, Point position, V
     }
 
     //Combine surface color with lights intensity/color
-    Color effective_color = color * light.intensity;
+    CColor effective_color = color * light.intensity;
 
     if(in_shadow)
     {
         //If the point is in shadow, only the ambient light will affect it
-        Color ambient = effective_color * m.ambient;
+        CColor ambient = effective_color * m.ambient;
 
         return ambient;
     }
@@ -33,15 +33,15 @@ Color Lighting(Material m, Shape_ptr object, PointLight light, Point position, V
         Vector light_v = Vector(light.position - position).normalized();
 
         //Compute the ambient contribution
-        Color ambient = effective_color * m.ambient;
+        CColor ambient = effective_color * m.ambient;
 
         //light_dot_normal represents the cosine of the angle between
         //the light vector and the normal vector. A negative number means the
         //light is on the other side of the surface
         double light_dot_normal = Math::Dot(light_v, normal_v);
 
-        Color diffuse{0, 0, 0};
-        Color specular{0, 0, 0};
+        CColor diffuse{0, 0, 0};
+        CColor specular{0, 0, 0};
 
         if (light_dot_normal >= 0)
         {
@@ -57,7 +57,7 @@ Color Lighting(Material m, Shape_ptr object, PointLight light, Point position, V
 
             if(reflect_dot_eye <= 0)
             {
-                specular = Color(0, 0, 0);
+                specular = CColor(0, 0, 0);
             } else
             {
                 double factor = std::pow(reflect_dot_eye, m.shininess);
@@ -69,7 +69,7 @@ Color Lighting(Material m, Shape_ptr object, PointLight light, Point position, V
     }
 }
 
-bool PointLight::operator==(const PointLight &other) const {
+bool SPointLight::operator==(const SPointLight &other) const {
     if (intensity == other.intensity && position == other.position)
     {
         return true;

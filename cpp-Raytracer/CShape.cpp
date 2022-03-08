@@ -2,12 +2,12 @@
 // Created by Jean-Luc von Nessen on 21.02.22.
 //
 
-#include "Shape.h"
+#include "CShape.h"
 
 
-int Shape::latest_id = 0;
+int CShape::latest_id = 0;
 
-bool Shape::operator==(const Shape &other) const {
+bool CShape::operator==(const CShape &other) const {
     if( this->transform == other.transform &&
         this->material == other.material &&
         this->id == other.id &&
@@ -20,20 +20,20 @@ bool Shape::operator==(const Shape &other) const {
     }
 }
 
-bool Shape::operator!=(const Shape &other) const {
+bool CShape::operator!=(const CShape &other) const {
     return !(*this == other);
 }
 
-Shape::Shape(ShapeType t):
+CShape::CShape(EShapeType t):
     id(latest_id),
     type(t),
     transform(Math::identiy_matrix),
-    material(Material{})
+    material(CMaterial{})
 {
     ++latest_id;
 }
 
-Vector Shape::NormalAt(Point world_point) const{
+Vector CShape::NormalAt(Point world_point) const{
     Point local_point{GetTransform().Inversed() * world_point};
     Vector local_normal{LocalNormalAt(local_point)};
     Vector world_normal{GetTransform().Inversed().Transposed() * local_normal};
@@ -41,7 +41,7 @@ Vector Shape::NormalAt(Point world_point) const{
     return world_normal.normalized();
 }
 
-Color Shape::StripeAtObject(Point world_point) const {
+CColor CShape::StripeAtObject(Point world_point) const {
     Point object_point{ transform.Inversed() * world_point};
     Point pattern_point{GetMaterialConst().GetPattern()->GetTransform().Inversed() * object_point};
     return GetMaterialConst().GetPattern()->PatternAt(pattern_point);
