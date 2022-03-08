@@ -331,6 +331,27 @@ TEST(Matricies, Matrix4VectorMultiplication)
     EXPECT_EQ(A*b, target);
 }
 
+TEST(Matricies, Matrix4ScalarMultiplication)
+{
+    Matrix4 A{
+        1, 1, 1, 1,
+        2, 2, 2, 2,
+        3, 3, 3, 3,
+        4, 4, 4, 4
+    };
+
+    double b = 2;
+
+    Matrix4 target{
+        2, 2, 2, 2,
+        4, 4, 4, 4,
+        6, 6, 6, 6,
+        8, 8, 8, 8
+    };
+
+    //EXPECT_EQ(A * b, target);
+}
+
 TEST(Matricies, Matrix4Identity)
 {
     Matrix4 A{
