@@ -41,7 +41,7 @@ CRay CCamera::RayForPixel(int x, int y) {
     double world_x = half_width - x_offset;
     double world_y = half_height - y_offset;
 
-    //Using the camera matrix, transform the canvas point and the origin, and then compute the rays direction vector, the canvas is at z = -1
+    //Using the camera matrix, transform the canvas point and the origin, and then compute the ray's direction vector, the canvas is at z = -focal_length
     Point pixel{transform.Inversed() * Point(world_x, world_y, -focal_length)};
 
     Point origin = CalculateRayOrigin();

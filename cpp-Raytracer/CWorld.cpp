@@ -176,13 +176,16 @@ bool CWorld::CalculateShadow(Point p) {
 
     std::vector<SIntersection> intersections = IntersectWorld(r_point_to_light);
 
-    if(Hit(intersections) && Hit(intersections)->t < distance_to_light)
+    if(SIntersection* hit = Hit(intersections))
     {
-        return true;
-    } else
-    {
-        return false;
+        bool blocking_shape_throws_shadow = hit->object->GetMaterial().throws_shadow;
+        if (hit->t < distance_to_light && blocking_shape_throws_shadow)
+        {
+            return true;
+        }
     }
+
+    return false;
 }
 
 CColor CWorld::CalculateReflectedColor(SIntersectionComputations comps, int remaining) {

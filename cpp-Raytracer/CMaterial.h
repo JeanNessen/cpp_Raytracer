@@ -21,6 +21,7 @@ public:
     double reflective = 0;
     double transparency = 0;
     double refractive_index = 1;
+    bool throws_shadow = true;
 
     std::shared_ptr<CPattern> GetPattern(){return pattern;}
     void SetPattern(std::shared_ptr<CPattern> pattern);
