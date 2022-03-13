@@ -1,4 +1,5 @@
 #include "CColor.h"
+#include "Math.h"
 
 
 CColor::CColor(double red, double green, double blue)
@@ -57,10 +58,6 @@ int CColor::ConvertdoubleToIntInRange(double num)
 		result = int(temp_result);
 	}
 	return result;
-}
-
-void CColor::Print() const {
-    std::cout << "(" << red << ", " << green << ", " << blue << ")" << std::endl;
 }
 
 std::ostream &operator<<(std::ostream &os, const CColor &c) {

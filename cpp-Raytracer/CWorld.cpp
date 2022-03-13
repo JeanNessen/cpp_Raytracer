@@ -7,11 +7,11 @@
 #include <iostream>
 #include <chrono>
 #include <algorithm>
-#include <omp.h>
+//#include <omp.h>
 
 
 //static variables
-int CWorld::recursion_depth = 5;
+int CWorld::m_recursion_depth = 5;
 
 CWorld DefaultWorld() {
     CWorld w{};
@@ -35,11 +35,11 @@ CWorld DefaultWorld() {
 }
 
 void CWorld::AddLight(SPointLight light) {
-    world_lights.push_back(light);
+    m_world_lights.push_back(light);
 }
 
 void CWorld::AddObject(Shape_ptr obj) {
-    world_objects.push_back(obj);
+    m_world_objects.push_back(obj);
 }
 
 std::vector<SIntersection> CWorld::IntersectWorld(CRay ray) {
@@ -47,7 +47,7 @@ std::vector<SIntersection> CWorld::IntersectWorld(CRay ray) {
     std::vector<std::unique_ptr<SIntersection>> world_intersections_ptr;
 
     //Add all the intersections to the vector
-    for (const auto& obj: world_objects) {
+    for (const auto& obj: m_world_objects) {
         std::vector<SIntersection> intersections = ray.Intersect(obj);
 
         for (auto i: intersections) {
@@ -76,7 +76,7 @@ std::vector<SIntersection> CWorld::IntersectWorld(CRay ray) {
 CColor CWorld::ShadeHit(SIntersectionComputations comps, int remaining) {
     CColor surface = Lighting(comps.object->GetMaterialConst(),
                               comps.object,
-                              world_lights[0],
+                              m_world_lights[0],
                               comps.over_point,
                               comps.eye_v,
                               comps.normal_v,
@@ -123,11 +123,8 @@ CCanvas CWorld::RenderSingleThread(CCamera c) {
     std::cout << "Starting render using one thread." << std::endl;
 
     CCanvas image_sum{c.GetHSize(), c.GetVSize()};
-    omp_set_num_threads(omp_get_max_threads()-2);
-    //Do one render pass per sample
-    //#pragma omp parallel
+
     {
-        //#pragma omp for
         for (int i = 0; i < c.GetSamplesPerPixel(); ++i) {
             std::cout << "Starting render pass " << i + 1 << " of " << c.GetSamplesPerPixel() << "." << std::endl;
             image_sum += ExecuteRenderPass(c);
@@ -168,7 +165,7 @@ CCanvas CWorld::ExecuteRenderPass(CCamera c) {
 }
 
 bool CWorld::CalculateShadow(Point p) {
-    Vector v_point_to_light{world_lights[0].position - p};
+    Vector v_point_to_light{m_world_lights[0].position - p};
     double distance_to_light = (v_point_to_light).magnitude();
     Vector direction_to_light = v_point_to_light.normalized();
 

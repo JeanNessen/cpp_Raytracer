@@ -12,7 +12,7 @@ CPattern::CPattern(CColor a, CColor b):
 }
 
 void CPattern::SetTransform(Matrix4 new_transform) {
-    transform = new_transform;
+    m_transform = new_transform;
 }
 
 CColor CStripePattern::PatternAt(Point p) const {

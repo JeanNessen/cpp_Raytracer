@@ -102,8 +102,8 @@ TYPED_TEST(FooTest, HasPropertyA) { ... }
 
 // Type-parameterized tests are abstract test patterns parameterized
 // by a type.  Compared with typed tests, type-parameterized tests
-// allow you to define the test pattern without knowing what the type
-// parameters are.  The defined pattern can be instantiated with
+// allow you to define the test m_pattern without knowing what the type
+// parameters are.  The defined m_pattern can be instantiated with
 // different types any number of times, in any number of translation
 // units.
 //
@@ -124,7 +124,7 @@ class FooTest : public testing::Test {
 };
 
 // Next, declare that you will define a type-parameterized test suite
-// (the _P suffix is for "parameterized" or "pattern", whichever you
+// (the _P suffix is for "parameterized" or "m_pattern", whichever you
 // prefer):
 TYPED_TEST_SUITE_P(FooTest);
 
@@ -145,11 +145,11 @@ TYPED_TEST_P(FooTest, HasPropertyA) { ... }
 REGISTER_TYPED_TEST_SUITE_P(FooTest,
                             DoesBlah, HasPropertyA);
 
-// Finally, you are free to instantiate the pattern with the types you
+// Finally, you are free to instantiate the m_pattern with the types you
 // want.  If you put the above code in a header file, you can #include
 // it in multiple C++ source files and instantiate it multiple times.
 //
-// To distinguish different instances of the pattern, the first
+// To distinguish different instances of the m_pattern, the first
 // argument to the INSTANTIATE_* macro is a prefix that will be added
 // to the actual test suite name.  Remember to pick unique prefixes for
 // different instances.

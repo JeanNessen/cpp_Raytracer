@@ -4,14 +4,15 @@
 #include "CSphere.h"
 #include "CPlane.h"
 
-#include "SIntersection.h"
 #include <vector>
-#include <initializer_list>
 
-
+//Forward Declarations
+struct SIntersection;
 
 class CRay
 {
+//Methods
+private:
 public:
 	CRay(Point origin, Vector direction);
 
@@ -26,16 +27,14 @@ public:
 	//Transforms the CRay according to the given transformation Matrix
 	CRay Transform(Matrix4 matrix);
 
-
-	const Point origin;
-	const Vector direction;
-
     std::vector<SIntersection> LocalIntersect(Sphere_ptr s);
     std::vector<SIntersection> LocalIntersect(Plane_ptr p);
 
+//Members
 private:
-
-
+public:
+    const Point origin;
+    const Vector direction;
 };
 
 

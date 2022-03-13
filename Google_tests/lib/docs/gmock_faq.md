@@ -230,7 +230,7 @@ Back to the original questions: why does gMock search the expectations (and
 `ON_CALL`s) from back to front? Because this allows a user to set up a mock's
 behavior for the common case early (e.g. in the mock's constructor or the test
 fixture's set-up phase) and customize it with more specific rules later. If
-gMock searches from front to back, this very useful pattern won't be possible.
+gMock searches from front to back, this very useful m_pattern won't be possible.
 
 ### gMock prints a warning when a function without EXPECT_CALL is called, even if I have set its behavior using ON_CALL. Would it be reasonable not to show the warning in this case?
 

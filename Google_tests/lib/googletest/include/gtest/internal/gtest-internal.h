@@ -297,7 +297,7 @@ class FloatingPoint {
 
   // Static methods
 
-  // Reinterprets a bit pattern as a floating-point number.
+  // Reinterprets a bit m_pattern as a floating-point number.
   //
   // This function is needed to test the AlmostEquals() method.
   static RawType ReinterpretBits(const Bits bits) {

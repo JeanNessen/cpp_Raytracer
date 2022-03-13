@@ -17,7 +17,7 @@ So what makes a good test, and how does googletest fit in? We believe:
     googletest allows you to run it in isolation for quick debugging.
 2.  Tests should be well *organized* and reflect the structure of the tested
     code. googletest groups related tests into test suites that can share data
-    and subroutines. This common pattern is easy to recognize and makes tests
+    and subroutines. This common m_pattern is easy to recognize and makes tests
     easy to maintain. Such consistency is especially helpful when people switch
     projects and start to work on a new code base.
 3.  Tests should be *portable* and *reusable*. Google has a lot of code that is

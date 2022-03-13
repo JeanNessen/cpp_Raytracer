@@ -1,72 +1,72 @@
 //
 // Created by Jean-Luc von Nessen on 13.02.22.
 //
-
-#ifndef CPP_RAYTRACER_CCAMERA_H
-#define CPP_RAYTRACER_CCAMERA_H
+#pragma once
 
 #include "Math.h"
-#include "CRay.h"
-#include <random>
+
+class CRay;
 
 class CCamera {
+
+//Methods
+public:
+    CCamera(int h_size, int v_size, double fov);
+
+
+    [[nodiscard]] int GetHSize() const{return m_horizontalSize;}
+    void SetHSize(int h){ m_horizontalSize = h;}
+
+    [[nodiscard]] int GetVSize() const{return m_verticalSize;}
+    void SetVSize(int v){ m_verticalSize = v;}
+
+    [[nodiscard]] double GetFOV() const{return m_fieldOfView;}
+    void SetFOV(double fov){ m_fieldOfView = fov;}
+
+    Matrix4 GetTransform(){return m_transform;}
+    void SetTransform(Matrix4 t){ m_transform = t;}
+
+    [[nodiscard]] double GetApertureSize() const{ return m_apertureSize; }
+    void SetApertureSize(double new_aperture_size){ m_apertureSize = new_aperture_size; }
+
+    [[nodiscard]] double GetFocalLength() const{ return m_focalLength; }
+    void SetFocalLength(double new_focal_length){ m_focalLength = new_focal_length; }
+
+    [[nodiscard]] int GetSamplesPerPixel() const{ return m_samplesPerPixel; }
+    void SetSamplesPerPixel(int samples){ m_samplesPerPixel = samples; }
+
+    [[nodiscard]] double GetPixelSize() const{return m_pixel_size;}
+
+    CRay RayForPixel(int x, int y);
+
+
 private:
-    int horizontal_size;
-    int vertical_size;
-    double field_of_view;
-    double focal_length = 5;
-    double aperture_size = 0.1;
-    Matrix4 transform;
-    int samples_per_pixel = 10;
-
-    double pixel_size;
-    double half_width, half_height;
-
     void CalculatePixelSize();
+
     Point CalculateRayOrigin();
-    double CalculatePixelOffset(int pixel) const;
 
-    static std::random_device dev;
-    std::mt19937 generator;
+    [[nodiscard]] double CalculatePixelOffset(int pixel) const;
 
 
+    [[nodiscard]] Point GetRandomPointOnAperture() const;
 
+
+//Members
 public:
     bool anti_aliasing = false;
     bool depth_of_field = false;
 
-    CCamera(int h_size, int v_size, double fov);
+private:
+    int m_horizontalSize;
+    int m_verticalSize;
+    double m_fieldOfView;
+    double m_focalLength = 5;
+    double m_apertureSize = 0.1;
+    Matrix4 m_transform;
+    int m_samplesPerPixel = 10;
 
-    int GetHSize() const{return horizontal_size;}
-    void SetHSize(int h){horizontal_size = h;}
-
-    int GetVSize() const{return vertical_size;}
-    void SetVSize(int v){vertical_size = v;}
-
-    double GetFOV() const{return field_of_view;}
-    void SetFOV(double fov){field_of_view = fov;}
-
-    Matrix4 GetTransform(){return transform;}
-    void SetTransform(Matrix4 t){ transform = t;}
-
-    double GetApertureSize() const{ return aperture_size; }
-    void SetApertureSize(double new_aperture_size){ aperture_size = new_aperture_size; }
-
-    double GetFocalLength() const{ return focal_length; }
-    void SetFocalLength(double new_focal_length){ focal_length = new_focal_length; }
-
-    int GetSamplesPerPixel() const{ return samples_per_pixel; }
-    void SetSamplesPerPixel(int samples){ samples_per_pixel = samples; }
-
-    double GetPixelSize() const{return pixel_size;}
-
-
-    CRay RayForPixel(int x, int y);
-
-    Point GetRandomPointOnAperture() const;
-
-
+    double m_pixel_size;
+    double m_half_width;
+    double m_half_height;
 };
 
-
-#endif //CPP_RAYTRACER_CCAMERA_H

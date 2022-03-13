@@ -1,5 +1,6 @@
 #include "CCanvas.h"
 #include <fstream>
+#include "CColor.h"
 
 CCanvas::CCanvas(int width, int height):
 	width(width),

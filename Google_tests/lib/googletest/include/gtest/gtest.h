@@ -92,7 +92,7 @@ GTEST_DECLARE_string_(color);
 // first failure.
 GTEST_DECLARE_bool_(fail_fast);
 
-// This flag sets up the filter to select by name using a glob pattern
+// This flag sets up the filter to select by name using a glob m_pattern
 // the tests to run. If the filter is not given all tests are executed.
 GTEST_DECLARE_string_(filter);
 

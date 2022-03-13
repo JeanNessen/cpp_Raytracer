@@ -650,7 +650,7 @@ However, you also want to use `FakeFoo` for the default behavior, as duplicating
 it in the mock object is, well, a lot of work.
 
 When you define the mock class using gMock, you can have it delegate its default
-action to a fake class you already have, using this pattern:
+action to a fake class you already have, using this m_pattern:
 
 ```cpp
 class MockFoo : public Foo {
@@ -1432,10 +1432,10 @@ using testing::Pair;
 **Tips:**
 
 *   `ElementsAre*()` can be used to match *any* container that implements the
-    STL iterator pattern (i.e. it has a `const_iterator` type and supports
+    STL iterator m_pattern (i.e. it has a `const_iterator` type and supports
     `begin()/end()`), not just the ones defined in STL. It will even work with
     container types yet to be written - as long as they follows the above
-    pattern.
+    m_pattern.
 *   You can use nested `ElementsAre*()` to match nested (multi-dimensional)
     containers.
 *   If the container is passed by pointer instead of by reference, just write
@@ -1665,7 +1665,7 @@ method where the specific overload is ambiguous. You can work around this by
 supplying a [simpler mock interface](#SimplerInterfaces) than the mocked class
 provides.
 
-This pattern is also useful when the arguments are interesting, but match logic
+This m_pattern is also useful when the arguments are interesting, but match logic
 is substantially complex. You can leave the argument list unspecified and use
 SaveArg actions to [save the values for later verification](#SaveArgVerify). If
 you do that, you can easily differentiate calling the method the wrong number of
@@ -2266,7 +2266,7 @@ invoked such that the callee has the full context of the call to work with. If
 the invoked function is not interested in some or all of the arguments, it can
 simply ignore them.
 
-Yet, a common pattern is that a test author wants to invoke a function without
+Yet, a common m_pattern is that a test author wants to invoke a function without
 the arguments of the mock function. She could do that using a wrapper function
 that throws away the arguments before invoking an underlining nullary function.
 Needless to say, this can be tedious and obscures the intent of the test.
@@ -3041,7 +3041,7 @@ work for it:
 MOCK_METHOD(void, ~MockFoo, ());  // Won't compile!
 ```
 
-The good news is that you can use a simple pattern to achieve the same effect.
+The good news is that you can use a simple m_pattern to achieve the same effect.
 First, add a mock function `Die()` to your mock class and call it in the
 destructor, like this:
 

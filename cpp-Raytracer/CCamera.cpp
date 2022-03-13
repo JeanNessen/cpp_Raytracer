@@ -3,33 +3,34 @@
 //
 
 #include "CCamera.h"
+#include "CRay.h"
 #include <random>
 
 CCamera::CCamera(int h_size, int v_size, double fov):
-    horizontal_size(h_size),
-    vertical_size(v_size),
-    field_of_view(fov),
-    transform(Math::identiy_matrix)
+        m_horizontalSize(h_size),
+        m_verticalSize(v_size),
+        m_fieldOfView(fov),
+        m_transform(Math::identiy_matrix)
 {
     CalculatePixelSize();
 }
 
 void CCamera::CalculatePixelSize() {
-    double half_view = std::tan(field_of_view / 2);
+    double half_view = std::tan(m_fieldOfView / 2);
 
-    double aspect = double(horizontal_size) / double(vertical_size);
+    double aspect = double(m_horizontalSize) / double(m_verticalSize);
 
     if (aspect >= 1)
     {
-        half_width = half_view;
-        half_height = half_view / aspect;
+        m_half_width = half_view;
+        m_half_height = half_view / aspect;
     } else
     {
-        half_width = half_view * aspect;
-        half_height = half_view;
+        m_half_width = half_view * aspect;
+        m_half_height = half_view;
     }
 
-    pixel_size = (half_width * 2) / horizontal_size;
+    m_pixel_size = (m_half_width * 2) / m_horizontalSize;
 }
 
 CRay CCamera::RayForPixel(int x, int y) {
@@ -38,11 +39,11 @@ CRay CCamera::RayForPixel(int x, int y) {
     double y_offset = CalculatePixelOffset(y);
 
     //The untransformed coordinates of the pixel in world space
-    double world_x = half_width - x_offset;
-    double world_y = half_height - y_offset;
+    double world_x = m_half_width - x_offset;
+    double world_y = m_half_height - y_offset;
 
-    //Using the camera matrix, transform the canvas point and the origin, and then compute the ray's direction vector, the canvas is at z = -focal_length
-    Point pixel{transform.Inversed() * Point(world_x, world_y, -focal_length)};
+    //Using the camera matrix, m_transform the canvas point and the origin, and then compute the ray's direction vector, the canvas is at z = -m_focalLength
+    Point pixel{m_transform.Inversed() * Point(world_x, world_y, -m_focalLength)};
 
     Point origin = CalculateRayOrigin();
 
@@ -56,12 +57,12 @@ double CCamera::CalculatePixelOffset(int pixel) const {
     //If Anti Aliasing is enabled the ray will pass through a random point inside the pixel.
     if(anti_aliasing)
     {
-        offset = (double(pixel) + Math::GetRandomDouble(0, 1)) * pixel_size;
+        offset = (double(pixel) + Math::GetRandomDouble(0, 1)) * m_pixel_size;
     }
     //If Anti Aliasing is disabled the ray will pass through the center of the pixel.
     else
     {
-        offset = (double(pixel) + 0.5f) * pixel_size;
+        offset = (double(pixel) + 0.5f) * m_pixel_size;
     }
     return offset;
 }
@@ -71,12 +72,12 @@ Point CCamera::CalculateRayOrigin() {
     //If Depth of field is enabled, the ray will originate from a random point on the aperture
     if(depth_of_field)
     {
-        origin = Point{transform.Inversed() * GetRandomPointOnAperture()};
+        origin = Point{m_transform.Inversed() * GetRandomPointOnAperture()};
     }
     //If Depth of field is disabled, the ray will originate from (0, 0, 0)
     else
     {
-        origin = Point{transform.Inversed() * Point(0, 0, 0)};
+        origin = Point{m_transform.Inversed() * Point(0, 0, 0)};
     }
     return origin;
 }
@@ -84,8 +85,8 @@ Point CCamera::CalculateRayOrigin() {
 
 
 Point CCamera::GetRandomPointOnAperture() const {
-    double x = Math::GetRandomDouble(0, aperture_size) - (aperture_size / 2);
-    double y = Math::GetRandomDouble(0, aperture_size) - (aperture_size / 2);
+    double x = Math::GetRandomDouble(0, m_apertureSize) - (m_apertureSize / 2);
+    double y = Math::GetRandomDouble(0, m_apertureSize) - (m_apertureSize / 2);
 
     return {x, y, 0};
 }

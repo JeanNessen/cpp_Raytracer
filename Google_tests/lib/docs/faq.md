@@ -595,7 +595,7 @@ makes it harder to search for real problems in the parent's log. Therefore,
 googletest only prints them when the death test has failed.
 
 If you really need to see such LOG messages, a workaround is to temporarily
-break the death test (e.g. by changing the regex pattern it is expected to
+break the death test (e.g. by changing the regex m_pattern it is expected to
 match). Admittedly, this is a hack. We'll consider a more permanent solution
 after the fork-and-exec-style death tests are implemented.
 

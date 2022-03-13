@@ -53,7 +53,7 @@ class FooTest : public ::testing::TestWithParam<const char*> {
 
 // Then, use the TEST_P macro to define as many parameterized tests
 // for this fixture as you want. The _P suffix is for "parameterized"
-// or "pattern", whichever you prefer to think.
+// or "m_pattern", whichever you prefer to think.
 
 TEST_P(FooTest, DoesBlah) {
   // Inside a test, access the test parameter with the GetParam() method
@@ -94,7 +94,7 @@ INSTANTIATE_TEST_SUITE_P(InstantiationName,
                          FooTest,
                          Values("meeny", "miny", "moe"));
 
-// To distinguish different instances of the pattern, (yes, you
+// To distinguish different instances of the m_pattern, (yes, you
 // can instantiate it more than once) the first argument to the
 // INSTANTIATE_TEST_SUITE_P macro is a prefix that will be added to the
 // actual test suite name. Remember to pick unique prefixes for different

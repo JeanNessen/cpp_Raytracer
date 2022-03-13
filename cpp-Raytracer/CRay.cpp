@@ -1,5 +1,7 @@
 #include "CRay.h"
 
+#include "SIntersection.h"
+
 CRay::CRay(Point origin, Vector direction):
 	origin(origin),
 	direction(direction)
@@ -30,7 +32,7 @@ CRay CRay::Transform(Matrix4 matrix)
 
 std::vector<SIntersection> CRay::Intersect(Shape_ptr s) {
 
-    //Transform the CRay before calculating intersections, to account for the transform of the intersected sphere
+    //Transform the CRay before calculating intersections, to account for the m_transform of the intersected sphere
     CRay local_ray{Transform(s->GetTransform().Inversed()) };
 
     s->saved_ray_direction = local_ray.direction;
@@ -38,9 +40,9 @@ std::vector<SIntersection> CRay::Intersect(Shape_ptr s) {
 
 
     switch (s->type) {
-        case EShapeType::sphere:
+        case CShape::EShapeType::sphere:
             return local_ray.LocalIntersect(std::dynamic_pointer_cast<CSphere>(s));
-        case EShapeType::plane:
+        case CShape::EShapeType::plane:
             return local_ray.LocalIntersect(std::dynamic_pointer_cast<CPlane>(s));
     }
 }

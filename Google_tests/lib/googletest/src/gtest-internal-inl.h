@@ -966,7 +966,7 @@ GTEST_API_ bool IsRepeat(char ch);
 GTEST_API_ bool IsAsciiWhiteSpace(char ch);
 GTEST_API_ bool IsAsciiWordChar(char ch);
 GTEST_API_ bool IsValidEscape(char ch);
-GTEST_API_ bool AtomMatchesChar(bool escaped, char pattern, char ch);
+GTEST_API_ bool AtomMatchesChar(bool escaped, char m_pattern, char ch);
 GTEST_API_ bool ValidateRegex(const char* regex);
 GTEST_API_ bool MatchRegexAtHead(const char* regex, const char* str);
 GTEST_API_ bool MatchRepetitionAndRegexAtHead(

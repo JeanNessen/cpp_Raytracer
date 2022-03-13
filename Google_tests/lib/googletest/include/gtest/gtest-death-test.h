@@ -246,7 +246,7 @@ class GTEST_API_ KilledBySignal {
 // appropriate fallback value (12 in this case) in opt mode. If you
 // need to test that a function has appropriate side-effects in opt
 // mode, include assertions against the side-effects.  A general
-// pattern for this is:
+// m_pattern for this is:
 //
 // EXPECT_DEBUG_DEATH({
 //   // Side-effects here will have an effect after this statement in

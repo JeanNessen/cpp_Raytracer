@@ -13,14 +13,14 @@ bool CMaterial::operator==(const CMaterial &other) const {
             Math::Equal(shininess, other.shininess) &&
             Math::Equal(specular, other.specular) &&
             color == other.color &&
-            pattern == other.pattern &&
+            m_pattern == other.m_pattern &&
             Math::Equal(reflective, other.reflective)
             );
 }
 
 CMaterial::CMaterial(std::shared_ptr<CPattern> pattern)
 {
-    this->pattern = pattern;
+    this->m_pattern = pattern;
 }
 
 CMaterial::CMaterial()
@@ -29,7 +29,7 @@ CMaterial::CMaterial()
 }
 
 void CMaterial::SetPattern(std::shared_ptr<CPattern> pattern) {
-    this->pattern = pattern;
+    this->m_pattern = pattern;
 }
 
 

@@ -12,6 +12,8 @@
 #include "../cpp-Raytracer/CSphere.h"
 //#include "../cpp-Raytracer/CSphere.cpp"
 
+#include "../cpp-Raytracer/SIntersection.h"
+
 #include "../cpp-Raytracer/CPlane.h"
 #include "../cpp-Raytracer/CPlane.cpp"
 

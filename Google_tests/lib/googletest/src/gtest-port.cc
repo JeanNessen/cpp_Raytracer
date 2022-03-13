@@ -775,7 +775,7 @@ bool IsValidEscape(char c) {
 }
 
 // Returns true if and only if the given atom (specified by escaped and
-// pattern) matches ch.  The result is undefined if the atom is invalid.
+// m_pattern) matches ch.  The result is undefined if the atom is invalid.
 bool AtomMatchesChar(bool escaped, char pattern_char, char ch) {
   if (escaped) {  // "\\p" where p is pattern_char.
     switch (pattern_char) {
@@ -878,7 +878,7 @@ bool MatchRepetitionAndRegexAtHead(
     // We know that the atom matches each of the first i characters in str.
     if (i >= min_count && MatchRegexAtHead(regex, str + i)) {
       // We have enough matches at the head, and the tail matches too.
-      // Since we only care about *whether* the pattern matches str
+      // Since we only care about *whether* the m_pattern matches str
       // (as opposed to *how* it matches), there is no need to find a
       // greedy match.
       return true;
@@ -969,7 +969,7 @@ void RE::Init(const char* regex) {
 
   is_valid_ = ValidateRegex(regex);
   if (!is_valid_) {
-    // No need to calculate the full pattern when the regex is invalid.
+    // No need to calculate the full m_pattern when the regex is invalid.
     return;
   }
 

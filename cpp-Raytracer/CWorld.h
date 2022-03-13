@@ -13,12 +13,8 @@
 
 
 class CWorld {
+//Methods
 private:
-    static int recursion_depth;
-
-    std::vector<SPointLight> world_lights{};
-
-    std::vector<Shape_ptr> world_objects{};
 
     CColor GetColorForPixel(CCamera c, int x, int y);
 
@@ -28,28 +24,39 @@ private:
 
 public:
 
-    static int GetRecursionDepth(){ return recursion_depth; }
-    void SetRecursionDepth(int new_depth){ recursion_depth = new_depth; }
+    static int GetRecursionDepth(){ return m_recursion_depth; }
+    void SetRecursionDepth(int new_depth){ m_recursion_depth = new_depth; }
 
-    std::vector<SPointLight>& GetWorldLights(){ return world_lights; }
+    std::vector<SPointLight>& GetWorldLights(){ return m_world_lights; }
     void AddLight(SPointLight light);
 
-    std::vector<Shape_ptr>& GetWorldObjects(){ return world_objects; }
+    std::vector<Shape_ptr>& GetWorldObjects(){ return m_world_objects; }
     void AddObject(Shape_ptr obj);
 
     std::vector<SIntersection> IntersectWorld(CRay ray);
 
     bool CalculateShadow(Point p);
 
-    CColor CalculateReflectedColor(SIntersectionComputations comps, int remaining = recursion_depth);
+    CColor CalculateReflectedColor(SIntersectionComputations comps, int remaining = m_recursion_depth);
 
-    CColor CalculateRefractedColor(SIntersectionComputations comps, int remaining = recursion_depth);
+    CColor CalculateRefractedColor(SIntersectionComputations comps, int remaining = m_recursion_depth);
 
-    CColor ShadeHit(SIntersectionComputations comps, int remaining = recursion_depth);
+    CColor ShadeHit(SIntersectionComputations comps, int remaining = m_recursion_depth);
 
-    CColor CalculateColorAt(CRay r, int remaining = recursion_depth);
+    CColor CalculateColorAt(CRay r, int remaining = m_recursion_depth);
 
     CCanvas RenderSingleThread(CCamera c);
+
+//Members
+private:
+
+    static int m_recursion_depth;
+
+    std::vector<SPointLight> m_world_lights{};
+
+    std::vector<Shape_ptr> m_world_objects{};
+
+public:
 };
 
 CWorld DefaultWorld();

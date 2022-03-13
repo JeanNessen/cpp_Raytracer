@@ -392,9 +392,9 @@ class StlContainerView< ::std::tuple<ElementPointer, Size> > {
 // StlContainer with a reference type.
 template <typename T> class StlContainerView<T&>;
 
-// A type transform to remove constness from the first part of a pair.
+// A type m_transform to remove constness from the first part of a pair.
 // Pairs like that are used as the value_type of associative containers,
-// and this transform produces a similar but assignable pair.
+// and this m_transform produces a similar but assignable pair.
 template <typename T>
 struct RemoveConstFromKey {
   typedef T type;

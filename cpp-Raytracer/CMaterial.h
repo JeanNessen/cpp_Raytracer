@@ -1,16 +1,27 @@
 //
 // Created by Jean-Luc von Nessen on 14.01.22.
 //
-
-#ifndef CPP_RAYTRACER_CMATERIAL_H
-#define CPP_RAYTRACER_CMATERIAL_H
-
+#pragma once
 
 #include <memory>
-#include "CColor.h"
+
 #include "CPattern.h"
 
 class CMaterial {
+//Methods
+private:
+public:
+    explicit CMaterial();
+    explicit CMaterial(std::shared_ptr<CPattern> pattern);
+
+    std::shared_ptr<CPattern> GetPattern(){return m_pattern;}
+    void SetPattern(std::shared_ptr<CPattern> pattern);
+
+    bool operator==(const CMaterial& other) const;
+
+//Members
+private:
+    std::shared_ptr<CPattern> m_pattern = nullptr;
 
 public:
     double ambient = 0.1;
@@ -22,19 +33,5 @@ public:
     double transparency = 0;
     double refractive_index = 1;
     bool throws_shadow = true;
-
-    std::shared_ptr<CPattern> GetPattern(){return pattern;}
-    void SetPattern(std::shared_ptr<CPattern> pattern);
-
-    bool operator==(const CMaterial& other) const;
-
-    explicit CMaterial(std::shared_ptr<CPattern> pattern);
-    explicit CMaterial();
-
-private:
-    std::shared_ptr<CPattern> pattern = nullptr;
-
 };
 
-
-#endif //CPP_RAYTRACER_CMATERIAL_H

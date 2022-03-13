@@ -55,7 +55,7 @@ int main()
     w.AddLight(default_light);
 
 
-    //Set up the pattern for the floor
+    //Set up the m_pattern for the floor
     std::shared_ptr<CPattern> p(new CCheckersPattern(CColor(0.8, 0.8, 0.8), CColor(0.4, 0.4, 0.4)));
     p->SetTransform(Math::Scaling(2));
 

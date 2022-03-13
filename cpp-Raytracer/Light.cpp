@@ -8,7 +8,7 @@ CColor Lighting(CMaterial m, Shape_ptr object, SPointLight light, Point position
 
     CColor color;
 
-    //check if the material has a pattern
+    //check if the material has a m_pattern
     if(m.GetPattern())
     {
         color = object->StripeAtObject(position);

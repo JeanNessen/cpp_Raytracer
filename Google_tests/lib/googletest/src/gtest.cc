@@ -670,8 +670,8 @@ std::string UnitTestOptions::GetAbsolutePathToOutputFile() {
   return result.string();
 }
 
-// Returns true if and only if the wildcard pattern matches the string. Each
-// pattern consists of regular characters, single-character wildcards (?), and
+// Returns true if and only if the wildcard m_pattern matches the string. Each
+// m_pattern consists of regular characters, single-character wildcards (?), and
 // multi-character wildcards (*).
 //
 // This function implements a linear-time string globbing algorithm based on
@@ -728,18 +728,18 @@ bool UnitTestOptions::MatchesFilter(const std::string& name_str,
   // The filter is a list of patterns separated by colons (:).
   const char* pattern = filter;
   while (true) {
-    // Find the bounds of this pattern.
+    // Find the bounds of this m_pattern.
     const char* const next_sep = strchr(pattern, ':');
     const char* const pattern_end =
         next_sep != nullptr ? next_sep : pattern + strlen(pattern);
 
-    // Check if this pattern matches name_str.
+    // Check if this m_pattern matches name_str.
     if (PatternMatchesString(name_str, pattern, pattern_end)) {
       return true;
     }
 
-    // Give up on this pattern. However, if we found a pattern separator (:),
-    // advance to the next pattern (skipping over the separator) and restart.
+    // Give up on this m_pattern. However, if we found a m_pattern separator (:),
+    // advance to the next m_pattern (skipping over the separator) and restart.
     if (next_sep == nullptr) {
       return false;
     }
@@ -774,7 +774,7 @@ bool UnitTestOptions::FilterMatchesTest(const std::string& test_suite_name,
   }
 
   // A filter is a colon-separated list of patterns.  It matches a
-  // test if any pattern in it matches the test.
+  // test if any m_pattern in it matches the test.
   return (MatchesFilter(full_name, positive.c_str()) &&
           !MatchesFilter(full_name, negative.c_str()));
 }
@@ -1936,8 +1936,8 @@ constexpr uint32_t kMaxCodePoint3 = (static_cast<uint32_t>(1) << (4 + 2*6)) - 1;
 // The maximum code-point a four-byte UTF-8 sequence can represent.
 constexpr uint32_t kMaxCodePoint4 = (static_cast<uint32_t>(1) << (3 + 3*6)) - 1;
 
-// Chops off the n lowest bits from a bit pattern.  Returns the n
-// lowest bits.  As a side effect, the original bit pattern will be
+// Chops off the n lowest bits from a bit m_pattern.  Returns the n
+// lowest bits.  As a side effect, the original bit m_pattern will be
 // shifted to the right by n bits.
 inline uint32_t ChopLowBits(uint32_t* bits, int n) {
   const uint32_t low_bits = *bits & ((static_cast<uint32_t>(1) << n) - 1);

@@ -1052,7 +1052,7 @@ class BarTest : public BaseTest,
 ```
 
 Then, use the `TEST_P` macro to define as many test patterns using this fixture
-as you want. The `_P` suffix is for "parameterized" or "pattern", whichever you
+as you want. The `_P` suffix is for "parameterized" or "m_pattern", whichever you
 prefer to think.
 
 ```c++
@@ -1090,11 +1090,11 @@ function scope.
 
 The first argument to `INSTANTIATE_TEST_SUITE_P` is a unique name for the
 instantiation of the test suite. The next argument is the name of the test
-pattern, and the last is the
+m_pattern, and the last is the
 [parameter generator](reference/testing.md#param-generators).
 
-You can instantiate a test pattern more than once, so to distinguish different
-instances of the pattern, the instantiation name is added as a prefix to the
+You can instantiate a test m_pattern more than once, so to distinguish different
+instances of the m_pattern, the instantiation name is added as a prefix to the
 actual test suite name. Remember to pick unique prefixes for different
 instantiations. The tests from the instantiation above will have these names:
 
@@ -1147,7 +1147,7 @@ You can see [sample7_unittest.cc] and [sample8_unittest.cc] for more examples.
 
 In the above, we define and instantiate `FooTest` in the *same* source file.
 Sometimes you may want to define value-parameterized tests in a library and let
-other people instantiate them later. This pattern is known as *abstract tests*.
+other people instantiate them later. This m_pattern is known as *abstract tests*.
 As an example of its application, when you are designing an interface you can
 write a standard suite of abstract tests (perhaps using a factory function as
 the test parameter) that all implementations of the interface are expected to
@@ -1346,7 +1346,7 @@ REGISTER_TYPED_TEST_SUITE_P(FooTest,
                             DoesBlah, HasPropertyA);
 ```
 
-Finally, you are free to instantiate the pattern with the types you want. If you
+Finally, you are free to instantiate the m_pattern with the types you want. If you
 put the above code in a header file, you can `#include` it in multiple C++
 source files and instantiate it multiple times.
 
@@ -1355,7 +1355,7 @@ using MyTypes = ::testing::Types<char, int, unsigned int>;
 INSTANTIATE_TYPED_TEST_SUITE_P(My, FooTest, MyTypes);
 ```
 
-To distinguish different instances of the pattern, the first argument to the
+To distinguish different instances of the m_pattern, the first argument to the
 `INSTANTIATE_TYPED_TEST_SUITE_P` macro is a prefix that will be added to the
 actual test suite name. Remember to pick unique prefixes for different
 instances.
@@ -1799,11 +1799,11 @@ whose full names (in the form of `TestSuiteName.TestName`) match the filter.
 
 The format of a filter is a '`:`'-separated list of wildcard patterns (called
 the *positive patterns*) optionally followed by a '`-`' and another
-'`:`'-separated pattern list (called the *negative patterns*). A test matches
+'`:`'-separated m_pattern list (called the *negative patterns*). A test matches
 the filter if and only if it matches any of the positive patterns but does not
 match any of the negative patterns.
 
-A pattern may contain `'*'` (matches any string) or `'?'` (matches any single
+A m_pattern may contain `'*'` (matches any string) or `'?'` (matches any single
 character). For convenience, the filter `'*-NegativePatterns'` can be also
 written as `'-NegativePatterns'`.
 

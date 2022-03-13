@@ -10,12 +10,14 @@
 #include "CMaterial.h"
 
 
-enum EShapeType{
-    sphere,
-    plane
-};
+
 
 class CShape {
+public:
+    enum EShapeType{
+        sphere,
+        plane
+    };
 
 protected:
     Matrix4 transform;
