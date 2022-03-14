@@ -20,6 +20,6 @@ set(CMAKE_CXX_STANDARD 20)
             cpp-Raytracer/CShape.cpp cpp-Raytracer/CShape.h
             cpp-Raytracer/CPlane.cpp cpp-Raytracer/CPlane.h
             cpp-Raytracer/SIntersectionComputations.cpp
-            cpp-Raytracer/CPattern.cpp cpp-Raytracer/CPattern.h)
+            cpp-Raytracer/CPattern.cpp cpp-Raytracer/CPattern.h cpp-Raytracer/CCube.cpp cpp-Raytracer/CCube.h)
 
 add_subdirectory(Google_tests)

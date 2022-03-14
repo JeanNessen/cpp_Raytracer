@@ -44,6 +44,8 @@ std::vector<SIntersection> CRay::Intersect(Shape_ptr s) {
             return local_ray.LocalIntersect(std::dynamic_pointer_cast<CSphere>(s));
         case CShape::EShapeType::plane:
             return local_ray.LocalIntersect(std::dynamic_pointer_cast<CPlane>(s));
+        case CShape::EShapeType::cube:
+            return local_ray.LocalIntersect(std::dynamic_pointer_cast<CCube>(s));
     }
 }
 
@@ -81,6 +83,49 @@ std::vector<SIntersection> CRay::LocalIntersect(Plane_ptr p) {
     }
 }
 
+std::vector<SIntersection> CRay::LocalIntersect(Cube_ptr c) {
+    //Find the minimum and maximum intersections for the ray with each of the axes
+    std::vector<double> x_tmin_tmax = CheckAxis(origin.x, direction.x);
+    std::vector<double> y_tmin_tmax = CheckAxis(origin.y, direction.y);
+    std::vector<double> z_tmin_tmax = CheckAxis(origin.z, direction.z);
+
+    double tmin = std::max({x_tmin_tmax[0], y_tmin_tmax[0], z_tmin_tmax[0]});
+    double tmax = std::min({x_tmin_tmax[1], y_tmin_tmax[1], z_tmin_tmax[1]});
+
+    if (tmin > tmax)
+    //The Ray misses the Cube
+    {
+        return {};
+    }
+
+    return {SIntersection(tmin, c), SIntersection(tmax, c)};
+}
+
+std::vector<double> CRay::CheckAxis(double axis_origin, double axis_direction)
+{
+    double tmin_enumerator{-1 - axis_origin};
+    double tmax_enumerator{1 - axis_origin};
+    double tmin;
+    double tmax;
+
+    if (abs(axis_direction) >= EPSILON)
+    {
+        tmin = tmin_enumerator / axis_direction;
+        tmax = tmax_enumerator / axis_direction;
+    }
+    else
+    {
+        tmin = tmin_enumerator * INFINITY;
+        tmax = tmax_enumerator * INFINITY;
+    }
+
+    if (tmin > tmax)
+    {
+        std::swap(tmin, tmax);
+    }
+
+    return {tmin, tmax};
+}
 
 
 

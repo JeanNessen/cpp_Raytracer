@@ -270,6 +270,10 @@ bool Tuple::operator!=(const Tuple &other) const {
     return !(*this == other);
 }
 
+Tuple Tuple::operator-(const double &other) const {
+    return {x-other, y-other, z-other, w};
+}
+
 Matrix4::Matrix4(
 	double n00, double n01, double n02, double n03,
 	double n10, double n11, double n12, double n13,

@@ -17,7 +17,9 @@
         bool operator!=(const Tuple& other) const;
 		Tuple operator+(const Tuple& other) const;
 		Tuple operator-(const Tuple& other) const;
+
 		Tuple operator*(const double& other) const;
+        Tuple operator-(const double& other) const;
 
         Tuple operator-();
 

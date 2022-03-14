@@ -16,7 +16,8 @@ class CShape {
 public:
     enum EShapeType{
         sphere,
-        plane
+        plane,
+        cube
     };
 
 protected:

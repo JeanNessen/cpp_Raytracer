@@ -7,7 +7,7 @@
 
 
 class CPlane: public CShape {
-
+//Methods
 public:
     CPlane();
 

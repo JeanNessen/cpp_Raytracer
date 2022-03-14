@@ -67,32 +67,34 @@ int main()
     floor->GetMaterial().reflective = 0.05f;
     w.AddObject(floor);
 
-    PlaceSpheres(w);
+    //Set Glass material
+    CMaterial glass_mat{};
+    glass_mat.color = color::black;
+    glass_mat.transparency = 1;
+    glass_mat.refractive_index = 1.51;
+    glass_mat.reflective = 1;
+    glass_mat.diffuse = 0.25;
+    glass_mat.ambient = 0.25;
+    glass_mat.specular = 1;
+    glass_mat.shininess = 300;
+    glass_mat.throws_shadow = false;
 
 
-    Sphere_ptr glass_sphere{new CSphere()};
-    glass_sphere->GetMaterial().color = color::black;
-    glass_sphere->GetMaterial().transparency = 1;
-    glass_sphere->GetMaterial().refractive_index = 1.3;
-    glass_sphere->GetMaterial().reflective = 1;
-    glass_sphere->GetMaterial().diffuse = 0.25;
-    glass_sphere->GetMaterial().ambient = 0.25;
-    glass_sphere->GetMaterial().specular = 1;
-    glass_sphere->GetMaterial().shininess = 300;
-    glass_sphere->GetMaterial().throws_shadow = false;
-    glass_sphere->SetTransform(Math::Translation(0, 0.75, 1) * Math::Scaling(0.75));
-    w.AddObject(glass_sphere);
+    Cube_ptr glass_cube (new CCube());
+    glass_cube->SetTransform(Math::Translation(0, 1+EPSILON, 0));
+    glass_cube->SetMaterial(glass_mat);
+    w.AddObject(glass_cube);
 
     //Initialize the CCamera
 
-    CCamera c{1600, 1000, 3 * (M_PI / 4)};
+    CCamera c{250, 250, 3 * (M_PI / 4)};
 
 
     //Position the CCamera
-    c.SetTransform(Math::ViewTransform(Point(0.0, 1.6865, -20), Point(0, 1, 1), Vector(0, 1, 0)));
+    c.SetTransform(Math::ViewTransform(Point(3.67, 3.6865, -20), Point(0, 1, 1), Vector(0, 1, 0)));
 
 
-    c.SetSamplesPerPixel(100);
+    c.SetSamplesPerPixel(1);
     c.depth_of_field = true;
     c.anti_aliasing = true;
     c.SetApertureSize(0.1);

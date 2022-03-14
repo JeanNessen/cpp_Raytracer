@@ -3,16 +3,20 @@
 #include "Math.h"
 #include "CSphere.h"
 #include "CPlane.h"
+#include "CCube.h"
 
 #include <vector>
 
 //Forward Declarations
 struct SIntersection;
 
+
 class CRay
 {
 //Methods
 private:
+    //returns a vector with two doubles, tmin and tmax
+    static std::vector<double> CheckAxis(double axis_origin, double axis_direction);
 public:
 	CRay(Point origin, Vector direction);
 
@@ -29,6 +33,7 @@ public:
 
     std::vector<SIntersection> LocalIntersect(Sphere_ptr s);
     std::vector<SIntersection> LocalIntersect(Plane_ptr p);
+    std::vector<SIntersection> LocalIntersect(Cube_ptr c);
 
 //Members
 private:
