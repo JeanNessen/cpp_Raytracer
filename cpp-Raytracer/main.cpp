@@ -82,21 +82,21 @@ int main()
 
     Cube_ptr glass_cube (new CCube());
     glass_cube->SetTransform(Math::Translation(0, 1+EPSILON, 0));
-    glass_cube->SetMaterial(glass_mat);
+    //glass_cube->SetMaterial(glass_mat);
     w.AddObject(glass_cube);
 
     //Initialize the CCamera
 
-    CCamera c{250, 250, 3 * (M_PI / 4)};
+    CCamera c{1600, 1000, 3 * (M_PI / 4)};
 
 
     //Position the CCamera
-    c.SetTransform(Math::ViewTransform(Point(3.67, 3.6865, -20), Point(0, 1, 1), Vector(0, 1, 0)));
+    c.SetTransform(Math::ViewTransform(Point(3.67, 3.6865, -20), Point(0, 1, 0), Vector(0, 1, 0)));
 
 
     c.SetSamplesPerPixel(1);
-    c.depth_of_field = true;
-    c.anti_aliasing = true;
+    c.depth_of_field = false;
+    c.anti_aliasing = false;
     c.SetApertureSize(0.1);
     c.SetFocalLength(20.3122);
 
