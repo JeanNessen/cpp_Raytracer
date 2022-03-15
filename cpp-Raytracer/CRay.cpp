@@ -95,10 +95,10 @@ std::vector<SIntersection> CRay::LocalIntersect(Cube_ptr c) {
     if (tmin > tmax)
     //The Ray misses the Cube
     {
-        return {};
+        return std::vector<SIntersection>{};
     }
 
-    return {SIntersection(tmin, c), SIntersection(tmax, c)};
+    return std::vector<SIntersection>{SIntersection(tmin, c), SIntersection(tmax, c)};
 }
 
 std::vector<double> CRay::CheckAxis(double axis_origin, double axis_direction)
@@ -108,7 +108,7 @@ std::vector<double> CRay::CheckAxis(double axis_origin, double axis_direction)
     double tmin;
     double tmax;
 
-    if (abs(axis_direction) >= EPSILON)
+    if (std::abs(axis_direction) >= EPSILON)
     {
         tmin = tmin_enumerator / axis_direction;
         tmax = tmax_enumerator / axis_direction;
@@ -124,7 +124,7 @@ std::vector<double> CRay::CheckAxis(double axis_origin, double axis_direction)
         std::swap(tmin, tmax);
     }
 
-    return {tmin, tmax};
+    return std::vector<double>{tmin, tmax};
 }
 
 

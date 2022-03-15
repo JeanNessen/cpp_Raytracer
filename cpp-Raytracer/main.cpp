@@ -70,7 +70,7 @@ int main()
     //Set Glass material
     CMaterial glass_mat{};
     glass_mat.color = color::black;
-    glass_mat.transparency = 1;
+    glass_mat.transparency = 0.8;
     glass_mat.refractive_index = 1.51;
     glass_mat.reflective = 1;
     glass_mat.diffuse = 0.25;
@@ -82,7 +82,7 @@ int main()
 
     Cube_ptr glass_cube (new CCube());
     glass_cube->SetTransform(Math::Translation(0, 1+EPSILON, 0));
-    //glass_cube->SetMaterial(glass_mat);
+    glass_cube->SetMaterial(glass_mat);
     w.AddObject(glass_cube);
 
     //Initialize the CCamera
@@ -94,9 +94,9 @@ int main()
     c.SetTransform(Math::ViewTransform(Point(3.67, 3.6865, -20), Point(0, 1, 0), Vector(0, 1, 0)));
 
 
-    c.SetSamplesPerPixel(1);
-    c.depth_of_field = false;
-    c.anti_aliasing = false;
+    c.SetSamplesPerPixel(25);
+    c.depth_of_field = true;
+    c.anti_aliasing = true;
     c.SetApertureSize(0.1);
     c.SetFocalLength(20.3122);
 
