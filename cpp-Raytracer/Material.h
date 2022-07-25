@@ -5,30 +5,30 @@
 
 #include <memory>
 
-#include "CPattern.h"
+#include "Pattern.h"
 
-class CMaterial {
+class Material {
 //Methods
 private:
 public:
-    explicit CMaterial();
-    explicit CMaterial(std::shared_ptr<CPattern> pattern);
+    explicit Material();
+    explicit Material(std::shared_ptr<Pattern> pattern);
 
-    std::shared_ptr<CPattern> GetPattern(){return m_pattern;}
-    void SetPattern(std::shared_ptr<CPattern> pattern);
+    std::shared_ptr<Pattern> GetPattern(){return m_pattern;}
+    void SetPattern(std::shared_ptr<Pattern> pattern);
 
-    bool operator==(const CMaterial& other) const;
+    bool operator==(const Material& other) const;
 
 //Members
 private:
-    std::shared_ptr<CPattern> m_pattern = nullptr;
+    std::shared_ptr<Pattern> m_pattern = nullptr;
 
 public:
     double ambient = 0.1;
     double diffuse = 0.9;
     double specular = 0.9;
     double shininess = 200.0;
-    CColor color{1, 1, 1};
+    Color color{1, 1, 1};
     double reflective = 0;
     double transparency = 0;
     double refractive_index = 1;

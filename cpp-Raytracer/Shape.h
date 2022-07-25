@@ -7,12 +7,12 @@
 
 #include <memory>
 #include "Math.h"
-#include "CMaterial.h"
+#include "Material.h"
 
 
 
 
-class CShape {
+class Shape {
 public:
     enum EShapeType{
         sphere,
@@ -23,11 +23,11 @@ public:
 protected:
     Matrix4 transform;
 
-    CMaterial material;
+    Material material;
 
     static int latest_id;
 
-    explicit CShape(EShapeType t);
+    explicit Shape(EShapeType t);
 
     [[nodiscard]] virtual Vector LocalNormalAt(Point local_point) const = 0;
 
@@ -39,23 +39,23 @@ public:
     [[nodiscard]] Matrix4 GetTransform() const { return transform; }
     void SetTransform(Matrix4 t){ transform = t; }
 
-    CMaterial& GetMaterial() { return material; }
-    [[nodiscard]] CMaterial GetMaterialConst() const {return material;}
-    void SetMaterial(CMaterial m){ material = m; }
+    Material& GetMaterial() { return material; }
+    [[nodiscard]] Material GetMaterialConst() const {return material;}
+    void SetMaterial(Material m){ material = m; }
 
-    bool operator==(const CShape& other) const;
-    bool operator!=(const CShape& other) const;
+    bool operator==(const Shape& other) const;
+    bool operator!=(const Shape& other) const;
 
-    virtual ~CShape()= default;
+    virtual ~Shape()= default;
 
     [[nodiscard]] Vector NormalAt(Point world_point) const;
-    [[nodiscard]] CColor StripeAtObject(Point world_point) const;
+    [[nodiscard]] Color StripeAtObject(Point world_point) const;
 
     Point saved_ray_origin;
     Vector saved_ray_direction;
 
 };
 
-using Shape_ptr = std::shared_ptr<CShape>;
+using Shape_ptr = std::shared_ptr<Shape>;
 
 #endif //CPP_RAYTRACER_CSHAPE_H

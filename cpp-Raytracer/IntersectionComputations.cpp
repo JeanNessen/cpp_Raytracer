@@ -2,12 +2,12 @@
 // Created by Jean-Luc von Nessen on 22.02.22.
 //
 
-#include "SIntersectionComputations.h"
+#include "IntersectionComputations.h"
 
 #include <utility>
 
 
-SIntersectionComputations::SIntersectionComputations(double t, Shape_ptr  object, Point point, Vector eye_v, Vector normal_v, double n1, double n2):
+IntersectionComputations::IntersectionComputations(double t, Shape_ptr  object, Point point, Vector eye_v, Vector normal_v, double n1, double n2):
         t(t),
         object(std::move(object)),
         point(point),
@@ -35,7 +35,7 @@ SIntersectionComputations::SIntersectionComputations(double t, Shape_ptr  object
 
 
 
-SIntersectionComputations PrepareComputations(const SIntersection& intersection, CRay ray, std::vector<SIntersection> xs) {
+IntersectionComputations PrepareComputations(const Intersection& intersection, Ray ray, std::vector<Intersection> xs) {
     if(xs.empty())
     {
         xs.push_back(intersection);
@@ -54,7 +54,7 @@ SIntersectionComputations PrepareComputations(const SIntersection& intersection,
 
 
 
-    SIntersectionComputations comps{
+    IntersectionComputations comps{
             comps_t,
             comps_object,
             comps_point,
@@ -68,14 +68,14 @@ SIntersectionComputations PrepareComputations(const SIntersection& intersection,
 
     return comps;
 }
-std::vector<double> FindRefractiveIndices(const SIntersection& intersection, const std::vector<SIntersection>& xs) {
+std::vector<double> FindRefractiveIndices(const Intersection& intersection, const std::vector<Intersection>& xs) {
 
     double local_n1, local_n2;
 
     std::vector<Shape_ptr> containers;
 
     //Find the refractive indices for the materials of this intersection
-    for (const SIntersection& i: xs) {
+    for (const Intersection& i: xs) {
 
         //If i is the hit, n1 is the refractive index of the last object in containers, or 1 if containers is empty
         if (i == intersection)
@@ -118,7 +118,7 @@ std::vector<double> FindRefractiveIndices(const SIntersection& intersection, con
     return std::vector<double>{local_n1, local_n2};
 }
 
-double Schlick(const SIntersectionComputations& comps) {
+double Schlick(const IntersectionComputations& comps) {
     //Find the cosine of the angle between the eye and normal vector
     double cos = Math::Dot(comps.eye_v, comps.normal_v);
 

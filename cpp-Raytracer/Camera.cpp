@@ -2,11 +2,11 @@
 // Created by Jean-Luc von Nessen on 13.02.22.
 //
 
-#include "CCamera.h"
-#include "CRay.h"
+#include "Camera.h"
+#include "Ray.h"
 #include <random>
 
-CCamera::CCamera(int h_size, int v_size, double fov):
+Camera::Camera(int h_size, int v_size, double fov):
         m_horizontalSize(h_size),
         m_verticalSize(v_size),
         m_fieldOfView(fov),
@@ -15,7 +15,7 @@ CCamera::CCamera(int h_size, int v_size, double fov):
     CalculatePixelSize();
 }
 
-void CCamera::CalculatePixelSize() {
+void Camera::CalculatePixelSize() {
     double half_view = std::tan(m_fieldOfView / 2);
 
     double aspect = double(m_horizontalSize) / double(m_verticalSize);
@@ -33,7 +33,7 @@ void CCamera::CalculatePixelSize() {
     m_pixel_size = (m_half_width * 2) / m_horizontalSize;
 }
 
-CRay CCamera::RayForPixel(int x, int y) {
+Ray Camera::RayForPixel(int x, int y) {
     //The offset from the edge of the canvas to a point in the pixel
     double x_offset = CalculatePixelOffset(x);
     double y_offset = CalculatePixelOffset(y);
@@ -52,7 +52,7 @@ CRay CCamera::RayForPixel(int x, int y) {
     return {origin, direction};
 }
 
-double CCamera::CalculatePixelOffset(int pixel) const {
+double Camera::CalculatePixelOffset(int pixel) const {
     double offset;
     //If Anti Aliasing is enabled the ray will pass through a random point inside the pixel.
     if(anti_aliasing)
@@ -67,7 +67,7 @@ double CCamera::CalculatePixelOffset(int pixel) const {
     return offset;
 }
 
-Point CCamera::CalculateRayOrigin() {
+Point Camera::CalculateRayOrigin() {
     Point origin;
     //If Depth of field is enabled, the ray will originate from a random point on the aperture
     if(depth_of_field)
@@ -84,7 +84,7 @@ Point CCamera::CalculateRayOrigin() {
 
 
 
-Point CCamera::GetRandomPointOnAperture() const {
+Point Camera::GetRandomPointOnAperture() const {
     double x = Math::GetRandomDouble(0, m_apertureSize) - (m_apertureSize / 2);
     double y = Math::GetRandomDouble(0, m_apertureSize) - (m_apertureSize / 2);
 

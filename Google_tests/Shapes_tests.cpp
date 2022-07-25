@@ -6,33 +6,33 @@
 
 #include "gtest/gtest.h"
 
-#include "../cpp-Raytracer/CShape.h"
-#include "../cpp-Raytracer/CShape.cpp"
+#include "../cpp-Raytracer/Shape.h"
+#include "../cpp-Raytracer/Shape.cpp"
 
-#include "../cpp-Raytracer/CSphere.h"
-//#include "../cpp-Raytracer/CSphere.cpp"
+#include "../cpp-Raytracer/Sphere.h"
+//#include "../cpp-Raytracer/Sphere.cpp"
 
-#include "../cpp-Raytracer/SIntersection.h"
+#include "../cpp-Raytracer/Intersection.h"
 
-#include "../cpp-Raytracer/CPlane.h"
-#include "../cpp-Raytracer/CPlane.cpp"
+#include "../cpp-Raytracer/Plane.h"
+#include "../cpp-Raytracer/Plane.cpp"
 
-#include "../cpp-Raytracer/CRay.h"
+#include "../cpp-Raytracer/Ray.h"
 
-#include "../cpp-Raytracer/CCube.cpp"
+#include "../cpp-Raytracer/Cube.cpp"
 
 #include <vector>
 
 TEST(Spheres, TheDefaultTransformation)
 {
-    CSphere s{};
+    Sphere s{};
 
     EXPECT_EQ(s.GetTransform(), Math::identiy_matrix);
 }
 
 TEST(Spheres, AssigningATransformation)
 {
-    CSphere s{};
+    Sphere s{};
 
     s.SetTransform(Math::Translation(2, 3, 4));
 
@@ -41,15 +41,15 @@ TEST(Spheres, AssigningATransformation)
 
 TEST(Spheres, TheDefaultMaterial)
 {
-    CSphere s{};
+    Sphere s{};
 
-    EXPECT_EQ(s.GetMaterial(), CMaterial{});
+    EXPECT_EQ(s.GetMaterial(), Material{});
 }
 
 TEST(Spheres, AssigningAMaterial)
 {
-    CSphere s{};
-    CMaterial m{};
+    Sphere s{};
+    Material m{};
     m.ambient = 1;
 
     s.SetMaterial(m);
@@ -59,11 +59,11 @@ TEST(Spheres, AssigningAMaterial)
 
 TEST(Spheres, IntersectingAScaledSphereWithARay)
 {
-    CRay r{Point(0, 0, -5), Vector(0, 0, 1)};
-    Sphere_ptr s (new CSphere());
+    Ray r{Point(0, 0, -5), Vector(0, 0, 1)};
+    Sphere_ptr s (new Sphere());
 
     s->SetTransform(Math::Scaling(2, 2, 2));
-    std::vector<SIntersection> xs = r.Intersect(s);
+    std::vector<Intersection> xs = r.Intersect(s);
 
     EXPECT_EQ(s->saved_ray_origin, Point(0, 0, -2.5));
     EXPECT_EQ(s->saved_ray_direction, Vector(0, 0, 0.5));
@@ -71,11 +71,11 @@ TEST(Spheres, IntersectingAScaledSphereWithARay)
 
 TEST(Spheres, IntersectingATranslatedSphereWithARay)
 {
-    CRay r{Point(0, 0, -5), Vector(0, 0, 1)};
-    Sphere_ptr s(new CSphere());
+    Ray r{Point(0, 0, -5), Vector(0, 0, 1)};
+    Sphere_ptr s(new Sphere());
 
     s->SetTransform(Math::Translation(5, 0, 0));
-    std::vector<SIntersection> xs = r.Intersect(s);
+    std::vector<Intersection> xs = r.Intersect(s);
 
     EXPECT_EQ(s->saved_ray_origin, Point(-5, 0, -5));
     EXPECT_EQ(s->saved_ray_direction, Vector(0, 0, 1));
@@ -83,14 +83,14 @@ TEST(Spheres, IntersectingATranslatedSphereWithARay)
 
 TEST(Planes, TheDefaultTransformation)
 {
-    CPlane p{};
+    Plane p{};
 
     EXPECT_EQ(p.GetTransform(), Math::identiy_matrix);
 }
 
 TEST(Planes, AssigningATransformation)
 {
-    CPlane p{};
+    Plane p{};
 
     p.SetTransform(Math::Translation(2, 3, 4));
 
@@ -99,15 +99,15 @@ TEST(Planes, AssigningATransformation)
 
 TEST(Planes, TheDefaultMaterial)
 {
-    CPlane p{};
+    Plane p{};
 
-    EXPECT_EQ(p.GetMaterial(), CMaterial{});
+    EXPECT_EQ(p.GetMaterial(), Material{});
 }
 
 TEST(Planes, AssigningAMaterial)
 {
-    CPlane p{};
-    CMaterial m{};
+    Plane p{};
+    Material m{};
     m.ambient = 1;
 
     p.SetMaterial(m);
@@ -117,11 +117,11 @@ TEST(Planes, AssigningAMaterial)
 
 TEST(Planes, IntersectingAScaledPlaneWithARay)
 {
-    CRay r{Point(0, 0, -5), Vector(0, 0, 1)};
-    Plane_ptr p (new CPlane());
+    Ray r{Point(0, 0, -5), Vector(0, 0, 1)};
+    Plane_ptr p (new Plane());
 
     p->SetTransform(Math::Scaling(2, 2, 2));
-    std::vector<SIntersection> xs = r.Intersect(p);
+    std::vector<Intersection> xs = r.Intersect(p);
 
     EXPECT_EQ(p->saved_ray_origin, Point(0, 0, -2.5));
     EXPECT_EQ(p->saved_ray_direction, Vector(0, 0, 0.5));
@@ -129,11 +129,11 @@ TEST(Planes, IntersectingAScaledPlaneWithARay)
 
 TEST(Planes, IntersectingATranslatedPlaneWithARay)
 {
-    CRay r{Point(0, 0, -5), Vector(0, 0, 1)};
-    Plane_ptr p (new CPlane());
+    Ray r{Point(0, 0, -5), Vector(0, 0, 1)};
+    Plane_ptr p (new Plane());
 
     p->SetTransform(Math::Translation(5, 0, 0));
-    std::vector<SIntersection> xs = r.Intersect(p);
+    std::vector<Intersection> xs = r.Intersect(p);
 
     EXPECT_EQ(p->saved_ray_origin, Point(-5, 0, -5));
     EXPECT_EQ(p->saved_ray_direction, Vector(0, 0, 1));
@@ -141,7 +141,7 @@ TEST(Planes, IntersectingATranslatedPlaneWithARay)
 
 TEST(Planes, TheNormalOfAPlaneIsConstantEverywhere)
 {
-    CPlane p{};
+    Plane p{};
 
     Vector n1 = p.LocalNormalAt(Point(0, 0, 0));
     Vector n2 = p.LocalNormalAt(Point(10, 0, -10));
@@ -156,30 +156,30 @@ TEST(Planes, TheNormalOfAPlaneIsConstantEverywhere)
 
 TEST(Planes, IntersectWithARayParallelToThePlane)
 {
-    Plane_ptr p (new CPlane());
-    CRay r{Point(0, 10, 10), Vector(0, 0, 1)};
+    Plane_ptr p (new Plane());
+    Ray r{Point(0, 10, 10), Vector(0, 0, 1)};
 
-    std::vector<SIntersection> xs = r.LocalIntersect(p);
+    std::vector<Intersection> xs = r.LocalIntersect(p);
 
     EXPECT_TRUE(xs.empty());
 }
 
 TEST(Planes, IntersectWithACoplanarRay)
 {
-    Plane_ptr p (new CPlane());
-    CRay r{Point(0, 0, 0), Vector(0, 0, 1)};
+    Plane_ptr p (new Plane());
+    Ray r{Point(0, 0, 0), Vector(0, 0, 1)};
 
-    std::vector<SIntersection> xs = r.LocalIntersect(p);
+    std::vector<Intersection> xs = r.LocalIntersect(p);
 
     EXPECT_TRUE(xs.empty());
 }
 
 TEST(Planes, ARayIntersectingAPlaneFormAbove)
 {
-    Plane_ptr p (new CPlane());
-    CRay r{Point(0, 1, 0), Vector(0, -1, 0)};
+    Plane_ptr p (new Plane());
+    Ray r{Point(0, 1, 0), Vector(0, -1, 0)};
 
-    std::vector<SIntersection> xs = r.LocalIntersect(p);
+    std::vector<Intersection> xs = r.LocalIntersect(p);
 
     EXPECT_EQ(xs.size(), 1);
     EXPECT_EQ(xs[0].t, 1);
@@ -188,10 +188,10 @@ TEST(Planes, ARayIntersectingAPlaneFormAbove)
 
 TEST(Planes, ARayIntersectingAPlaneFormBelow)
 {
-    Plane_ptr p (new CPlane());
-    CRay r{Point(0, -1, 0), Vector(0, 1, 0)};
+    Plane_ptr p (new Plane());
+    Ray r{Point(0, -1, 0), Vector(0, 1, 0)};
 
-    std::vector<SIntersection> xs = r.LocalIntersect(p);
+    std::vector<Intersection> xs = r.LocalIntersect(p);
 
     EXPECT_EQ(xs.size(), 1);
     EXPECT_EQ(xs[0].t, 1);
@@ -200,10 +200,10 @@ TEST(Planes, ARayIntersectingAPlaneFormBelow)
 
 TEST(Cubes, RayIntersectsCube_01)
 {
-    Cube_ptr c (new CCube());
-    CRay r{Point(5, 0.5, 0), Vector(-1, 0, 0)};
+    Cube_ptr c (new Cube());
+    Ray r{Point(5, 0.5, 0), Vector(-1, 0, 0)};
 
-    std::vector<SIntersection> xs = r.LocalIntersect(c);
+    std::vector<Intersection> xs = r.LocalIntersect(c);
 
     EXPECT_EQ(xs.size(), 2);
     EXPECT_EQ(xs[0].t, 4);
@@ -212,10 +212,10 @@ TEST(Cubes, RayIntersectsCube_01)
 
 TEST(Cubes, RayIntersectsCube_02)
 {
-    Cube_ptr c (new CCube());
-    CRay r{Point(-5, 0.5, 0), Vector(1, 0, 0)};
+    Cube_ptr c (new Cube());
+    Ray r{Point(-5, 0.5, 0), Vector(1, 0, 0)};
 
-    std::vector<SIntersection> xs = r.LocalIntersect(c);
+    std::vector<Intersection> xs = r.LocalIntersect(c);
 
     EXPECT_EQ(xs.size(), 2);
     EXPECT_EQ(xs[0].t, 4);
@@ -224,10 +224,10 @@ TEST(Cubes, RayIntersectsCube_02)
 
 TEST(Cubes, RayIntersectsCube_03)
 {
-    Cube_ptr c (new CCube());
-    CRay r{Point(0.5, 5, 0), Vector(0, -1, 0)};
+    Cube_ptr c (new Cube());
+    Ray r{Point(0.5, 5, 0), Vector(0, -1, 0)};
 
-    std::vector<SIntersection> xs = r.LocalIntersect(c);
+    std::vector<Intersection> xs = r.LocalIntersect(c);
 
     EXPECT_EQ(xs.size(), 2);
     EXPECT_EQ(xs[0].t, 4);
@@ -236,10 +236,10 @@ TEST(Cubes, RayIntersectsCube_03)
 
 TEST(Cubes, RayIntersectsCube_04)
 {
-    Cube_ptr c (new CCube());
-    CRay r{Point(0.5, -5, 0), Vector(0, 1, 0)};
+    Cube_ptr c (new Cube());
+    Ray r{Point(0.5, -5, 0), Vector(0, 1, 0)};
 
-    std::vector<SIntersection> xs = r.LocalIntersect(c);
+    std::vector<Intersection> xs = r.LocalIntersect(c);
 
     EXPECT_EQ(xs.size(), 2);
     EXPECT_EQ(xs[0].t, 4);
@@ -248,10 +248,10 @@ TEST(Cubes, RayIntersectsCube_04)
 
 TEST(Cubes, RayIntersectsCube_05)
 {
-    Cube_ptr c (new CCube());
-    CRay r{Point(0.5, 0, 5), Vector(0, 0, -1)};
+    Cube_ptr c (new Cube());
+    Ray r{Point(0.5, 0, 5), Vector(0, 0, -1)};
 
-    std::vector<SIntersection> xs = r.LocalIntersect(c);
+    std::vector<Intersection> xs = r.LocalIntersect(c);
 
     EXPECT_EQ(xs.size(), 2);
     EXPECT_EQ(xs[0].t, 4);
@@ -260,10 +260,10 @@ TEST(Cubes, RayIntersectsCube_05)
 
 TEST(Cubes, RayIntersectsCube_06)
 {
-    Cube_ptr c (new CCube());
-    CRay r{Point(0.5, 0, -5), Vector(0, 0, 1)};
+    Cube_ptr c (new Cube());
+    Ray r{Point(0.5, 0, -5), Vector(0, 0, 1)};
 
-    std::vector<SIntersection> xs = r.LocalIntersect(c);
+    std::vector<Intersection> xs = r.LocalIntersect(c);
 
     EXPECT_EQ(xs.size(), 2);
     EXPECT_EQ(xs[0].t, 4);
@@ -272,10 +272,10 @@ TEST(Cubes, RayIntersectsCube_06)
 
 TEST(Cubes, RayIntersectsCube_07)
 {
-    Cube_ptr c (new CCube());
-    CRay r{Point(0, 0.5, 0), Vector(0, 0, 1)};
+    Cube_ptr c (new Cube());
+    Ray r{Point(0, 0.5, 0), Vector(0, 0, 1)};
 
-    std::vector<SIntersection> xs = r.LocalIntersect(c);
+    std::vector<Intersection> xs = r.LocalIntersect(c);
 
     EXPECT_EQ(xs.size(), 2);
     EXPECT_EQ(xs[0].t, -1);
@@ -284,67 +284,67 @@ TEST(Cubes, RayIntersectsCube_07)
 
 TEST(Cubes, RayMissesCube_01)
 {
-    Cube_ptr c (new CCube());
-    CRay r{Point(-2, 0, 0), Vector(0.2673, 0.5345, 0.8018)};
+    Cube_ptr c (new Cube());
+    Ray r{Point(-2, 0, 0), Vector(0.2673, 0.5345, 0.8018)};
 
-    std::vector<SIntersection> xs = r.LocalIntersect(c);
+    std::vector<Intersection> xs = r.LocalIntersect(c);
 
     EXPECT_EQ(xs.size(), 0);
 }
 
 TEST(Cubes, RayMissesCube_02)
 {
-    Cube_ptr c (new CCube());
-    CRay r{Point(0, -2, 0), Vector(0.8018, 0.2673, 0.5345)};
+    Cube_ptr c (new Cube());
+    Ray r{Point(0, -2, 0), Vector(0.8018, 0.2673, 0.5345)};
 
-    std::vector<SIntersection> xs = r.LocalIntersect(c);
+    std::vector<Intersection> xs = r.LocalIntersect(c);
 
     EXPECT_EQ(xs.size(), 0);
 }
 
 TEST(Cubes, RayMissesCube_03)
 {
-    Cube_ptr c (new CCube());
-    CRay r{Point(0, 0, -2), Vector(0.5345, 0.8018, 0.2673)};
+    Cube_ptr c (new Cube());
+    Ray r{Point(0, 0, -2), Vector(0.5345, 0.8018, 0.2673)};
 
-    std::vector<SIntersection> xs = r.LocalIntersect(c);
+    std::vector<Intersection> xs = r.LocalIntersect(c);
 
     EXPECT_EQ(xs.size(), 0);
 }
 
 TEST(Cubes, RayMissesCube_04)
 {
-    Cube_ptr c (new CCube());
-    CRay r{Point(2, 0, 2), Vector(0, 0, -1)};
+    Cube_ptr c (new Cube());
+    Ray r{Point(2, 0, 2), Vector(0, 0, -1)};
 
-    std::vector<SIntersection> xs = r.LocalIntersect(c);
+    std::vector<Intersection> xs = r.LocalIntersect(c);
 
     EXPECT_EQ(xs.size(), 0);
 }
 
 TEST(Cubes, RayMissesCube_05)
 {
-    Cube_ptr c (new CCube());
-    CRay r{Point(0, 2, 2), Vector(0, -1, 0)};
+    Cube_ptr c (new Cube());
+    Ray r{Point(0, 2, 2), Vector(0, -1, 0)};
 
-    std::vector<SIntersection> xs = r.LocalIntersect(c);
+    std::vector<Intersection> xs = r.LocalIntersect(c);
 
     EXPECT_EQ(xs.size(), 0);
 }
 
 TEST(Cubes, RayMissesCube_06)
 {
-    Cube_ptr c (new CCube());
-    CRay r{Point(2, 2, 0), Vector(-1, 0, 0)};
+    Cube_ptr c (new Cube());
+    Ray r{Point(2, 2, 0), Vector(-1, 0, 0)};
 
-    std::vector<SIntersection> xs = r.LocalIntersect(c);
+    std::vector<Intersection> xs = r.LocalIntersect(c);
 
     EXPECT_EQ(xs.size(), 0);
 }
 
 TEST(Cubes, NormalOnCubeSurface_01)
 {
-    Cube_ptr c (new CCube());
+    Cube_ptr c (new Cube());
     Point p{1, 0.5, -0.8};
     Vector normal = c->LocalNormalAt(p);
 
@@ -353,7 +353,7 @@ TEST(Cubes, NormalOnCubeSurface_01)
 
 TEST(Cubes, NormalOnCubeSurface_02)
 {
-    Cube_ptr c (new CCube());
+    Cube_ptr c (new Cube());
     Point p{-1, -0.2, 0.9};
     Vector normal = c->LocalNormalAt(p);
 
@@ -362,7 +362,7 @@ TEST(Cubes, NormalOnCubeSurface_02)
 
 TEST(Cubes, NormalOnCubeSurface_03)
 {
-    Cube_ptr c (new CCube());
+    Cube_ptr c (new Cube());
     Point p{-0.4, 1, -0.1};
     Vector normal = c->LocalNormalAt(p);
 
@@ -371,7 +371,7 @@ TEST(Cubes, NormalOnCubeSurface_03)
 
 TEST(Cubes, NormalOnCubeSurface_04)
 {
-    Cube_ptr c (new CCube());
+    Cube_ptr c (new Cube());
     Point p{0.3, -1, -0.7};
     Vector normal = c->LocalNormalAt(p);
 
@@ -380,7 +380,7 @@ TEST(Cubes, NormalOnCubeSurface_04)
 
 TEST(Cubes, NormalOnCubeSurface_05)
 {
-    Cube_ptr c (new CCube());
+    Cube_ptr c (new Cube());
     Point p{-0.6, 0.3, 1};
     Vector normal = c->LocalNormalAt(p);
 
@@ -389,7 +389,7 @@ TEST(Cubes, NormalOnCubeSurface_05)
 
 TEST(Cubes, NormalOnCubeSurface_06)
 {
-    Cube_ptr c (new CCube());
+    Cube_ptr c (new Cube());
     Point p{0.4, 0.4, -1};
     Vector normal = c->LocalNormalAt(p);
 
@@ -398,7 +398,7 @@ TEST(Cubes, NormalOnCubeSurface_06)
 
 TEST(Cubes, NormalOnCubeSurface_07)
 {
-    Cube_ptr c (new CCube());
+    Cube_ptr c (new Cube());
     Point p{1, 1, 1};
     Vector normal = c->LocalNormalAt(p);
 
@@ -407,7 +407,7 @@ TEST(Cubes, NormalOnCubeSurface_07)
 
 TEST(Cubes, NormalOnCubeSurface_08)
 {
-    Cube_ptr c (new CCube());
+    Cube_ptr c (new Cube());
     Point p{-1, -1, -1};
     Vector normal = c->LocalNormalAt(p);
 

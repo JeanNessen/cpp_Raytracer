@@ -4,14 +4,14 @@
 
 #include "gtest/gtest.h"
 
-#include "../cpp-Raytracer/CPattern.h"
-//#include "../cpp-Raytracer/CPattern.cpp"
+#include "../cpp-Raytracer/Pattern.h"
+//#include "../cpp-Raytracer/Pattern.cpp"
 
-#include "../cpp-Raytracer/CSphere.h"
+#include "../cpp-Raytracer/Sphere.h"
 
 TEST(Patterns, CreatingAStripePattern)
 {
-    std::shared_ptr<CPattern> pattern (new CStripePattern(color::white, color::black));
+    std::shared_ptr<Pattern> pattern (new CStripePattern(color::white, color::black));
 
     EXPECT_EQ(pattern->a, color::white);
     EXPECT_EQ(pattern->b, color::black);
@@ -19,7 +19,7 @@ TEST(Patterns, CreatingAStripePattern)
 
 TEST(Patterns, AStripePatternsIsConstantInY)
 {
-    std::shared_ptr<CPattern> pattern (new CStripePattern(color::white, color::black));
+    std::shared_ptr<Pattern> pattern (new CStripePattern(color::white, color::black));
 
     EXPECT_EQ(pattern->PatternAt(Point(0, 0, 0)), color::white);
     EXPECT_EQ(pattern->PatternAt(Point(0, 1, 0)), color::white);
@@ -28,7 +28,7 @@ TEST(Patterns, AStripePatternsIsConstantInY)
 
 TEST(Patterns, AStripePatternsIsConstantInZ)
 {
-    std::shared_ptr<CPattern> pattern (new CStripePattern(color::white, color::black));
+    std::shared_ptr<Pattern> pattern (new CStripePattern(color::white, color::black));
 
 
     EXPECT_EQ(pattern->PatternAt(Point(0, 0, 0)), color::white);
@@ -38,7 +38,7 @@ TEST(Patterns, AStripePatternsIsConstantInZ)
 
 TEST(Patterns, AStripePatternAlternatesInX)
 {
-    std::shared_ptr<CPattern> pattern (new CStripePattern(color::white, color::black));
+    std::shared_ptr<Pattern> pattern (new CStripePattern(color::white, color::black));
 
 
     EXPECT_EQ(pattern->PatternAt(Point(0, 0, 0)), color::white);
@@ -51,38 +51,38 @@ TEST(Patterns, AStripePatternAlternatesInX)
 
 TEST(Patterns, StripesWithObjectTransformation)
 {
-    CSphere object{};
+    Sphere object{};
     object.SetTransform(Math::Scaling(2, 2, 2));
-    std::shared_ptr<CPattern> pattern (new CStripePattern(color::white, color::black));
+    std::shared_ptr<Pattern> pattern (new CStripePattern(color::white, color::black));
     object.GetMaterial().SetPattern(pattern);
 
-    CColor c = object.StripeAtObject(Point(1.5, 0, 0));
+    Color c = object.StripeAtObject(Point(1.5, 0, 0));
 
     EXPECT_EQ(c, color::white);
 }
 
 TEST(Patterns, StripesWithPatternTransformation)
 {
-    CSphere object{};
-    std::shared_ptr<CPattern> pattern (new CStripePattern(color::white, color::black));
+    Sphere object{};
+    std::shared_ptr<Pattern> pattern (new CStripePattern(color::white, color::black));
     pattern->SetTransform(Math::Scaling(2, 2, 2));
     object.GetMaterial().SetPattern(pattern);
 
 
-    CColor c = object.StripeAtObject(Point(1.5, 0, 0));
+    Color c = object.StripeAtObject(Point(1.5, 0, 0));
 
     EXPECT_EQ(c, color::white);
 }
 
 TEST(Patterns, StripesWithBothObjectAndPatternTransformation)
 {
-    CSphere object{};
+    Sphere object{};
     object.SetTransform(Math::Scaling(2, 2, 2));
-    std::shared_ptr<CPattern> pattern (new CStripePattern(color::white, color::black));
+    std::shared_ptr<Pattern> pattern (new CStripePattern(color::white, color::black));
     pattern->SetTransform(Math::Translation(0.5, 0, 0));
     object.GetMaterial().SetPattern(pattern);
 
-    CColor c = object.StripeAtObject(Point(2.5, 0, 0));
+    Color c = object.StripeAtObject(Point(2.5, 0, 0));
 
     EXPECT_EQ(c, color::white);
 
@@ -93,9 +93,9 @@ TEST(Patterns, GradientLinearlyInterpolatesBetweenColors)
     CGradientPattern pattern{color::white, color::black};
 
     EXPECT_EQ(pattern.PatternAt(Point(0, 0, 0)), color::white);
-    EXPECT_EQ(pattern.PatternAt(Point(0.25, 0, 0)), CColor(0.75, 0.75, 0.75));
-    EXPECT_EQ(pattern.PatternAt(Point(0.5, 0, 0)), CColor(0.5, 0.5, 0.5));
-    EXPECT_EQ(pattern.PatternAt(Point(0.75, 0, 0)), CColor(0.25, 0.25, 0.25));
+    EXPECT_EQ(pattern.PatternAt(Point(0.25, 0, 0)), Color(0.75, 0.75, 0.75));
+    EXPECT_EQ(pattern.PatternAt(Point(0.5, 0, 0)), Color(0.5, 0.5, 0.5));
+    EXPECT_EQ(pattern.PatternAt(Point(0.75, 0, 0)), Color(0.25, 0.25, 0.25));
 }
 
 TEST(Patterns, CheckersShouldRepeatInX)

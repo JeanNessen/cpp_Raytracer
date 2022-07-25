@@ -2,11 +2,11 @@
 // Created by Jean-Luc von Nessen on 14.01.22.
 //
 
-#include "CMaterial.h"
+#include "Material.h"
 
 #include <memory>
 
-bool CMaterial::operator==(const CMaterial &other) const {
+bool Material::operator==(const Material &other) const {
     return (
             Math::Equal(ambient, other.ambient) &&
             Math::Equal(diffuse, other.diffuse) &&
@@ -18,17 +18,17 @@ bool CMaterial::operator==(const CMaterial &other) const {
             );
 }
 
-CMaterial::CMaterial(std::shared_ptr<CPattern> pattern)
+Material::Material(std::shared_ptr<Pattern> pattern)
 {
     this->m_pattern = pattern;
 }
 
-CMaterial::CMaterial()
+Material::Material()
 {
 
 }
 
-void CMaterial::SetPattern(std::shared_ptr<CPattern> pattern) {
+void Material::SetPattern(std::shared_ptr<Pattern> pattern) {
     this->m_pattern = pattern;
 }
 

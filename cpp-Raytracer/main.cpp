@@ -1,5 +1,5 @@
-#include "CCanvas.h"
-#include "CWorld.h"
+#include "Canvas.h"
+#include "World.h"
 #include <random>
 
 bool CheckSpot(Point spot, const std::vector<Point>& taken_spots)
@@ -20,13 +20,13 @@ bool CheckSpot(Point spot, const std::vector<Point>& taken_spots)
     return spot_is_free;
 }
 
-void PlaceSpheres(CWorld &w)
+void PlaceSpheres(World &w)
 {
     std::vector<Point> taken_spots;
 
     for (int i = 0; i < 25; ++i) {
-        Sphere_ptr sphere(new CSphere());
-        sphere->GetMaterial().color = CColor(Math::GetRandomDouble(0, 1), Math::GetRandomDouble(0, 1), Math::GetRandomDouble(0, 1));
+        Sphere_ptr sphere(new Sphere());
+        sphere->GetMaterial().color = Color(Math::GetRandomDouble(0, 1), Math::GetRandomDouble(0, 1), Math::GetRandomDouble(0, 1));
         sphere->GetMaterial().diffuse = 0.7f;
         sphere->GetMaterial().specular = 0.2f;
         sphere->GetMaterial().reflective = 0.1;
@@ -46,29 +46,29 @@ void PlaceSpheres(CWorld &w)
 
 int main()
 {
-    //Initialize the CWorld
-    CWorld w{};
+    //Initialize the World
+    World w{};
     w.SetRecursionDepth(5);
 
     //Initialize the light
-    SPointLight default_light{color::white, Point(-5, 10, -5)};
+    PointLight default_light{color::white, Point(-5, 10, -5)};
     w.AddLight(default_light);
 
 
     //Set up the m_pattern for the floor
-    std::shared_ptr<CPattern> p(new CCheckersPattern(CColor(0.8, 0.8, 0.8), CColor(0.4, 0.4, 0.4)));
+    std::shared_ptr<Pattern> p(new CCheckersPattern(Color(0.8, 0.8, 0.8), Color(0.4, 0.4, 0.4)));
     p->SetTransform(Math::Scaling(2));
 
     //Set up the floor
-    Plane_ptr floor (new CPlane());
+    Plane_ptr floor (new Plane());
     floor->GetMaterial().SetPattern(p);
-    floor->GetMaterial().color = CColor(1, 0.9, 0.9);
+    floor->GetMaterial().color = Color(1, 0.9, 0.9);
     floor->GetMaterial().specular = 0.6f;
     floor->GetMaterial().reflective = 0.05f;
     w.AddObject(floor);
 
     //Set Glass material
-    CMaterial glass_mat{};
+    Material glass_mat{};
     glass_mat.color = color::black;
     glass_mat.transparency = 0.8;
     glass_mat.refractive_index = 1.51;
@@ -80,30 +80,30 @@ int main()
     glass_mat.throws_shadow = false;
 
 
-    Cube_ptr glass_cube (new CCube());
+    Cube_ptr glass_cube (new Cube());
     glass_cube->SetTransform(Math::Translation(0, 1+EPSILON, 0));
     glass_cube->SetMaterial(glass_mat);
     w.AddObject(glass_cube);
 
-    //Initialize the CCamera
+    //Initialize the Camera
 
-    CCamera c{1600, 1000, 3 * (M_PI / 4)};
+    Camera c{1600, 1000, 3 * (M_PI / 4)};
 
 
-    //Position the CCamera
+    //Position the Camera
     c.SetTransform(Math::ViewTransform(Point(3.67, 3.6865, -20), Point(0, 1, 0), Vector(0, 1, 0)));
 
 
-    c.SetSamplesPerPixel(25);
-    c.depth_of_field = true;
-    c.anti_aliasing = true;
+    c.SetSamplesPerPixel(1);
+    c.depth_of_field = false;
+    c.anti_aliasing = false;
     c.SetApertureSize(0.1);
     c.SetFocalLength(20.3122);
 
     //RenderMultiThread the image
-    CCanvas image = w.RenderSingleThread(c);
+    Canvas image = w.RenderSingleThread(c);
 
-    image.to_ppm();
+    image.ToPPM();
 
 
 

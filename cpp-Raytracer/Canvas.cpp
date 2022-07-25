@@ -1,28 +1,28 @@
-#include "CCanvas.h"
+#include "Canvas.h"
 #include <fstream>
-#include "CColor.h"
+#include "Color.h"
 
-CCanvas::CCanvas(int width, int height):
+Canvas::Canvas(int width, int height):
 	width(width),
 	height(height)
 {
 	for (int i = 0; i < height; i++)
 	{
-		grid.push_back(std::vector<CColor>(width, CColor{0,0,0}));
+		grid.push_back(std::vector<Color>(width, Color{0,0,0}));
 	}
 }
 
-CColor CCanvas::PixelAt(int x, int y) const
+Color Canvas::PixelAt(int x, int y) const
 {
 	return grid[y][x];
 }
 
-void CCanvas::WritePixel(int x, int y, CColor col)
+void Canvas::WritePixel(int x, int y, Color col)
 {
 	grid[y][x] = col;
 }
 
-std::string CCanvas::to_ppm()
+std::string Canvas::ToPPM()
 {
 	std::remove("output.ppm");
 	std::string line1 = "P3\n";
@@ -61,39 +61,39 @@ std::string CCanvas::to_ppm()
 	return header + body;
 }
 
-CCanvas CCanvas::operator+(const CCanvas &other) {
-    CCanvas sum{width, height};
+Canvas Canvas::operator+(const Canvas &other) {
+    Canvas sum{width, height};
     for (int x = 0; x < width; ++x) {
         for (int y = 0; y < height; ++y) {
-            CColor color_sum = PixelAt(x, y) + other.PixelAt(x, y);
+            Color color_sum = PixelAt(x, y) + other.PixelAt(x, y);
             sum.WritePixel(x, y, color_sum);
         }
     }
     return sum;
 }
 
-CCanvas& CCanvas::operator+=(const CCanvas &other) {
+Canvas& Canvas::operator+=(const Canvas &other) {
     for (int x = 0; x < width; ++x) {
         for (int y = 0; y < height; ++y) {
-            CColor color_sum = PixelAt(x, y) + other.PixelAt(x, y);
+            Color color_sum = PixelAt(x, y) + other.PixelAt(x, y);
             WritePixel(x, y, color_sum);
         }
     }
     return *this;
 }
 
-CCanvas CCanvas::operator/(const double& other) {
-    CCanvas quotient{width, height};
+Canvas Canvas::operator/(const double& other) {
+    Canvas quotient{width, height};
     for (int x = 0; x < width; ++x) {
         for (int y = 0; y < height; ++y) {
-            CColor color_quotient = PixelAt(x, y) / other;
+            Color color_quotient = PixelAt(x, y) / other;
             quotient.WritePixel(x, y, color_quotient);
         }
     }
     return quotient;
 }
 
-bool CCanvas::operator==(const CCanvas &other) const {
+bool Canvas::operator==(const Canvas &other) const {
 
     for (int x = 0; x < width; ++x) {
         for (int y = 0; y < height; ++y) {
@@ -106,6 +106,6 @@ bool CCanvas::operator==(const CCanvas &other) const {
     return true;
 }
 
-bool CCanvas::operator!=(const CCanvas &other) const {
+bool Canvas::operator!=(const Canvas &other) const {
     return !(*this == other);
 }

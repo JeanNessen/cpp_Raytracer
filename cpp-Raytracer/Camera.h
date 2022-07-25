@@ -5,13 +5,13 @@
 
 #include "Math.h"
 
-class CRay;
+class Ray;
 
-class CCamera {
+class Camera {
 
 //Methods
 public:
-    CCamera(int h_size, int v_size, double fov);
+    Camera(int h_size, int v_size, double fov);
 
 
     [[nodiscard]] int GetHSize() const{return m_horizontalSize;}
@@ -37,7 +37,7 @@ public:
 
     [[nodiscard]] double GetPixelSize() const{return m_pixel_size;}
 
-    CRay RayForPixel(int x, int y);
+    Ray RayForPixel(int x, int y);
 
 
 private:

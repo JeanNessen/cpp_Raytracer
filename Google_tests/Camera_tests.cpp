@@ -4,7 +4,7 @@
 
 #include "gtest/gtest.h"
 
-#include "../cpp-Raytracer/CCamera.h"
-//#include "../cpp-Raytracer/CCamera.cpp"
+#include "../cpp-Raytracer/Camera.h"
+//#include "../cpp-Raytracer/Camera.cpp"
 
 
