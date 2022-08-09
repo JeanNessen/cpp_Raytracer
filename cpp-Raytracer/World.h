@@ -45,7 +45,7 @@ public:
 
     Color CalculateColorAt(Ray r, int remaining = m_recursion_depth);
 
-    Canvas RenderSingleThread(Camera c);
+    Canvas render_multi_thread(Camera c, int num_threads);
 
 //Members
 private:

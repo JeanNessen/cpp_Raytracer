@@ -1,6 +1,8 @@
 #include "Math.h"
 #include <cmath>
 #include <iostream>
+#include <random>
+#include <thread>
 
 Matrix4 Math::identiy_matrix = Matrix4{
 			1, 0, 0, 0,
@@ -190,7 +192,14 @@ Matrix4 Math::Scaling(const double s) {
 double Math::GetRandomDouble(double min, double max) {
     //Faster random number generator is used, as distribution is not important here.
     //https://cboard.cprogramming.com/c-programming/3264-best-way-generate-random-double.html
-    return ( ( double )rand() * ( max - min ) ) / ( double )RAND_MAX + min;
+    //return ( ( double )rand() * ( max - min ) ) / ( double )RAND_MAX + min;
+
+	//Using the thread id to seed the random generator to make sure each thread produces numbers indipendend from the others.
+	auto seed = std::hash<std::thread::id>()(std::this_thread::get_id());
+
+	static thread_local std::mt19937 generator(seed);
+	std::uniform_real_distribution<double> distribution(min, max);
+	return distribution(generator);
 }
 
 Tuple::Tuple(double x, double y, double z)

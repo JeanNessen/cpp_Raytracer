@@ -99,14 +99,14 @@ int main()
     c.SetTransform(Math::ViewTransform(Point(3.67, 1, -20), Point(0, 1, 8), Vector(0, 1, 0)));
 
 
-    c.SetSamplesPerPixel(5);
+    c.SetSamplesPerPixel(22);
     c.depth_of_field = true;
     c.anti_aliasing = true;
     c.SetApertureSize(0.1);
     c.SetFocalLength(30.3122);
 
     //RenderMultiThread the image
-    Canvas image = w.RenderSingleThread(c);
+    Canvas image = w.render_multi_thread(c,);
 
     image.ToPPM();
 

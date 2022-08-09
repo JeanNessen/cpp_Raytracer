@@ -118,7 +118,7 @@ Color World::CalculateColorAt(Ray r, int remaining) {
 
 }
 
-Canvas World::RenderSingleThread(Camera c) {
+Canvas World::render_multi_thread(Camera c, int num_threads) {
 
     auto start = std::chrono::high_resolution_clock::now();
 
@@ -127,23 +127,25 @@ Canvas World::RenderSingleThread(Camera c) {
     Canvas image_sum{c.GetHSize(), c.GetVSize()};
 
     std::vector<std::thread> workers;
-    std::vector<std::future<Canvas>> render_pass_cavases;
-    render_pass_cavases.reserve(c.GetSamplesPerPixel());
+    workers.reserve(num_threads);
+
+    std::vector<std::future<Canvas>> render_pass_canvases;
+    render_pass_canvases.reserve(c.GetSamplesPerPixel());
 
     
     for (int i = 0; i < c.GetSamplesPerPixel(); ++i) {
         std::cout << "Starting render pass " << i + 1 << " of " << c.GetSamplesPerPixel() << "." << std::endl;
-        render_pass_cavases.push_back(std::async(&World::ExecuteRenderPass, this, c));
+        render_pass_canvases.push_back(std::async(&World::ExecuteRenderPass, this, c));
     }
 
-    for (size_t i = 0; i < render_pass_cavases.size(); i++)
+    for (size_t i = 0; i < render_pass_canvases.size(); i++)
     {
-        render_pass_cavases[i].wait();
+        render_pass_canvases[i].wait();
     }
     
-    for (size_t i = 0; i < render_pass_cavases.size(); i++)
+    for (size_t i = 0; i < render_pass_canvases.size(); i++)
     {
-        image_sum += render_pass_cavases[i].get();
+        image_sum += render_pass_canvases[i].get();
     }
     
     Canvas image_average = image_sum / c.GetSamplesPerPixel();
