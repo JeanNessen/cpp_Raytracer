@@ -81,24 +81,29 @@ int main()
 
 
     Cube_ptr glass_cube (new Cube());
-    glass_cube->SetTransform(Math::Translation(0, 1+EPSILON, 0));
+    glass_cube->SetTransform(Math::Translation(0, 0.5+EPSILON, 8) * Math::Scaling(0.5));
     glass_cube->SetMaterial(glass_mat);
     w.AddObject(glass_cube);
+    PlaceSpheres(w);
+    // Sphere_ptr glass_sphere(new Sphere());
+    // glass_sphere->SetTransform(Math::Translation(0, 0.5, 8) * Math::Scaling(0.5));
+    // glass_sphere->SetMaterial(glass_mat);
+    // w.AddObject(glass_sphere);
 
     //Initialize the Camera
 
-    Camera c{1600, 1000, 3 * (M_PI / 4)};
+    Camera c{1000, 1000, 3 * (M_PI / 4)};
 
 
     //Position the Camera
-    c.SetTransform(Math::ViewTransform(Point(3.67, 3.6865, -20), Point(0, 1, 0), Vector(0, 1, 0)));
+    c.SetTransform(Math::ViewTransform(Point(3.67, 1, -20), Point(0, 1, 8), Vector(0, 1, 0)));
 
 
-    c.SetSamplesPerPixel(1);
-    c.depth_of_field = false;
-    c.anti_aliasing = false;
+    c.SetSamplesPerPixel(5);
+    c.depth_of_field = true;
+    c.anti_aliasing = true;
     c.SetApertureSize(0.1);
-    c.SetFocalLength(20.3122);
+    c.SetFocalLength(30.3122);
 
     //RenderMultiThread the image
     Canvas image = w.RenderSingleThread(c);

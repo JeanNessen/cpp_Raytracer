@@ -7,7 +7,9 @@
 #include <iostream>
 #include <chrono>
 #include <algorithm>
-//#include <omp.h>
+#include <thread>
+#include <future>
+
 
 
 //static variables
@@ -124,13 +126,26 @@ Canvas World::RenderSingleThread(Camera c) {
 
     Canvas image_sum{c.GetHSize(), c.GetVSize()};
 
-    {
-        for (int i = 0; i < c.GetSamplesPerPixel(); ++i) {
-            std::cout << "Starting render pass " << i + 1 << " of " << c.GetSamplesPerPixel() << "." << std::endl;
-            image_sum += ExecuteRenderPass(c);
-            std::cout << "Finished render pass " << i + 1 << "." << std::endl;
-        }
+    std::vector<std::thread> workers;
+    std::vector<std::future<Canvas>> render_pass_cavases;
+    render_pass_cavases.reserve(c.GetSamplesPerPixel());
+
+    
+    for (int i = 0; i < c.GetSamplesPerPixel(); ++i) {
+        std::cout << "Starting render pass " << i + 1 << " of " << c.GetSamplesPerPixel() << "." << std::endl;
+        render_pass_cavases.push_back(std::async(&World::ExecuteRenderPass, this, c));
     }
+
+    for (size_t i = 0; i < render_pass_cavases.size(); i++)
+    {
+        render_pass_cavases[i].wait();
+    }
+    
+    for (size_t i = 0; i < render_pass_cavases.size(); i++)
+    {
+        image_sum += render_pass_cavases[i].get();
+    }
+    
     Canvas image_average = image_sum / c.GetSamplesPerPixel();
 
 
@@ -150,9 +165,8 @@ Canvas World::ExecuteRenderPass(Camera c) {
 
     int lines_remaining = c.GetVSize();
 
-#pragma omp parallel
+
     {
-    #pragma omp for
         for (int y = 0; y < c.GetVSize()-1; ++y) {
                 for (int x = 0; x < c.GetHSize(); ++x) {
                     Color color = GetColorForPixel(c, x, y);
