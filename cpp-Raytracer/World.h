@@ -16,34 +16,35 @@ class World {
 //Methods
 private:
 
-    Color GetColorForPixel(Camera c, int x, int y);
+    Color get_color_for_pixel(Camera c, int x, int y);
 
-    Canvas ExecuteRenderPass(Camera c);
+    Canvas execute_single_pass(Camera c);
+    Canvas execute_multiple_passes(Camera c, int num_passes);
 
-    void PrintProgressUpdate(int lines_total, int lines_remaining, Camera c);
+    void print_progress_update() const;
 
 public:
 
-    static int GetRecursionDepth(){ return m_recursion_depth; }
-    void SetRecursionDepth(int new_depth){ m_recursion_depth = new_depth; }
+    static int get_recursion_depth(){ return m_recursion_depth; }
+	static void set_recursion_depth(int new_depth){ m_recursion_depth = new_depth; }
 
-    std::vector<PointLight>& GetWorldLights(){ return m_world_lights; }
-    void AddLight(PointLight light);
+    std::vector<PointLight>& get_world_lights(){ return m_world_lights; }
+    void add_light(PointLight light);
 
-    std::vector<Shape_ptr>& GetWorldObjects(){ return m_world_objects; }
-    void AddObject(Shape_ptr obj);
+    std::vector<Shape_ptr>& get_world_objects(){ return m_world_objects; }
+    void add_object(Shape_ptr obj);
 
-    std::vector<Intersection> IntersectWorld(Ray ray);
+    std::vector<Intersection> intersect_world(Ray ray);
 
-    bool CalculateShadow(Point p);
+    bool calculate_shadow(Point p);
 
-    Color CalculateReflectedColor(IntersectionComputations comps, int remaining = m_recursion_depth);
+    Color calculate_reflected_color(IntersectionComputations comps, int remaining = m_recursion_depth);
 
-    Color CalculateRefractedColor(IntersectionComputations comps, int remaining = m_recursion_depth);
+    Color calculate_refracted_color(IntersectionComputations comps, int remaining = m_recursion_depth);
 
-    Color ShadeHit(IntersectionComputations comps, int remaining = m_recursion_depth);
+    Color shade_hit(IntersectionComputations comps, int remaining = m_recursion_depth);
 
-    Color CalculateColorAt(Ray r, int remaining = m_recursion_depth);
+    Color calculate_color_at(Ray r, int remaining = m_recursion_depth);
 
     Canvas render_multi_thread(Camera c, int num_threads);
 
@@ -55,6 +56,9 @@ private:
     std::vector<PointLight> m_world_lights{};
 
     std::vector<Shape_ptr> m_world_objects{};
+
+    static std::atomic<int> m_remaining_lines;
+    int m_total_lines{0};
 
 public:
 };

@@ -97,12 +97,12 @@ TEST(Refractions, TheUnderPointIfOffsetBelowTheSurface)
 TEST(Refractions, TheRefractedColorWithOpaqueSurface)
 {
     World w = DefaultWorld();
-    Shape_ptr shape = w.GetWorldObjects()[0];
+    Shape_ptr shape = w.get_world_objects()[0];
     Ray r{Point(0, 0, -5), Vector(0, 0, 1)};
     std::vector<Intersection> xs{Intersection(4, shape), Intersection(6, shape)};
 
     IntersectionComputations comps = PrepareComputations(xs[0], r, xs);
-    Color c = w.CalculateRefractedColor(comps, 5);
+    Color c = w.calculate_refracted_color(comps, 5);
 
     EXPECT_EQ(c, color::black);
 }
@@ -110,14 +110,14 @@ TEST(Refractions, TheRefractedColorWithOpaqueSurface)
 TEST(Refractions, RefractedColorAtMaxRecursiveDepth)
 {
     World w = DefaultWorld();
-    Shape_ptr shape = w.GetWorldObjects()[0];
+    Shape_ptr shape = w.get_world_objects()[0];
     shape->GetMaterial().transparency = 1;
     shape->GetMaterial().refractive_index = 1.5;
     Ray r{Point(0, 0, -5), Vector(0, 0, 1)};
     std::vector<Intersection> xs{Intersection(4, shape), Intersection(6, shape)};
 
     IntersectionComputations comps = PrepareComputations(xs[0], r, xs);
-    Color c = w.CalculateRefractedColor(comps, 0);
+    Color c = w.calculate_refracted_color(comps, 0);
 
     EXPECT_EQ(c, color::black);
 }
@@ -125,14 +125,14 @@ TEST(Refractions, RefractedColorAtMaxRecursiveDepth)
 TEST(Refractions, TheRefractedColorUnderTotalInternalReflection)
 {
     World w = DefaultWorld();
-    Shape_ptr shape = w.GetWorldObjects()[0];
+    Shape_ptr shape = w.get_world_objects()[0];
     shape->GetMaterial().transparency = 1;
     shape->GetMaterial().refractive_index = 1.5;
     Ray r{Point(0, 0, sqrt(2) / 2), Vector(0, 1, 0)};
     std::vector<Intersection> xs{Intersection(-sqrt(2) / 2, shape), Intersection(sqrt(2) / 2, shape)};
 
     IntersectionComputations comps = PrepareComputations(xs[1], r, xs);
-    Color c = w.CalculateRefractedColor(comps, 5);
+    Color c = w.calculate_refracted_color(comps, 5);
 
     EXPECT_EQ(c, color::black);
 }
@@ -141,12 +141,12 @@ TEST(Refractions, RefractedColorWithRefractedRay)
 {
     World w = DefaultWorld();
 
-    Shape_ptr A = w.GetWorldObjects()[0];
+    Shape_ptr A = w.get_world_objects()[0];
     A->GetMaterial().ambient = 1;
     std::shared_ptr<Pattern> pat(new CTestPattern(color::white, color::black));
     A->GetMaterial().SetPattern(pat);
 
-    Shape_ptr B = w.GetWorldObjects()[1];
+    Shape_ptr B = w.get_world_objects()[1];
     B->GetMaterial().transparency = 1;
     B->GetMaterial().refractive_index = 1.5;
 
@@ -157,7 +157,7 @@ TEST(Refractions, RefractedColorWithRefractedRay)
                                   Intersection(0.9899, A)};
 
     IntersectionComputations comps = PrepareComputations(xs[2], r, xs);
-    Color c = w.CalculateRefractedColor(comps, 5);
+    Color c = w.calculate_refracted_color(comps, 5);
 
     EXPECT_EQ(c, Color(0, 0.99888, 0.04725));
 
@@ -171,20 +171,20 @@ TEST(Refractions, ShadeHitWithTransparentMaterial)
     floor->SetTransform(Math::Translation(0, -1, 0));
     floor->GetMaterial().transparency = 0.5;
     floor->GetMaterial().refractive_index = 1.5;
-    w.AddObject(floor);
+    w.add_object(floor);
 
     Sphere_ptr ball{new Sphere()};
     ball->GetMaterial().color = color::red;
     ball->GetMaterial().ambient = 0.5;
     ball->SetTransform(Math::Translation(0, -3.5, -0.5));
-    w.AddObject(ball);
+    w.add_object(ball);
 
     Ray r{Point(0, 0, -3), Vector(0, -sqrt(2) / 2, sqrt(2) / 2)};
     std::vector<Intersection> xs{Intersection(sqrt(2), floor)};
 
     IntersectionComputations comps = PrepareComputations(xs[0], r, xs);
 
-    Color color = w.ShadeHit(comps, 5);
+    Color color = w.shade_hit(comps, 5);
 
     EXPECT_EQ(color, Color(0.93642, 0.68642, 0.68642));
 }
@@ -235,20 +235,20 @@ TEST(Refractions, ShadeHitWithAReflectiveTransparentMaterial)
     floor->GetMaterial().reflective = 0.5;
     floor->GetMaterial().transparency = 0.5;
     floor->GetMaterial().refractive_index = 1.5;
-    w.AddObject(floor);
+    w.add_object(floor);
 
     Sphere_ptr ball{new Sphere()};
     ball->GetMaterial().color = color::red;
     ball->GetMaterial().ambient = 0.5;
     ball->SetTransform(Math::Translation(0, -3.5, -0.5));
-    w.AddObject(ball);
+    w.add_object(ball);
 
     Ray r{Point(0, 0, -3), Vector(0, -sqrt(2) / 2, sqrt(2) / 2)};
     std::vector<Intersection> xs{Intersection(sqrt(2), floor)};
 
     IntersectionComputations comps = PrepareComputations(xs[0], r, xs);
 
-    Color color = w.ShadeHit(comps, 5);
+    Color color = w.shade_hit(comps, 5);
 
     EXPECT_EQ(color, Color(0.93391, 0.69643, 0.69243));
 }
