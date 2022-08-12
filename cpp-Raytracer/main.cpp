@@ -40,7 +40,7 @@ void PlaceSpheres(World &w)
         }
         taken_spots.push_back(spot);
         sphere->SetTransform(Math::Translation(spot.x, spot.y, spot.z) * scaling);
-        w.AddObject(sphere);
+        w.add_object(sphere);
     }
 }
 
@@ -48,11 +48,11 @@ int main()
 {
     //Initialize the World
     World w{};
-    w.SetRecursionDepth(5);
+    w.set_recursion_depth(5);
 
     //Initialize the light
     PointLight default_light{color::white, Point(-5, 10, -5)};
-    w.AddLight(default_light);
+    w.add_light(default_light);
 
 
     //Set up the m_pattern for the floor
@@ -65,7 +65,7 @@ int main()
     floor->GetMaterial().color = Color(1, 0.9, 0.9);
     floor->GetMaterial().specular = 0.6f;
     floor->GetMaterial().reflective = 0.05f;
-    w.AddObject(floor);
+    w.add_object(floor);
 
     //Set Glass material
     Material glass_mat{};
@@ -83,7 +83,7 @@ int main()
     Cube_ptr glass_cube (new Cube());
     glass_cube->SetTransform(Math::Translation(0, 0.5+EPSILON, 8) * Math::Scaling(0.5));
     glass_cube->SetMaterial(glass_mat);
-    w.AddObject(glass_cube);
+    w.add_object(glass_cube);
     PlaceSpheres(w);
     // Sphere_ptr glass_sphere(new Sphere());
     // glass_sphere->SetTransform(Math::Translation(0, 0.5, 8) * Math::Scaling(0.5));
@@ -92,21 +92,21 @@ int main()
 
     //Initialize the Camera
 
-    Camera c{1000, 1000, 3 * (M_PI / 4)};
+    Camera c{500, 500, 3 * (M_PI / 4)};
 
 
     //Position the Camera
     c.SetTransform(Math::ViewTransform(Point(3.67, 1, -20), Point(0, 1, 8), Vector(0, 1, 0)));
 
 
-    c.SetSamplesPerPixel(22);
+    c.SetSamplesPerPixel(300);
     c.depth_of_field = true;
     c.anti_aliasing = true;
     c.SetApertureSize(0.1);
     c.SetFocalLength(30.3122);
 
     //RenderMultiThread the image
-    Canvas image = w.render_multi_thread(c,);
+    Canvas image = w.render_multi_thread(c,20);
 
     image.ToPPM();
 
