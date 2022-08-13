@@ -21,6 +21,7 @@ set(CMAKE_CXX_STANDARD 20)
             cpp-Raytracer/Plane.cpp cpp-Raytracer/Plane.h
             cpp-Raytracer/IntersectionComputations.cpp
             cpp-Raytracer/Pattern.cpp cpp-Raytracer/Pattern.h 
-            cpp-Raytracer/Cube.cpp cpp-Raytracer/Cube.h)
+            cpp-Raytracer/Cube.cpp cpp-Raytracer/Cube.h 
+            cpp-Raytracer/Shapes/Cylinder.h cpp-Raytracer/Shapes/Cylinder.cpp)
 
 add_subdirectory(Google_tests)

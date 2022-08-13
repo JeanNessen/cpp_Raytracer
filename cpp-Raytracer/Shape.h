@@ -17,7 +17,8 @@ public:
     enum EShapeType{
         sphere,
         plane,
-        cube
+        cube,
+        cylinder
     };
 
 protected:

@@ -4,8 +4,10 @@
 #include "Sphere.h"
 #include "Plane.h"
 #include "Cube.h"
+#include "Shapes/Cylinder.h"
 
 #include <vector>
+
 
 //Forward Declarations
 struct Intersection;
@@ -31,9 +33,14 @@ public:
 	//Transforms the Ray according to the given transformation Matrix
 	Ray Transform(Matrix4 matrix);
 
-    std::vector<Intersection> LocalIntersect(Sphere_ptr s);
-    std::vector<Intersection> LocalIntersect(Plane_ptr p);
-    std::vector<Intersection> LocalIntersect(Cube_ptr c);
+    std::vector<Intersection> local_intersect(Sphere_ptr s);
+    std::vector<Intersection> local_intersect(Plane_ptr p);
+    std::vector<Intersection> local_intersect(Cube_ptr c);
+    std::vector<Intersection> local_intersect(Cylinder_ptr cylinder);
+
+    //methods for intersecting cylinders
+	[[nodiscard]] bool check_cap(double t) const;
+    void intersect_caps(Cylinder_ptr cylinder, std::vector<Intersection>& xs);
 
 //Members
 private:

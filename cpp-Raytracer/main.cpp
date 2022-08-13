@@ -88,7 +88,14 @@ int main()
     // Sphere_ptr glass_sphere(new Sphere());
     // glass_sphere->SetTransform(Math::Translation(0, 0.5, 8) * Math::Scaling(0.5));
     // glass_sphere->SetMaterial(glass_mat);
-    // w.AddObject(glass_sphere);
+    //w.AddObject(glass_sphere);
+
+    Cylinder_ptr cylinder{ new Cylinder()};
+    cylinder->SetTransform(Math::Translation(0, 0.5, 0) * Math::Scaling(0.5) * Math::Rotation_X(M_PI/2));
+    cylinder->closed = true;
+    cylinder->minimum = 0;
+    cylinder->maximum = 2;
+    w.add_object(cylinder);
 
     //Initialize the Camera
 
@@ -96,12 +103,12 @@ int main()
 
 
     //Position the Camera
-    c.SetTransform(Math::ViewTransform(Point(3.67, 1, -20), Point(0, 1, 8), Vector(0, 1, 0)));
+    //c.SetTransform(Math::ViewTransform(Point(3.67, 1, -20), Point(0, 1, 8), Vector(0, 1, 0)));
+    c.SetTransform(Math::ViewTransform(Point(0, 1, -20), Point(0, 1, 8), Vector(0, 1, 0)));
 
-
-    c.SetSamplesPerPixel(300);
-    c.depth_of_field = true;
-    c.anti_aliasing = true;
+    c.SetSamplesPerPixel(1);
+    c.depth_of_field = false;
+    c.anti_aliasing = false;
     c.SetApertureSize(0.1);
     c.SetFocalLength(30.3122);
 
