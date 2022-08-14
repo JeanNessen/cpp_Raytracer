@@ -84,6 +84,7 @@ int main()
     glass_cube->SetTransform(Math::Translation(-0.6, 0.5+EPSILON, 10) * Math::Scaling(0.5));
     glass_cube->SetMaterial(glass_mat);
     w.add_object(glass_cube);
+
     //PlaceSpheres(w);
 
     Sphere_ptr glass_sphere{ std::make_shared<Sphere>(Sphere{}) };
@@ -113,12 +114,12 @@ int main()
 
     Camera c{1280, 720, 3 * (M_PI / 4)};
 
-
     //Position the Camera
     c.SetTransform(Math::ViewTransform(Point(3.67, 4, -20), Point(0, 0.5, 10), Vector(0, 1, 0)));
     //c.SetTransform(Math::ViewTransform(Point(0, 1, -20), Point(0, 1, 8), Vector(0, 1, 0)));
 
     c.SetSamplesPerPixel(20);
+
     c.depth_of_field = true;
     c.anti_aliasing = true;
     c.SetApertureSize(0.1);
