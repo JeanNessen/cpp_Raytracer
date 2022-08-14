@@ -81,36 +81,48 @@ int main()
 
 
     Cube_ptr glass_cube (new Cube());
-    glass_cube->SetTransform(Math::Translation(0, 0.5+EPSILON, 8) * Math::Scaling(0.5));
+    glass_cube->SetTransform(Math::Translation(-0.6, 0.5+EPSILON, 10) * Math::Scaling(0.5));
     glass_cube->SetMaterial(glass_mat);
     w.add_object(glass_cube);
-    PlaceSpheres(w);
-    // Sphere_ptr glass_sphere(new Sphere());
-    // glass_sphere->SetTransform(Math::Translation(0, 0.5, 8) * Math::Scaling(0.5));
-    // glass_sphere->SetMaterial(glass_mat);
-    //w.AddObject(glass_sphere);
+    //PlaceSpheres(w);
 
-    Cylinder_ptr cylinder{ new Cylinder()};
-    cylinder->SetTransform(Math::Translation(0, 0.5, 0) * Math::Scaling(0.5) * Math::Rotation_X(M_PI/2));
-    cylinder->closed = true;
-    cylinder->minimum = 0;
-    cylinder->maximum = 2;
-    w.add_object(cylinder);
+    Sphere_ptr glass_sphere{ std::make_shared<Sphere>(Sphere{}) };
+	glass_sphere->SetTransform(Math::Translation(-1.8, 0.5 + EPSILON, 10) * Math::Scaling(0.5));
+	glass_sphere->SetMaterial(glass_mat);
+	w.add_object(glass_sphere);
+
+    Cone_ptr glass_cone{ std::make_shared<Cone>(Cone{}) };
+    glass_cone->SetTransform(Math::Translation(0.6, 0.5 + EPSILON, 10));
+    glass_cone->closed = true;
+    glass_cone->minimum = -1;
+    glass_cone->maximum = 0;
+    glass_cone->SetMaterial(glass_mat);
+    w.add_object(glass_cone);
+
+    Cylinder_ptr glass_cylinder{ std::make_shared<Cylinder>(Cylinder{}) };
+    glass_cylinder->SetTransform(Math::Translation(1.8, 0.5 + EPSILON, 10) * Math::Scaling(0.5));
+    glass_cylinder->minimum = -1;
+    glass_cylinder->maximum = 1;
+    glass_cylinder->closed = true;
+    glass_cylinder->SetMaterial(glass_mat);
+    w.add_object(glass_cylinder);
+
+
 
     //Initialize the Camera
 
-    Camera c{500, 500, 3 * (M_PI / 4)};
+    Camera c{1280, 720, 3 * (M_PI / 4)};
 
 
     //Position the Camera
-    //c.SetTransform(Math::ViewTransform(Point(3.67, 1, -20), Point(0, 1, 8), Vector(0, 1, 0)));
-    c.SetTransform(Math::ViewTransform(Point(0, 1, -20), Point(0, 1, 8), Vector(0, 1, 0)));
+    c.SetTransform(Math::ViewTransform(Point(3.67, 4, -20), Point(0, 0.5, 10), Vector(0, 1, 0)));
+    //c.SetTransform(Math::ViewTransform(Point(0, 1, -20), Point(0, 1, 8), Vector(0, 1, 0)));
 
-    c.SetSamplesPerPixel(1);
-    c.depth_of_field = false;
-    c.anti_aliasing = false;
+    c.SetSamplesPerPixel(20);
+    c.depth_of_field = true;
+    c.anti_aliasing = true;
     c.SetApertureSize(0.1);
-    c.SetFocalLength(30.3122);
+    c.SetFocalLength(30.4256);
 
     //RenderMultiThread the image
     Canvas image = w.render_multi_thread(c,20);

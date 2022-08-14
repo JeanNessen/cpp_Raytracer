@@ -1,12 +1,15 @@
 #pragma once
 
 #include "Math.h"
-#include "Sphere.h"
-#include "Plane.h"
-#include "Cube.h"
+#include "Shapes/Sphere.h"
+#include "Shapes/Plane.h"
+#include "Shapes/Cube.h"
 #include "Shapes/Cylinder.h"
+#include "Shapes/Cone.h"
 
 #include <vector>
+
+
 
 
 //Forward Declarations
@@ -37,10 +40,12 @@ public:
     std::vector<Intersection> local_intersect(Plane_ptr p);
     std::vector<Intersection> local_intersect(Cube_ptr c);
     std::vector<Intersection> local_intersect(Cylinder_ptr cylinder);
+    std::vector<Intersection> local_intersect(Cone_ptr cone);
 
-    //methods for intersecting cylinders
-	[[nodiscard]] bool check_cap(double t) const;
+    //methods for intersecting cylinders and cones
+	[[nodiscard]] bool check_cap(double t, double radius = 1) const;
     void intersect_caps(Cylinder_ptr cylinder, std::vector<Intersection>& xs);
+    void intersect_caps(Cone_ptr cone, std::vector<Intersection>& xs);
 
 //Members
 private:

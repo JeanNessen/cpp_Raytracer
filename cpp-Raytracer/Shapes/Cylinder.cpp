@@ -21,5 +21,6 @@ Vector Cylinder::LocalNormalAt(Point local_point) const
 		return { 0, -1, 0 };
 	}
 
+
 	return{ local_point.x, 0, local_point.z };
 }

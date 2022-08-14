@@ -2,14 +2,13 @@
 
 #include "Shape.h"
 
-class Cylinder: public Shape
+class Cone: public Shape
 {
 public:
-	Cylinder();
+	Cone();
 
-	Vector LocalNormalAt(Point local_point) const override;
+	[[nodiscard]] Vector LocalNormalAt(Point local_point) const override;
 
-public:
 	double minimum = -std::numeric_limits<double>::infinity();
 	double maximum = std::numeric_limits<double>::infinity();
 
@@ -18,5 +17,4 @@ private:
 
 };
 
-
-using Cylinder_ptr = std::shared_ptr<Cylinder>;
+using Cone_ptr = std::shared_ptr<Cone>;
