@@ -3,8 +3,7 @@
 //
 
 #pragma once
-#include "Sphere.h"
-#include "Plane.h"
+#include "Shapes/Shape.h"
 #include <vector>
 
 struct Intersection {

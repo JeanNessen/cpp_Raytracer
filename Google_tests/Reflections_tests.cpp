@@ -6,7 +6,7 @@
 
 #include "../cpp-Raytracer/Material.h"
 
-#include "../cpp-Raytracer/Plane.h"
+#include "../cpp-Raytracer/Shapes/Plane.h"
 #include "../cpp-Raytracer/IntersectionComputations.h"
 #include "../cpp-Raytracer/World.h"
 

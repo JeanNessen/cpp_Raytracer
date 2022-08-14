@@ -7,7 +7,7 @@
 #include "../cpp-Raytracer/Pattern.h"
 //#include "../cpp-Raytracer/Pattern.cpp"
 
-#include "../cpp-Raytracer/Sphere.h"
+#include "../cpp-Raytracer/Shapes/Sphere.h"
 
 TEST(Patterns, CreatingAStripePattern)
 {

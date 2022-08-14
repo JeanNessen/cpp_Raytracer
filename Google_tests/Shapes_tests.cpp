@@ -6,23 +6,27 @@
 
 #include "gtest/gtest.h"
 
-#include "../cpp-Raytracer/Shape.h"
-#include "../cpp-Raytracer/Shape.cpp"
+#include "../cpp-Raytracer/Shapes/Shape.h"
+#include "../cpp-Raytracer/Shapes/Shape.cpp"
 
-#include "../cpp-Raytracer/Sphere.h"
+#include "../cpp-Raytracer/Shapes/Sphere.h"
 //#include "../cpp-Raytracer/Sphere.cpp"
 
 #include "../cpp-Raytracer/Intersection.h"
 
-#include "../cpp-Raytracer/Plane.h"
-#include "../cpp-Raytracer/Plane.cpp"
+#include "../cpp-Raytracer/Shapes/Plane.h"
+#include "../cpp-Raytracer/Shapes/Plane.cpp"
 
 #include "../cpp-Raytracer/Ray.h"
 
-#include "../cpp-Raytracer/Cube.cpp"
+#include "../cpp-Raytracer/Shapes/Cube.cpp"
 
 #include "../cpp-Raytracer/Shapes/Cylinder.h"
 #include "../cpp-Raytracer/Shapes/Cylinder.cpp"
+
+#include"../cpp-Raytracer/Shapes/Cone.h"
+#include"../cpp-Raytracer/Shapes/Cone.cpp"
+
 
 #include <vector>
 
@@ -827,4 +831,136 @@ TEST(Cylinders, NormalOnCylinderCaps_06)
     Vector normal{ cyl->LocalNormalAt({0, 2, 0.5}) };
 
     EXPECT_EQ(normal, Vector(0, 1, 0));
+}
+
+TEST(Cones, IntersectingConeWithRay_01)
+{
+    Cone_ptr cone{ std::make_shared<Cone>(Cone{}) };
+
+    Vector direction{ 0, 0, 1 };
+    direction = direction.normalized();
+
+    Ray r{ Point{0, 0, -5}, direction };
+
+    std::vector<Intersection> xs{ r.local_intersect(cone) };
+
+    ASSERT_EQ(xs.size(), 2);
+    EXPECT_TRUE(Math::Equal(xs[0].t, 5));
+    EXPECT_TRUE(Math::Equal(xs[1].t, 5));
+}
+
+TEST(Cones, IntersectingConeWithRay_02)
+{
+    Cone_ptr cone{ std::make_shared<Cone>(Cone{}) };
+
+    Vector direction{ 1, 1, 1 };
+    direction = direction.normalized();
+
+    Ray r{ Point{0, 0, -5}, direction };
+
+    std::vector<Intersection> xs{ r.local_intersect(cone) };
+
+    ASSERT_EQ(xs.size(), 2);
+    EXPECT_TRUE(Math::Equal(xs[0].t, 8.66025));
+    EXPECT_TRUE(Math::Equal(xs[1].t, 8.66025));
+}
+
+TEST(Cones, IntersectingConeWithRay_03)
+{
+    Cone_ptr cone{ std::make_shared<Cone>(Cone{}) };
+
+    Vector direction{ -0.5, -1, 1 };
+    direction = direction.normalized();
+
+    Ray r{ Point{1, 1, -5}, direction };
+
+    std::vector<Intersection> xs{ r.local_intersect(cone) };
+
+    ASSERT_EQ(xs.size(), 2);
+    EXPECT_TRUE(Math::Equal(xs[0].t, 4.55006));
+    EXPECT_TRUE(Math::Equal(xs[1].t, 49.44994));
+}
+
+TEST(Cones, IntersectingConeWithRayParalelToOneHalve)
+{
+    Cone_ptr cone{ std::make_shared<Cone>(Cone{}) };
+
+    Vector direction{ 0, 1, 1 };
+    direction = direction.normalized();
+
+    Ray r{ {0, 0, -1}, direction };
+
+    std::vector<Intersection> xs{ r.local_intersect(cone) };
+
+    ASSERT_EQ(xs.size(), 1);
+    EXPECT_TRUE(Math::Equal(xs[0].t, 0.35355));
+}
+
+TEST(Cones, IntersectingConesCaps_01)
+{
+    Cone_ptr cone{ std::make_shared<Cone>(Cone{}) };
+    cone->minimum = -0.5;
+    cone->maximum = 0.5;
+    cone->closed = true;
+
+    Vector direction{ Vector{0, 1, 0}.normalized() };
+    Ray r{ Point{0, 0, -5}, direction };
+    std::vector<Intersection> xs{ r.local_intersect(cone) };
+
+    ASSERT_EQ(xs.size(), 0);
+}
+
+TEST(Cones, IntersectingConesCaps_02)
+{
+    Cone_ptr cone{ std::make_shared<Cone>(Cone{}) };
+    cone->minimum = -0.5;
+    cone->maximum = 0.5;
+    cone->closed = true;
+
+    Vector direction{ Vector{0, 1, 1}.normalized() };
+    Ray r{ Point{0, 0, -0.25}, direction };
+    std::vector<Intersection> xs{ r.local_intersect(cone) };
+
+    ASSERT_EQ(xs.size(), 2);
+}
+
+TEST(Cones, IntersectingConesCaps_03)
+{
+    Cone_ptr cone{ std::make_shared<Cone>(Cone{}) };
+    cone->minimum = -0.5;
+    cone->maximum = 0.5;
+    cone->closed = true;
+
+    Vector direction{ Vector{0, 1, 0}.normalized() };
+    Ray r{ Point{0, 0, -0.25}, direction };
+    std::vector<Intersection> xs{ r.local_intersect(cone) };
+
+    ASSERT_EQ(xs.size(), 4);
+}
+
+TEST(Cones, NormalOnConeSurface_01)
+{
+    Cone_ptr cone{ std::make_shared<Cone>(Cone{}) };
+
+    Vector n{ cone->LocalNormalAt(Point{0, 0, 0}) };
+
+    EXPECT_EQ(n, Vector( 0, 0, 0 ));
+}
+
+TEST(Cones, NormalOnConeSurface_02)
+{
+    Cone_ptr cone{ std::make_shared<Cone>(Cone{}) };
+
+    Vector n{ cone->LocalNormalAt(Point{1, 1, 1}) };
+
+    EXPECT_EQ(n, Vector(1, -std::sqrt(2), 1));
+}
+
+TEST(Cones, NormalOnConeSurface_03)
+{
+    Cone_ptr cone{ std::make_shared<Cone>(Cone{}) };
+
+    Vector n{ cone->LocalNormalAt(Point{-1, -1, 0}) };
+
+    EXPECT_EQ(n, Vector(-1, 1, 0));
 }

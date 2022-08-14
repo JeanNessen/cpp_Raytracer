@@ -13,11 +13,11 @@
 //#include "../cpp-Raytracer/IntersectionComputations.h"
 #include "../cpp-Raytracer/IntersectionComputations.cpp"
 
-#include "../cpp-Raytracer/Shape.h"
+#include "../cpp-Raytracer/Shapes/Shape.h"
 //#include "../cpp-Raytracer/Shape.cpp"
 
-#include "../cpp-Raytracer/Sphere.h"
-#include "../cpp-Raytracer/Sphere.cpp"
+#include "../cpp-Raytracer/Shapes/Sphere.h"
+#include "../cpp-Raytracer/Shapes/Sphere.cpp"
 
 #include "../cpp-Raytracer/Color.h"
 
