@@ -6,8 +6,8 @@
 #define CPP_RAYTRACER_CSHAPE_H
 
 #include <memory>
-#include "Math.h"
-#include "Material.h"
+#include "../Math.h"
+#include "../Material.h"
 
 
 
@@ -17,7 +17,9 @@ public:
     enum EShapeType{
         sphere,
         plane,
-        cube
+        cube,
+        cylinder,
+        cone
     };
 
 protected:

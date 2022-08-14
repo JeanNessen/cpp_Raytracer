@@ -8,7 +8,7 @@
 #include "Color.h"
 #include "Material.h"
 #include "Math.h"
-#include "Shape.h"
+#include "Shapes/Shape.h"
 
 struct PointLight{
     Color intensity{};

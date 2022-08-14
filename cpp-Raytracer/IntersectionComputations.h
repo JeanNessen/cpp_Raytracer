@@ -5,7 +5,7 @@
 #ifndef CPP_RAYTRACER_COMP_H
 #define CPP_RAYTRACER_COMP_H
 
-#include "Shape.h"
+#include "Shapes/Shape.h"
 #include "Intersection.h"
 #include "Ray.h"
 

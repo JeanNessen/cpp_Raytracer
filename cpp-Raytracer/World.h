@@ -4,7 +4,6 @@
 #pragma once
 
 #include <vector>
-#include "Sphere.h"
 #include "Light.h"
 #include "Ray.h"
 #include "Canvas.h"

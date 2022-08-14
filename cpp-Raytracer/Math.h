@@ -42,7 +42,7 @@
 		Vector(double x, double y, double z);
         explicit Vector(Tuple t);
 
-		Vector normalized() const;
+		[[nodiscard]]Vector normalized() const;
 
         Vector Reflect(Vector normal) const;
 	};
