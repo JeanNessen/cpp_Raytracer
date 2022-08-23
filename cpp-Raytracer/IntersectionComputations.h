@@ -2,17 +2,17 @@
 // Created by Jean-Luc von Nessen on 03.02.22.
 //
 
-#ifndef CPP_RAYTRACER_COMP_H
-#define CPP_RAYTRACER_COMP_H
+#pragma once
 
-#include "Shapes/Shape.h"
+
+#include "Shapes/shape.h"
 #include "Intersection.h"
 #include "Ray.h"
 
 //Data structure to hold precalculated Computations about an Intersection
 struct IntersectionComputations {
     double t;
-    const Shape_ptr object;
+    const shape_ptr object;
     Point point;
     Vector eye_v;
     Vector normal_v;
@@ -21,17 +21,17 @@ struct IntersectionComputations {
     Point over_point, under_point;
     double n1, n2;
 
-    IntersectionComputations(double t, Shape_ptr  object, Point point, Vector eye_v, Vector normal_v, double n1, double n2);
+    IntersectionComputations(double pT, shape_ptr  pObject, Point pPoint, Vector pEyeV, Vector pNormalV, double pN1, double pN2);
 
 
 };
 
-IntersectionComputations PrepareComputations(const Intersection& intersection, Ray ray, std::vector<Intersection> xs = {});
+IntersectionComputations PrepareComputations(const intersection& pIntersection, ray pRay, std::vector<intersection> xs = {});
 
-std::vector<double> FindRefractiveIndices(const Intersection& intersection, const std::vector<Intersection>& xs);
+std::vector<double> find_refractive_indices(const intersection& pIntersection, const std::vector<intersection>& xs);
 
 double Schlick(const IntersectionComputations& comps);
 
 
-#endif //CPP_RAYTRACER_COMP_H
+
 

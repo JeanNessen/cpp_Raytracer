@@ -3,19 +3,19 @@
 //
 #pragma once
 
-#include "Color.h"
+#include "color.h"
 #include "Math.h"
 
 
 class Pattern {
 //Methods
 protected:
-    Pattern(Color a, Color b);
+    Pattern(color a, color b);
 
     Matrix4 m_transform = Math::identiy_matrix;
 
 public:
-    [[nodiscard]] virtual Color PatternAt(Point p) const = 0;
+    [[nodiscard]] virtual color PatternAt(Point p) const = 0;
 
     Matrix4 GetTransform(){return m_transform;}
     void SetTransform(Matrix4 new_transform);
@@ -23,41 +23,41 @@ public:
 //Members
 private:
 public:
-    Color a;
-    Color b;
+    color a;
+    color b;
 };
 
 class CStripePattern: public Pattern {
 
 public:
-    CStripePattern(Color a, Color b);
+    CStripePattern(color a, color b);
 
-    [[nodiscard]] Color PatternAt(Point p) const override;
+    [[nodiscard]] color PatternAt(Point p) const override;
 };
 
 class CGradientPattern: public Pattern {
 
 public:
-    CGradientPattern(Color a, Color b);
+    CGradientPattern(color a, color b);
 
-    [[nodiscard]] Color PatternAt(Point p) const override;
+    [[nodiscard]] color PatternAt(Point p) const override;
 
 };
 
 class CCheckersPattern: public Pattern {
 
 public:
-    CCheckersPattern(Color a, Color b);
+    CCheckersPattern(color a, color b);
 
-    [[nodiscard]] Color PatternAt(Point p) const override;
+    [[nodiscard]] color PatternAt(Point p) const override;
 
 };
 
 class CTestPattern: public Pattern {
 
 public:
-    CTestPattern(Color a, Color b);
+    CTestPattern(color a, color b);
 
-    Color PatternAt(Point p) const override;
+    color PatternAt(Point p) const override;
 };
 

@@ -19,9 +19,9 @@ TEST(Reflections, ReflectivityForDefaultMaterial)
 
 TEST(Reflections, PrecomputingReflectionVector)
 {
-    Plane_ptr plane (new Plane());
-    Ray r{Point(0, 1, -1), Vector(0, -sqrt(2) / 2, sqrt(2) / 2)};
-    Intersection i{sqrt(2), plane};
+    plane_ptr p (new plane());
+    ray r{Point(0, 1, -1), Vector(0, -sqrt(2) / 2, sqrt(2) / 2)};
+    intersection i{sqrt(2), p};
 
     IntersectionComputations comps = PrepareComputations(i, r);
 
@@ -31,82 +31,82 @@ TEST(Reflections, PrecomputingReflectionVector)
 TEST(Reflections, ReflectedColorForNonreflectiveMaterial)
 {
     World w = DefaultWorld();
-    Ray r{Point(0, 0, 0), Vector(0, 0, 1)};
-    Sphere_ptr shape = dynamic_pointer_cast<Sphere>(w.get_world_objects()[1]);
-    shape->GetMaterial().ambient = 1;
-    Intersection i{1, shape};
+    ray r{Point(0, 0, 0), Vector(0, 0, 1)};
+    sphere_ptr shape = dynamic_pointer_cast<Sphere>(w.get_world_objects()[1]);
+    shape->get_material().ambient = 1;
+    intersection i{1, shape};
 
     IntersectionComputations comps = PrepareComputations(i, r);
-    Color c = w.calculate_reflected_color(comps);
+    color c = w.calculate_reflected_color(comps);
 
-    EXPECT_EQ(c, Color(0, 0, 0));
+    EXPECT_EQ(c, color(0, 0, 0));
 }
 
 TEST(Reflections, ReflectedColorForReflectiveMaterial)
 {
     World w = DefaultWorld();
-    Plane_ptr shape (new Plane());
-    shape->GetMaterial().reflective = 0.5;
-    shape->SetTransform(Math::Translation(0, -1, 0));
+    plane_ptr shape (new plane());
+    shape->get_material().reflective = 0.5;
+    shape->set_transform(Math::Translation(0, -1, 0));
     w.add_object(shape);
-    Ray r{Point(0, 0, -3), Vector(0, -sqrt(2) / 2, sqrt(2) / 2)};
-    Intersection i{sqrt(2), shape};
+    ray r{Point(0, 0, -3), Vector(0, -sqrt(2) / 2, sqrt(2) / 2)};
+    intersection i{sqrt(2), shape};
 
     IntersectionComputations comps = PrepareComputations(i, r);
-    Color c = w.calculate_reflected_color(comps);
+    color c = w.calculate_reflected_color(comps);
 
-    EXPECT_EQ(c, Color(0.19032, 0.2379, 0.14274));
+    EXPECT_EQ(c, color(0.19032, 0.2379, 0.14274));
 }
 
 TEST(Reflections, ShadeHitWithReflectiveMaterial)
 {
     World w = DefaultWorld();
-    Plane_ptr shape (new Plane());
-    shape->GetMaterial().reflective = 0.5;
-    shape->SetTransform(Math::Translation(0, -1, 0));
+    plane_ptr shape (new plane());
+    shape->get_material().reflective = 0.5;
+    shape->set_transform(Math::Translation(0, -1, 0));
     w.add_object(shape);
-    Ray r{Point(0, 0, -3), Vector(0, -sqrt(2) / 2, sqrt(2) / 2)};
-    Intersection i{sqrt(2), shape};
+    ray r{Point(0, 0, -3), Vector(0, -sqrt(2) / 2, sqrt(2) / 2)};
+    intersection i{sqrt(2), shape};
 
     IntersectionComputations comps = PrepareComputations(i, r);
-    Color c = w.shade_hit(comps);
+    color c = w.shade_hit(comps);
 
-    EXPECT_EQ(c, Color(0.87677, 0.92436, 0.82918));
+    EXPECT_EQ(c, color(0.87677, 0.92436, 0.82918));
 }
 
 TEST(Reflections, ColorAtWithMutuallyReflectiveSurfaces)
 {
     World w{};
-    w.add_light(PointLight(color::white, Point(0, 0, 0)));
+    w.add_light(PointLight(colors::white, Point(0, 0, 0)));
 
-    Plane_ptr lower(new Plane());
-    lower->GetMaterial().reflective = 1;
-    lower->SetTransform(Math::Translation(0, -1, 0));
+    plane_ptr lower(new plane());
+    lower->get_material().reflective = 1;
+    lower->set_transform(Math::Translation(0, -1, 0));
     w.add_object(lower);
 
-    Plane_ptr upper(new Plane());
-    upper->GetMaterial().reflective = 1;
-    upper->SetTransform(Math::Translation(0, 1, 0));
+    plane_ptr upper(new plane());
+    upper->get_material().reflective = 1;
+    upper->set_transform(Math::Translation(0, 1, 0));
     w.add_object(upper);
 
-    Ray r{Point(0, 0, 0), Vector(0, 1, 0)};
+    ray r{Point(0, 0, 0), Vector(0, 1, 0)};
 
-    Color c = w.calculate_color_at(r);
+    color c = w.calculate_color_at(r);
 }
 
 TEST(Reflections, TheReflectedColorAtMaximumRecursiveDepth)
 {
     World w = DefaultWorld();
-    Plane_ptr plane(new Plane());
-    plane->GetMaterial().reflective = 0.5;
-    plane->SetTransform(Math::Translation(0, -1, 0));
-    w.add_object(plane);
-    Ray r{Point(0, 0, -3), Vector(0, -sqrt(2) / 2, sqrt(2) / 2)};
-    Intersection i{sqrt(2), plane};
+    plane_ptr p(new plane());
+    p->get_material().reflective = 0.5;
+    p->set_transform(Math::Translation(0, -1, 0));
+    w.add_object(p);
+    ray r{Point(0, 0, -3), Vector(0, -sqrt(2) / 2, sqrt(2) / 2)};
+    intersection i{sqrt(2), p};
 
     IntersectionComputations comps = PrepareComputations(i, r);
-    Color c = w.calculate_reflected_color(comps, 0);
+    color c = w.calculate_reflected_color(comps, 0);
 
-    EXPECT_EQ(c, color::black);
+    EXPECT_EQ(c, colors::black);
 
 }

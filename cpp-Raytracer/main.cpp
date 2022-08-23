@@ -25,12 +25,12 @@ void PlaceSpheres(World &w)
     std::vector<Point> taken_spots;
 
     for (int i = 0; i < 25; ++i) {
-        Sphere_ptr sphere(new Sphere());
-        sphere->GetMaterial().color = Color(Math::GetRandomDouble(0, 1), Math::GetRandomDouble(0, 1), Math::GetRandomDouble(0, 1));
-        sphere->GetMaterial().diffuse = 0.7f;
-        sphere->GetMaterial().specular = 0.2f;
-        sphere->GetMaterial().reflective = 0.1;
-        sphere->GetMaterial().shininess = 150;
+        sphere_ptr sphere(new Sphere());
+        sphere->get_material().color = color(Math::GetRandomDouble(0, 1), Math::GetRandomDouble(0, 1), Math::GetRandomDouble(0, 1));
+        sphere->get_material().diffuse = 0.7f;
+        sphere->get_material().specular = 0.2f;
+        sphere->get_material().reflective = 0.1;
+        sphere->get_material().shininess = 150;
         double sphere_scaling_s = Math::GetRandomDouble(0.1, 0.25);
         Matrix4 scaling = Math::Scaling(sphere_scaling_s);
         Point spot{Math::GetRandomDouble(-5, 5), sphere_scaling_s, Math::GetRandomDouble(10, 20)};
@@ -39,7 +39,7 @@ void PlaceSpheres(World &w)
             spot = Point{Math::GetRandomDouble(-5, 5), sphere_scaling_s, Math::GetRandomDouble(10, 20)};
         }
         taken_spots.push_back(spot);
-        sphere->SetTransform(Math::Translation(spot.x, spot.y, spot.z) * scaling);
+        sphere->set_transform(Math::Translation(spot.x, spot.y, spot.z) * scaling);
         w.add_object(sphere);
     }
 }
@@ -51,25 +51,67 @@ int main()
     w.set_recursion_depth(5);
 
     //Initialize the light
-    PointLight default_light{color::white, Point(-5, 10, -5)};
+    PointLight default_light{ color{254.0/255.0, 216.0/255.0, 177.0/255.0}, Point(0, 6, 0) };
     w.add_light(default_light);
 
 
     //Set up the m_pattern for the floor
-    std::shared_ptr<Pattern> p(new CCheckersPattern(Color(0.8, 0.8, 0.8), Color(0.4, 0.4, 0.4)));
+    std::shared_ptr<Pattern> p(new CCheckersPattern(color(0.8, 0.8, 0.8), color(0.4, 0.4, 0.4)));
     p->SetTransform(Math::Scaling(2));
 
     //Set up the floor
-    Plane_ptr floor (new Plane());
-    floor->GetMaterial().SetPattern(p);
-    floor->GetMaterial().color = Color(1, 0.9, 0.9);
-    floor->GetMaterial().specular = 0.6f;
-    floor->GetMaterial().reflective = 0.05f;
+    plane_ptr floor (new plane());
+    floor->get_material().color = colors::white;
+    floor->get_material().specular = 0.0f;
+    floor->get_material().reflective = 0.01f;
     w.add_object(floor);
+
+    //Set up ceiling
+    cube_ptr ceiling(std::make_shared<cube>(cube()));
+    ceiling->get_material().color = colors::white;
+    ceiling->get_material().specular = 0.0f;
+    ceiling->get_material().reflective = 0.01f;
+    ceiling->set_transform(Math::Translation(0, 10, 0) * Math::Scaling(10, 0.5, 11));
+    w.add_object(ceiling);
+
+    //Set up right wall
+    cube_ptr right_wall(std::make_shared<cube>(cube()));
+    right_wall->get_material().color = colors::green;
+    right_wall->get_material().specular = 0.0f;
+    right_wall->get_material().reflective = 0.01f;
+    right_wall->set_transform(Math::Translation(5, 0, 0)* Math::Scaling(0.5, 11, 11));
+    w.add_object(right_wall);
+
+    //Set up left wall
+    cube_ptr left_wall(std::make_shared<cube>(cube()));
+    left_wall->get_material().color = colors::red;
+    left_wall->get_material().specular = 0.0f;
+    left_wall->get_material().reflective = 0.01f;
+    left_wall->set_transform( Math::Translation(-5, 0, 0) * Math::Scaling(0.5, 11, 11));
+    w.add_object(left_wall);
+
+    //Set up back wall
+    cube_ptr back_wall(std::make_shared<cube>(cube()));
+    back_wall->get_material().color = colors::white;
+    back_wall->get_material().specular = 0.0f;
+    back_wall->get_material().reflective = 0.01f;
+    back_wall->set_transform(Math::Translation(0, 0, 5) * Math::Scaling(11, 11, 0.5));
+    w.add_object(back_wall);
+
+
+    //Add first cube
+    cube_ptr cube_1(std::make_shared<cube>(cube()));
+    cube_1->get_material().color = colors::white;
+    cube_1->get_material().specular = 0.0f;
+    cube_1->get_material().reflective = 0.01f;
+    cube_1->set_transform(Math::Translation(2.5, 1, 0.5) * Math::Rotation_Y(-50) * Math::Scaling(1, 2, 1));
+    w.add_object(cube_1);
+
+
 
     //Set Glass material
     Material glass_mat{};
-    glass_mat.color = color::black;
+    glass_mat.color = colors::black;
     glass_mat.transparency = 0.8;
     glass_mat.refractive_index = 1.51;
     glass_mat.reflective = 1;
@@ -80,55 +122,28 @@ int main()
     glass_mat.throws_shadow = false;
 
 
-    Cube_ptr glass_cube (new Cube());
-    glass_cube->SetTransform(Math::Translation(-0.6, 0.5+EPSILON, 10) * Math::Scaling(0.5));
-    glass_cube->SetMaterial(glass_mat);
-    w.add_object(glass_cube);
-
-    //PlaceSpheres(w);
-
-    Sphere_ptr glass_sphere{ std::make_shared<Sphere>(Sphere{}) };
-	glass_sphere->SetTransform(Math::Translation(-1.8, 0.5 + EPSILON, 10) * Math::Scaling(0.5));
-	glass_sphere->SetMaterial(glass_mat);
-	w.add_object(glass_sphere);
-
-    Cone_ptr glass_cone{ std::make_shared<Cone>(Cone{}) };
-    glass_cone->SetTransform(Math::Translation(0.6, 0.5 + EPSILON, 10));
-    glass_cone->closed = true;
-    glass_cone->minimum = -1;
-    glass_cone->maximum = 0;
-    glass_cone->SetMaterial(glass_mat);
-    w.add_object(glass_cone);
-
-    Cylinder_ptr glass_cylinder{ std::make_shared<Cylinder>(Cylinder{}) };
-    glass_cylinder->SetTransform(Math::Translation(1.8, 0.5 + EPSILON, 10) * Math::Scaling(0.5));
-    glass_cylinder->minimum = -1;
-    glass_cylinder->maximum = 1;
-    glass_cylinder->closed = true;
-    glass_cylinder->SetMaterial(glass_mat);
-    w.add_object(glass_cylinder);
 
 
 
     //Initialize the Camera
 
-    Camera c{1280, 720, 3 * (M_PI / 4)};
+    camera c{1000, 1000, 3 * (M_PI / 4)};
 
     //Position the Camera
-    c.SetTransform(Math::ViewTransform(Point(3.67, 4, -20), Point(0, 0.5, 10), Vector(0, 1, 0)));
+    c.set_transform(Math::ViewTransform(Point(0, 5, -29.5), Point(0, 5, 0), Vector(0, 1, 0)));
     //c.SetTransform(Math::ViewTransform(Point(0, 1, -20), Point(0, 1, 8), Vector(0, 1, 0)));
 
-    c.SetSamplesPerPixel(20);
+    c.set_samples_per_pixel(20);
 
-    c.depth_of_field = true;
+    c.depth_of_field = false;
     c.anti_aliasing = true;
-    c.SetApertureSize(0.1);
-    c.SetFocalLength(30.4256);
+    c.set_aperture_size(0.5);
+    c.set_focal_length(10);
 
     //RenderMultiThread the image
-    Canvas image = w.render_multi_thread(c,20);
+    canvas image = w.render_multi_thread(c,20);
 
-    image.ToPPM();
+    image.to_ppm();
 
 
 

@@ -1,72 +1,73 @@
-#include "Color.h"
+#include "color.h"
 #include "Math.h"
 
 
-Color::Color(double red, double green, double blue)
+color::color(const double pRed, const double pGreen, const double pBlue)
 {
-	this->red = red;
-	this->green = green;
-	this->blue = blue;
+	this->red = pRed;
+	this->green = pGreen;
+	this->blue = pBlue;
 }
 
-bool Color::operator==(const Color& other) const
+bool color::operator==(const color& pOther) const
 {
 
-	return Math::Equal(red, other.red) && Math::Equal(green, other.green) && Math::Equal(blue, other.blue);
+	return Math::Equal(red, pOther.red) && Math::Equal(green, pOther.green) && Math::Equal(blue, pOther.blue);
 }
 
-Color Color::operator+(const Color& other) const
+color color::operator+(const color& pOther) const
 {
-	Color sum{ red + other.red, green + other.green, blue + other.blue };
+	const color sum{ red + pOther.red, green + pOther.green, blue + pOther.blue };
 	return sum;
 }
 
-Color Color::operator-(const Color& other) const
+color color::operator-(const color& pOther) const
 {
-	Color difference{ red - other.red, green - other.green, blue - other.blue };
+	const color difference{ red - pOther.red, green - pOther.green, blue - pOther.blue };
 	return difference;
 }
 
-Color Color::operator*(const Color& other) const
+color color::operator*(const color& pOther) const
 {
-	Color product{ red * other.red, green * other.green, blue * other.blue };
+	const color product{ red * pOther.red, green * pOther.green, blue * pOther.blue };
 	return product;
 }
 
-Color Color::operator*(const double& other) const
+color color::operator*(const double& pOther) const
 {
-	Color product{ red * other, green * other, blue * other };
+	const color product{ red * pOther, green * pOther, blue * pOther };
 	return product;
 }
 
 //Converts a color in the range 0.0f-1.0f to one from the range 0-255
-int Color::ConvertdoubleToIntInRange(double num)
+int color::convert_double_to_int_in_range(const double pNum) const
 {
 	int result;
-	if (num < 0)
+	if (pNum < 0)
 	{
 		result = 0;
 	}
-	else if (num > 1)
+	else if (pNum > 1)
 	{
 		result = 255;
 	}
 	else
 	{
-		double temp_result = 255 * num;
-		temp_result = std::round(temp_result);
-		result = int(temp_result);
+		double tempResult = 255 * pNum;
+		tempResult = std::round(tempResult);
+		result = static_cast<int>(tempResult);
 	}
 	return result;
 }
 
-std::ostream &operator<<(std::ostream &os, const Color &c) {
-    os << "c(" << c.red << ", " << c.green << ", " << c.blue << ")";
+// ReSharper disable once CppInconsistentNaming
+std::ostream &operator<<(std::ostream &os, const color &pC) {
+    os << "c(" << pC.red << ", " << pC.green << ", " << pC.blue << ")";
     return os;
 }
 
-Color Color::operator/(const double &other) const {
-    return {red / other, green / other, blue / other};
+color color::operator/(const double &pOther) const {
+    return {red / pOther, green / pOther, blue / pOther};
 }
 
 

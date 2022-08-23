@@ -15,10 +15,10 @@ class World {
 //Methods
 private:
 
-    Color get_color_for_pixel(Camera c, int x, int y);
+    color get_color_for_pixel(camera c, int x, int y);
 
-    Canvas execute_single_pass(Camera c);
-    Canvas execute_multiple_passes(Camera c, int num_passes);
+    canvas execute_single_pass(camera c);
+    canvas execute_multiple_passes(camera c, int num_passes);
 
     void print_progress_update() const;
 
@@ -30,22 +30,22 @@ public:
     std::vector<PointLight>& get_world_lights(){ return m_world_lights; }
     void add_light(PointLight light);
 
-    std::vector<Shape_ptr>& get_world_objects(){ return m_world_objects; }
-    void add_object(Shape_ptr obj);
+    std::vector<shape_ptr>& get_world_objects(){ return m_world_objects; }
+    void add_object(shape_ptr obj);
 
-    std::vector<Intersection> intersect_world(Ray ray);
+    std::vector<intersection> intersect_world(ray ray);
 
     bool calculate_shadow(Point p);
 
-    Color calculate_reflected_color(IntersectionComputations comps, int remaining = m_recursion_depth);
+    color calculate_reflected_color(IntersectionComputations comps, int remaining = m_recursion_depth);
 
-    Color calculate_refracted_color(IntersectionComputations comps, int remaining = m_recursion_depth);
+    color calculate_refracted_color(IntersectionComputations comps, int remaining = m_recursion_depth);
 
-    Color shade_hit(IntersectionComputations comps, int remaining = m_recursion_depth);
+    color shade_hit(IntersectionComputations comps, int remaining = m_recursion_depth);
 
-    Color calculate_color_at(Ray r, int remaining = m_recursion_depth);
+    color calculate_color_at(ray r, int remaining = m_recursion_depth);
 
-    Canvas render_multi_thread(Camera c, int num_threads);
+    canvas render_multi_thread(camera c, int num_threads);
 
 //Members
 private:
@@ -54,7 +54,7 @@ private:
 
     std::vector<PointLight> m_world_lights{};
 
-    std::vector<Shape_ptr> m_world_objects{};
+    std::vector<shape_ptr> m_world_objects{};
 
     static std::atomic<int> m_remaining_lines;
     int m_total_lines{0};

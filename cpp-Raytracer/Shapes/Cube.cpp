@@ -5,22 +5,22 @@
 #include "Cube.h"
 #include <algorithm>
 
-Cube::Cube()
-    : Shape(EShapeType::cube)
+cube::cube()
+    : shape(shape_type::cube)
 {
 
 }
 
-Vector Cube::LocalNormalAt(Point local_point) const {
-    double maxc = std::max({std::abs(local_point.x), std::abs(local_point.y), std::abs(local_point.z)});
+Vector cube::local_normal_at(Point pLocalPoint) const {
+	const double maxc = std::max({std::abs(pLocalPoint.x), std::abs(pLocalPoint.y), std::abs(pLocalPoint.z)});
 
-    if (maxc == std::abs(local_point.x))
+    if (maxc == std::abs(pLocalPoint.x))
     {
-        return {local_point.x, 0, 0};
+        return {pLocalPoint.x, 0, 0};
     }
-    else if (maxc == std::abs(local_point.y))
+    if (maxc == std::abs(pLocalPoint.y))
     {
-        return {0, local_point.y, 0};
+        return {0, pLocalPoint.y, 0};
     }
-    return {0, 0, local_point.z};
+    return {0, 0, pLocalPoint.z};
 }

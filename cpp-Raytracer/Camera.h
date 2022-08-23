@@ -5,50 +5,50 @@
 
 #include "Math.h"
 
-class Ray;
+class ray;
 
-class Camera {
+class camera {
 
 //Methods
 public:
-    Camera(int h_size, int v_size, double fov);
+    camera(int pHSize, int pVSize, double pFOV);
 
 
-    [[nodiscard]] int GetHSize() const{return m_horizontalSize;}
-    void SetHSize(int h){ m_horizontalSize = h;}
+    [[nodiscard]] int get_h_size() const{return m_horizontal_size;}
+    void set_h_size(const int pH){ m_horizontal_size = pH;}
 
-    [[nodiscard]] int GetVSize() const{return m_verticalSize;}
-    void SetVSize(int v){ m_verticalSize = v;}
+    [[nodiscard]] int get_v_size() const{return m_vertical_size;}
+    void set_v_size(const int pV){ m_vertical_size = pV;}
 
-    [[nodiscard]] double GetFOV() const{return m_fieldOfView;}
-    void SetFOV(double fov){ m_fieldOfView = fov;}
+    [[nodiscard]] double get_fov() const{return m_field_of_view;}
+    void set_fov(const double pFov){ m_field_of_view = pFov;}
 
-    Matrix4 GetTransform(){return m_transform;}
-    void SetTransform(Matrix4 t){ m_transform = t;}
+	[[nodiscard]] Matrix4 get_transform() const {return m_transform;}
+    void set_transform(const Matrix4 pT){ m_transform = pT;}
 
-    [[nodiscard]] double GetApertureSize() const{ return m_apertureSize; }
-    void SetApertureSize(double new_aperture_size){ m_apertureSize = new_aperture_size; }
+    [[nodiscard]] double get_aperture_size() const{ return m_aperture_size; }
+    void set_aperture_size(const double pNewApertureSize){ m_aperture_size = pNewApertureSize; }
 
-    [[nodiscard]] double GetFocalLength() const{ return m_focalLength; }
-    void SetFocalLength(double new_focal_length){ m_focalLength = new_focal_length; }
+    [[nodiscard]] double get_focal_length() const{ return m_focal_length; }
+    void set_focal_length(const double pNewFocalLength){ m_focal_length = pNewFocalLength; }
 
-    [[nodiscard]] int GetSamplesPerPixel() const{ return m_samplesPerPixel; }
-    void SetSamplesPerPixel(int samples){ m_samplesPerPixel = samples; }
+    [[nodiscard]] int get_samples_per_pixel() const{ return m_samples_per_pixel; }
+    void set_samples_per_pixel(const int pSamples){ m_samples_per_pixel = pSamples; }
 
-    [[nodiscard]] double GetPixelSize() const{return m_pixel_size;}
+    [[nodiscard]] double get_pixel_size() const{return m_pixel_size;}
 
-    Ray RayForPixel(int x, int y);
+	[[nodiscard]] ray ray_for_pixel(int pX,int pY) const;
 
 
 private:
-    void CalculatePixelSize();
+    void calculate_pixel_size();
 
-    Point CalculateRayOrigin();
+	[[nodiscard]] Point calculate_ray_origin() const;
 
-    [[nodiscard]] double CalculatePixelOffset(int pixel) const;
+    [[nodiscard]] double calculate_pixel_offset(int pPixel) const;
 
 
-    [[nodiscard]] Point GetRandomPointOnAperture() const;
+    [[nodiscard]] Point get_random_point_on_aperture() const;
 
 
 //Members
@@ -57,13 +57,13 @@ public:
     bool depth_of_field = false;
 
 private:
-    int m_horizontalSize;
-    int m_verticalSize;
-    double m_fieldOfView;
-    double m_focalLength = 5;
-    double m_apertureSize = 0.1;
+    int m_horizontal_size;
+    int m_vertical_size;
+    double m_field_of_view;
+    double m_focal_length = 5;
+    double m_aperture_size = 0.1;
     Matrix4 m_transform;
-    int m_samplesPerPixel = 10;
+    int m_samples_per_pixel = 10;
 
     double m_pixel_size;
     double m_half_width;

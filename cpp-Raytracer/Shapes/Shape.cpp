@@ -2,16 +2,16 @@
 // Created by Jean-Luc von Nessen on 21.02.22.
 //
 
-#include "Shape.h"
+#include "shape.h"
 
 
-int Shape::latest_id = 0;
+int shape::m_latest_id = 0;
 
-bool Shape::operator==(const Shape &other) const {
-    if( this->transform == other.transform &&
-        this->material == other.material &&
-        this->id == other.id &&
-        this->type == other.type)
+bool shape::operator==(const shape& pOther) const {
+    if( this->m_transform == pOther.m_transform &&
+        this->m_material == pOther.m_material &&
+        this->id == pOther.id &&
+        this->type == pOther.type)
     {
         return true;
     } else
@@ -20,31 +20,31 @@ bool Shape::operator==(const Shape &other) const {
     }
 }
 
-bool Shape::operator!=(const Shape &other) const {
-    return !(*this == other);
+bool shape::operator!=(const shape &pOther) const {
+    return !(*this == pOther);
 }
 
-Shape::Shape(EShapeType t):
-    id(latest_id),
-    type(t),
-    transform(Math::identiy_matrix),
-    material(Material{})
+shape::shape(const shape_type pT):
+	m_transform(Math::identiy_matrix),
+	m_material(Material{}),
+	id(m_latest_id),
+	type(pT)
 {
-    ++latest_id;
+    ++m_latest_id;
 }
 
-Vector Shape::NormalAt(Point world_point) const{
-    Point local_point{GetTransform().Inversed() * world_point};
-    Vector local_normal{LocalNormalAt(local_point)};
-    Vector world_normal{GetTransform().Inversed().Transposed() * local_normal};
-    world_normal.w = 0;
-    return world_normal.normalized();
+Vector shape::normal_at(const Point pWorldPoint) const{
+	const Point localPoint{get_transform().Inversed() * pWorldPoint};
+	const Vector localNormal{local_normal_at(localPoint)};
+    Vector worldNormal{get_transform().Inversed().Transposed() * localNormal};
+    worldNormal.w = 0;
+    return worldNormal.normalized();
 }
 
-Color Shape::StripeAtObject(Point world_point) const {
-    Point object_point{ transform.Inversed() * world_point};
-    Point pattern_point{GetMaterialConst().GetPattern()->GetTransform().Inversed() * object_point};
-    return GetMaterialConst().GetPattern()->PatternAt(pattern_point);
+color shape::stripe_at_object(const Point pWorldPoint) const {
+	const Point objectPoint{ m_transform.Inversed() * pWorldPoint};
+	const Point patternPoint{get_material_const().GetPattern()->GetTransform().Inversed() * objectPoint};
+    return get_material_const().GetPattern()->PatternAt(patternPoint);
 }
 
 

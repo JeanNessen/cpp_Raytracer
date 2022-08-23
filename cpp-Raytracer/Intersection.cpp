@@ -6,41 +6,41 @@
 
 #include <utility>
 
-bool Intersection::operator==(const Intersection& other) const
+bool intersection::operator==(const intersection& pOther) const
 {
-    if (t != other.t)
+    if (t != pOther.t)
     {
         return false;
     }
-    if (object != other.object)
+    if (object != pOther.object)
     {
         return false;
     }
     return true;
 }
 
-Intersection::Intersection(double t, Shape_ptr  shape):
-    t(t),
-    object(std::move(shape))
+intersection::intersection(const double pT, shape_ptr  pShape):
+    t(pT),
+    object(std::move(pShape))
 {
 }
 
-Intersection* Hit(std::vector<Intersection> &intersections)
+intersection* hit(std::vector<intersection> &pIntersections)
 {
-    Intersection *hit = nullptr;
-    for (int i = 0; i < intersections.size(); i++)
+    intersection *hit = nullptr;
+    for (auto& intersection : pIntersections)
     {
-        if (intersections[i].t < 0)
+        if (intersection.t < 0)
         {
             continue;
         }
         if (hit == nullptr)
         {
-            hit = &intersections[i];
+            hit = &intersection;
         }
-        else if (intersections[i].t < hit->t)
+        else if (intersection.t < hit->t)
         {
-            hit = &intersections[i];
+            hit = &intersection;
         }
     }
     return hit;

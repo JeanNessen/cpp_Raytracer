@@ -6,8 +6,8 @@
 
 #include "gtest/gtest.h"
 
-#include "../cpp-Raytracer/Shapes/Shape.h"
-#include "../cpp-Raytracer/Shapes/Shape.cpp"
+#include "../cpp-Raytracer/Shapes/shape.h"
+#include "../cpp-Raytracer/Shapes/shape.cpp"
 
 #include "../cpp-Raytracer/Shapes/Sphere.h"
 //#include "../cpp-Raytracer/Sphere.cpp"
@@ -34,23 +34,23 @@ TEST(Spheres, TheDefaultTransformation)
 {
     Sphere s{};
 
-    EXPECT_EQ(s.GetTransform(), Math::identiy_matrix);
+    EXPECT_EQ(s.get_transform(), Math::identiy_matrix);
 }
 
 TEST(Spheres, AssigningATransformation)
 {
     Sphere s{};
 
-    s.SetTransform(Math::Translation(2, 3, 4));
+    s.set_transform(Math::Translation(2, 3, 4));
 
-    EXPECT_EQ(s.GetTransform(), Math::Translation(2, 3, 4));
+    EXPECT_EQ(s.get_transform(), Math::Translation(2, 3, 4));
 }
 
 TEST(Spheres, TheDefaultMaterial)
 {
     Sphere s{};
 
-    EXPECT_EQ(s.GetMaterial(), Material{});
+    EXPECT_EQ(s.get_material(), Material{});
 }
 
 TEST(Spheres, AssigningAMaterial)
@@ -59,18 +59,18 @@ TEST(Spheres, AssigningAMaterial)
     Material m{};
     m.ambient = 1;
 
-    s.SetMaterial(m);
+    s.set_material(m);
 
-    EXPECT_EQ(s.GetMaterial(), m);
+    EXPECT_EQ(s.get_material(), m);
 }
 
 TEST(Spheres, IntersectingAScaledSphereWithARay)
 {
-    Ray r{Point(0, 0, -5), Vector(0, 0, 1)};
-    Sphere_ptr s (new Sphere());
+    ray r{Point(0, 0, -5), Vector(0, 0, 1)};
+    sphere_ptr s (new Sphere());
 
-    s->SetTransform(Math::Scaling(2, 2, 2));
-    std::vector<Intersection> xs = r.Intersect(s);
+    s->set_transform(Math::Scaling(2, 2, 2));
+    std::vector<intersection> xs = r.intersect(s);
 
     EXPECT_EQ(s->saved_ray_origin, Point(0, 0, -2.5));
     EXPECT_EQ(s->saved_ray_direction, Vector(0, 0, 0.5));
@@ -78,11 +78,11 @@ TEST(Spheres, IntersectingAScaledSphereWithARay)
 
 TEST(Spheres, IntersectingATranslatedSphereWithARay)
 {
-    Ray r{Point(0, 0, -5), Vector(0, 0, 1)};
-    Sphere_ptr s(new Sphere());
+    ray r{Point(0, 0, -5), Vector(0, 0, 1)};
+    sphere_ptr s(new Sphere());
 
-    s->SetTransform(Math::Translation(5, 0, 0));
-    std::vector<Intersection> xs = r.Intersect(s);
+    s->set_transform(Math::Translation(5, 0, 0));
+    std::vector<intersection> xs = r.intersect(s);
 
     EXPECT_EQ(s->saved_ray_origin, Point(-5, 0, -5));
     EXPECT_EQ(s->saved_ray_direction, Vector(0, 0, 1));
@@ -90,45 +90,45 @@ TEST(Spheres, IntersectingATranslatedSphereWithARay)
 
 TEST(Planes, TheDefaultTransformation)
 {
-    Plane p{};
+    plane p{};
 
-    EXPECT_EQ(p.GetTransform(), Math::identiy_matrix);
+    EXPECT_EQ(p.get_transform(), Math::identiy_matrix);
 }
 
 TEST(Planes, AssigningATransformation)
 {
-    Plane p{};
+    plane p{};
 
-    p.SetTransform(Math::Translation(2, 3, 4));
+    p.set_transform(Math::Translation(2, 3, 4));
 
-    EXPECT_EQ(p.GetTransform(), Math::Translation(2, 3, 4));
+    EXPECT_EQ(p.get_transform(), Math::Translation(2, 3, 4));
 }
 
 TEST(Planes, TheDefaultMaterial)
 {
-    Plane p{};
+    plane p{};
 
-    EXPECT_EQ(p.GetMaterial(), Material{});
+    EXPECT_EQ(p.get_material(), Material{});
 }
 
 TEST(Planes, AssigningAMaterial)
 {
-    Plane p{};
+    plane p{};
     Material m{};
     m.ambient = 1;
 
-    p.SetMaterial(m);
+    p.set_material(m);
 
-    EXPECT_EQ(p.GetMaterial(), m);
+    EXPECT_EQ(p.get_material(), m);
 }
 
 TEST(Planes, IntersectingAScaledPlaneWithARay)
 {
-    Ray r{Point(0, 0, -5), Vector(0, 0, 1)};
-    Plane_ptr p (new Plane());
+    ray r{Point(0, 0, -5), Vector(0, 0, 1)};
+    plane_ptr p (new plane());
 
-    p->SetTransform(Math::Scaling(2, 2, 2));
-    std::vector<Intersection> xs = r.Intersect(p);
+    p->set_transform(Math::Scaling(2, 2, 2));
+    std::vector<intersection> xs = r.intersect(p);
 
     EXPECT_EQ(p->saved_ray_origin, Point(0, 0, -2.5));
     EXPECT_EQ(p->saved_ray_direction, Vector(0, 0, 0.5));
@@ -136,11 +136,11 @@ TEST(Planes, IntersectingAScaledPlaneWithARay)
 
 TEST(Planes, IntersectingATranslatedPlaneWithARay)
 {
-    Ray r{Point(0, 0, -5), Vector(0, 0, 1)};
-    Plane_ptr p (new Plane());
+    ray r{Point(0, 0, -5), Vector(0, 0, 1)};
+    plane_ptr p (new plane());
 
-    p->SetTransform(Math::Translation(5, 0, 0));
-    std::vector<Intersection> xs = r.Intersect(p);
+    p->set_transform(Math::Translation(5, 0, 0));
+    std::vector<intersection> xs = r.intersect(p);
 
     EXPECT_EQ(p->saved_ray_origin, Point(-5, 0, -5));
     EXPECT_EQ(p->saved_ray_direction, Vector(0, 0, 1));
@@ -148,11 +148,11 @@ TEST(Planes, IntersectingATranslatedPlaneWithARay)
 
 TEST(Planes, TheNormalOfAPlaneIsConstantEverywhere)
 {
-    Plane p{};
+    plane p{};
 
-    Vector n1 = p.LocalNormalAt(Point(0, 0, 0));
-    Vector n2 = p.LocalNormalAt(Point(10, 0, -10));
-    Vector n3 = p.LocalNormalAt(Point(-5, 0, 150));
+    Vector n1 = p.local_normal_at(Point(0, 0, 0));
+    Vector n2 = p.local_normal_at(Point(10, 0, -10));
+    Vector n3 = p.local_normal_at(Point(-5, 0, 150));
 
     Vector n = Vector(0, 1, 0);
 
@@ -163,30 +163,30 @@ TEST(Planes, TheNormalOfAPlaneIsConstantEverywhere)
 
 TEST(Planes, IntersectWithARayParallelToThePlane)
 {
-    Plane_ptr p (new Plane());
-    Ray r{Point(0, 10, 10), Vector(0, 0, 1)};
+    plane_ptr p (new plane());
+    ray r{Point(0, 10, 10), Vector(0, 0, 1)};
 
-    std::vector<Intersection> xs = r.local_intersect(p);
+    std::vector<intersection> xs = r.local_intersect(p);
 
     EXPECT_TRUE(xs.empty());
 }
 
 TEST(Planes, IntersectWithACoplanarRay)
 {
-    Plane_ptr p (new Plane());
-    Ray r{Point(0, 0, 0), Vector(0, 0, 1)};
+    plane_ptr p (new plane());
+    ray r{Point(0, 0, 0), Vector(0, 0, 1)};
 
-    std::vector<Intersection> xs = r.local_intersect(p);
+    std::vector<intersection> xs = r.local_intersect(p);
 
     EXPECT_TRUE(xs.empty());
 }
 
 TEST(Planes, ARayIntersectingAPlaneFormAbove)
 {
-    Plane_ptr p (new Plane());
-    Ray r{Point(0, 1, 0), Vector(0, -1, 0)};
+    plane_ptr p (new plane());
+    ray r{Point(0, 1, 0), Vector(0, -1, 0)};
 
-    std::vector<Intersection> xs = r.local_intersect(p);
+    std::vector<intersection> xs = r.local_intersect(p);
 
     EXPECT_EQ(xs.size(), 1);
     EXPECT_EQ(xs[0].t, 1);
@@ -195,10 +195,10 @@ TEST(Planes, ARayIntersectingAPlaneFormAbove)
 
 TEST(Planes, ARayIntersectingAPlaneFormBelow)
 {
-    Plane_ptr p (new Plane());
-    Ray r{Point(0, -1, 0), Vector(0, 1, 0)};
+    plane_ptr p (new plane());
+    ray r{Point(0, -1, 0), Vector(0, 1, 0)};
 
-    std::vector<Intersection> xs = r.local_intersect(p);
+    std::vector<intersection> xs = r.local_intersect(p);
 
     EXPECT_EQ(xs.size(), 1);
     EXPECT_EQ(xs[0].t, 1);
@@ -207,10 +207,10 @@ TEST(Planes, ARayIntersectingAPlaneFormBelow)
 
 TEST(Cubes, RayIntersectsCube_01)
 {
-    Cube_ptr c (new Cube());
-    Ray r{Point(5, 0.5, 0), Vector(-1, 0, 0)};
+    cube_ptr c (new cube());
+    ray r{Point(5, 0.5, 0), Vector(-1, 0, 0)};
 
-    std::vector<Intersection> xs = r.local_intersect(c);
+    std::vector<intersection> xs = r.local_intersect(c);
 
     EXPECT_EQ(xs.size(), 2);
     EXPECT_EQ(xs[0].t, 4);
@@ -219,10 +219,10 @@ TEST(Cubes, RayIntersectsCube_01)
 
 TEST(Cubes, RayIntersectsCube_02)
 {
-    Cube_ptr c (new Cube());
-    Ray r{Point(-5, 0.5, 0), Vector(1, 0, 0)};
+    cube_ptr c (new cube());
+    ray r{Point(-5, 0.5, 0), Vector(1, 0, 0)};
 
-    std::vector<Intersection> xs = r.local_intersect(c);
+    std::vector<intersection> xs = r.local_intersect(c);
 
     EXPECT_EQ(xs.size(), 2);
     EXPECT_EQ(xs[0].t, 4);
@@ -231,10 +231,10 @@ TEST(Cubes, RayIntersectsCube_02)
 
 TEST(Cubes, RayIntersectsCube_03)
 {
-    Cube_ptr c (new Cube());
-    Ray r{Point(0.5, 5, 0), Vector(0, -1, 0)};
+    cube_ptr c (new cube());
+    ray r{Point(0.5, 5, 0), Vector(0, -1, 0)};
 
-    std::vector<Intersection> xs = r.local_intersect(c);
+    std::vector<intersection> xs = r.local_intersect(c);
 
     EXPECT_EQ(xs.size(), 2);
     EXPECT_EQ(xs[0].t, 4);
@@ -243,10 +243,10 @@ TEST(Cubes, RayIntersectsCube_03)
 
 TEST(Cubes, RayIntersectsCube_04)
 {
-    Cube_ptr c (new Cube());
-    Ray r{Point(0.5, -5, 0), Vector(0, 1, 0)};
+    cube_ptr c (new cube());
+    ray r{Point(0.5, -5, 0), Vector(0, 1, 0)};
 
-    std::vector<Intersection> xs = r.local_intersect(c);
+    std::vector<intersection> xs = r.local_intersect(c);
 
     EXPECT_EQ(xs.size(), 2);
     EXPECT_EQ(xs[0].t, 4);
@@ -255,10 +255,10 @@ TEST(Cubes, RayIntersectsCube_04)
 
 TEST(Cubes, RayIntersectsCube_05)
 {
-    Cube_ptr c (new Cube());
-    Ray r{Point(0.5, 0, 5), Vector(0, 0, -1)};
+    cube_ptr c (new cube());
+    ray r{Point(0.5, 0, 5), Vector(0, 0, -1)};
 
-    std::vector<Intersection> xs = r.local_intersect(c);
+    std::vector<intersection> xs = r.local_intersect(c);
 
     EXPECT_EQ(xs.size(), 2);
     EXPECT_EQ(xs[0].t, 4);
@@ -267,10 +267,10 @@ TEST(Cubes, RayIntersectsCube_05)
 
 TEST(Cubes, RayIntersectsCube_06)
 {
-    Cube_ptr c (new Cube());
-    Ray r{Point(0.5, 0, -5), Vector(0, 0, 1)};
+    cube_ptr c (new cube());
+    ray r{Point(0.5, 0, -5), Vector(0, 0, 1)};
 
-    std::vector<Intersection> xs = r.local_intersect(c);
+    std::vector<intersection> xs = r.local_intersect(c);
 
     EXPECT_EQ(xs.size(), 2);
     EXPECT_EQ(xs[0].t, 4);
@@ -279,10 +279,10 @@ TEST(Cubes, RayIntersectsCube_06)
 
 TEST(Cubes, RayIntersectsCube_07)
 {
-    Cube_ptr c (new Cube());
-    Ray r{Point(0, 0.5, 0), Vector(0, 0, 1)};
+    cube_ptr c (new cube());
+    ray r{Point(0, 0.5, 0), Vector(0, 0, 1)};
 
-    std::vector<Intersection> xs = r.local_intersect(c);
+    std::vector<intersection> xs = r.local_intersect(c);
 
     EXPECT_EQ(xs.size(), 2);
     EXPECT_EQ(xs[0].t, -1);
@@ -291,188 +291,188 @@ TEST(Cubes, RayIntersectsCube_07)
 
 TEST(Cubes, RayMissesCube_01)
 {
-    Cube_ptr c (new Cube());
-    Ray r{Point(-2, 0, 0), Vector(0.2673, 0.5345, 0.8018)};
+    cube_ptr c (new cube());
+    ray r{Point(-2, 0, 0), Vector(0.2673, 0.5345, 0.8018)};
 
-    std::vector<Intersection> xs = r.local_intersect(c);
+    std::vector<intersection> xs = r.local_intersect(c);
 
     EXPECT_EQ(xs.size(), 0);
 }
 
 TEST(Cubes, RayMissesCube_02)
 {
-    Cube_ptr c (new Cube());
-    Ray r{Point(0, -2, 0), Vector(0.8018, 0.2673, 0.5345)};
+    cube_ptr c (new cube());
+    ray r{Point(0, -2, 0), Vector(0.8018, 0.2673, 0.5345)};
 
-    std::vector<Intersection> xs = r.local_intersect(c);
+    std::vector<intersection> xs = r.local_intersect(c);
 
     EXPECT_EQ(xs.size(), 0);
 }
 
 TEST(Cubes, RayMissesCube_03)
 {
-    Cube_ptr c (new Cube());
-    Ray r{Point(0, 0, -2), Vector(0.5345, 0.8018, 0.2673)};
+    cube_ptr c (new cube());
+    ray r{Point(0, 0, -2), Vector(0.5345, 0.8018, 0.2673)};
 
-    std::vector<Intersection> xs = r.local_intersect(c);
+    std::vector<intersection> xs = r.local_intersect(c);
 
     EXPECT_EQ(xs.size(), 0);
 }
 
 TEST(Cubes, RayMissesCube_04)
 {
-    Cube_ptr c (new Cube());
-    Ray r{Point(2, 0, 2), Vector(0, 0, -1)};
+    cube_ptr c (new cube());
+    ray r{Point(2, 0, 2), Vector(0, 0, -1)};
 
-    std::vector<Intersection> xs = r.local_intersect(c);
+    std::vector<intersection> xs = r.local_intersect(c);
 
     EXPECT_EQ(xs.size(), 0);
 }
 
 TEST(Cubes, RayMissesCube_05)
 {
-    Cube_ptr c (new Cube());
-    Ray r{Point(0, 2, 2), Vector(0, -1, 0)};
+    cube_ptr c (new cube());
+    ray r{Point(0, 2, 2), Vector(0, -1, 0)};
 
-    std::vector<Intersection> xs = r.local_intersect(c);
+    std::vector<intersection> xs = r.local_intersect(c);
 
     EXPECT_EQ(xs.size(), 0);
 }
 
 TEST(Cubes, RayMissesCube_06)
 {
-    Cube_ptr c (new Cube());
-    Ray r{Point(2, 2, 0), Vector(-1, 0, 0)};
+    cube_ptr c (new cube());
+    ray r{Point(2, 2, 0), Vector(-1, 0, 0)};
 
-    std::vector<Intersection> xs = r.local_intersect(c);
+    std::vector<intersection> xs = r.local_intersect(c);
 
     EXPECT_EQ(xs.size(), 0);
 }
 
 TEST(Cubes, NormalOnCubeSurface_01)
 {
-    Cube_ptr c (new Cube());
+    cube_ptr c (new cube());
     Point p{1, 0.5, -0.8};
-    Vector normal = c->LocalNormalAt(p);
+    Vector normal = c->local_normal_at(p);
 
     EXPECT_EQ(normal, Vector(1, 0, 0));
 }
 
 TEST(Cubes, NormalOnCubeSurface_02)
 {
-    Cube_ptr c (new Cube());
+    cube_ptr c (new cube());
     Point p{-1, -0.2, 0.9};
-    Vector normal = c->LocalNormalAt(p);
+    Vector normal = c->local_normal_at(p);
 
     EXPECT_EQ(normal, Vector(-1, 0, 0));
 }
 
 TEST(Cubes, NormalOnCubeSurface_03)
 {
-    Cube_ptr c (new Cube());
+    cube_ptr c (new cube());
     Point p{-0.4, 1, -0.1};
-    Vector normal = c->LocalNormalAt(p);
+    Vector normal = c->local_normal_at(p);
 
     EXPECT_EQ(normal, Vector(0, 1, 0));
 }
 
 TEST(Cubes, NormalOnCubeSurface_04)
 {
-    Cube_ptr c (new Cube());
+    cube_ptr c (new cube());
     Point p{0.3, -1, -0.7};
-    Vector normal = c->LocalNormalAt(p);
+    Vector normal = c->local_normal_at(p);
 
     EXPECT_EQ(normal, Vector(0, -1, 0));
 }
 
 TEST(Cubes, NormalOnCubeSurface_05)
 {
-    Cube_ptr c (new Cube());
+    cube_ptr c (new cube());
     Point p{-0.6, 0.3, 1};
-    Vector normal = c->LocalNormalAt(p);
+    Vector normal = c->local_normal_at(p);
 
     EXPECT_EQ(normal, Vector(0, 0, 1));
 }
 
 TEST(Cubes, NormalOnCubeSurface_06)
 {
-    Cube_ptr c (new Cube());
+    cube_ptr c (new cube());
     Point p{0.4, 0.4, -1};
-    Vector normal = c->LocalNormalAt(p);
+    Vector normal = c->local_normal_at(p);
 
     EXPECT_EQ(normal, Vector(0, 0, -1));
 }
 
 TEST(Cubes, NormalOnCubeSurface_07)
 {
-    Cube_ptr c (new Cube());
+    cube_ptr c (new cube());
     Point p{1, 1, 1};
-    Vector normal = c->LocalNormalAt(p);
+    Vector normal = c->local_normal_at(p);
 
     EXPECT_EQ(normal, Vector(1, 0, 0));
 }
 
 TEST(Cubes, NormalOnCubeSurface_08)
 {
-    Cube_ptr c (new Cube());
+    cube_ptr c (new cube());
     Point p{-1, -1, -1};
-    Vector normal = c->LocalNormalAt(p);
+    Vector normal = c->local_normal_at(p);
 
     EXPECT_EQ(normal, Vector(-1, 0, 0));
 }
 
 TEST(Cylinders, RayMissesCylinder_01)
 {
-    Cylinder_ptr cyl{ std::make_shared<Cylinder>(Cylinder{}) };
+    cylinder_ptr cyl{ std::make_shared<cylinder>(cylinder{}) };
 
     Vector direction{ 0, 1, 0 };
     direction = direction.normalized();
 
-    Ray r{ Point{1, 0, 0}, direction };
+    ray r{ Point{1, 0, 0}, direction };
 
-    std::vector<Intersection> xs = r.local_intersect(cyl);
+    std::vector<intersection> xs = r.local_intersect(cyl);
 
     EXPECT_EQ(xs.size(), 0);
 }
 
 TEST(Cylinders, RayMissesCylinder_02)
 {
-    Cylinder_ptr cyl{ std::make_shared<Cylinder>(Cylinder{}) };
+    cylinder_ptr cyl{ std::make_shared<cylinder>(cylinder{}) };
 
     Vector direction{ 0, 1, 0 };
     direction = direction.normalized();
 
-    Ray r{ Point{0, 0, 0}, direction };
+    ray r{ Point{0, 0, 0}, direction };
 
-    std::vector<Intersection> xs = r.local_intersect(cyl);
+    std::vector<intersection> xs = r.local_intersect(cyl);
 
     EXPECT_EQ(xs.size(), 0);
 }
 
 TEST(Cylinders, RayMissesCylinder_03)
 {
-    Cylinder_ptr cyl{ std::make_shared<Cylinder>(Cylinder{}) };
+    cylinder_ptr cyl{ std::make_shared<cylinder>(cylinder{}) };
 
     Vector direction{ 1, 1, 1 };
     direction = direction.normalized();
 
-    Ray r{ Point{0, 0, -5}, direction };
+    ray r{ Point{0, 0, -5}, direction };
 
-    std::vector<Intersection> xs = r.local_intersect(cyl);
+    std::vector<intersection> xs = r.local_intersect(cyl);
 
     EXPECT_EQ(xs.size(), 0);
 }
 
 TEST(Cylinders, RayIntersectsCylinder_01)
 {
-    Cylinder_ptr cyl{ std::make_shared<Cylinder>(Cylinder{}) };
+    cylinder_ptr cyl{ std::make_shared<cylinder>(cylinder{}) };
 
     Vector direction{ 0, 0, 1 };
     direction = direction.normalized();
 
-    Ray r{ Point{1, 0, -5}, direction };
+    ray r{ Point{1, 0, -5}, direction };
 
-    std::vector<Intersection> xs = r.local_intersect(cyl);
+    std::vector<intersection> xs = r.local_intersect(cyl);
 
     EXPECT_EQ(xs.size(), 2);
     EXPECT_EQ(xs[0].t, 5);
@@ -481,14 +481,14 @@ TEST(Cylinders, RayIntersectsCylinder_01)
 
 TEST(Cylinders, RayIntersectsCylinder_02)
 {
-    Cylinder_ptr cyl{ std::make_shared<Cylinder>(Cylinder{}) };
+    cylinder_ptr cyl{ std::make_shared<cylinder>(cylinder{}) };
 
     Vector direction{ 0, 0, 1 };
     direction = direction.normalized();
 
-    Ray r{ Point{0, 0, -5}, direction };
+    ray r{ Point{0, 0, -5}, direction };
 
-    std::vector<Intersection> xs = r.local_intersect(cyl);
+    std::vector<intersection> xs = r.local_intersect(cyl);
 
     EXPECT_EQ(xs.size(), 2);
     EXPECT_EQ(xs[0].t, 4);
@@ -497,14 +497,14 @@ TEST(Cylinders, RayIntersectsCylinder_02)
 
 TEST(Cylinders, RayIntersectsCylinder_03)
 {
-    Cylinder_ptr cyl{ std::make_shared<Cylinder>(Cylinder{}) };
+    cylinder_ptr cyl{ std::make_shared<cylinder>(cylinder{}) };
 
     Vector direction{ 0.1, 1, 1 };
     direction = direction.normalized();
 
-    Ray r{ Point{0.5, 0, -5}, direction };
+    ray r{ Point{0.5, 0, -5}, direction };
 
-    std::vector<Intersection> xs = r.local_intersect(cyl);
+    std::vector<intersection> xs = r.local_intersect(cyl);
 
     EXPECT_EQ(xs.size(), 2);
     EXPECT_TRUE(Math::Equal(xs[0].t, 6.80798));
@@ -513,43 +513,43 @@ TEST(Cylinders, RayIntersectsCylinder_03)
 
 TEST(Cylinders, NormalOnCylinderSurface_01)
 {
-    Cylinder_ptr cyl{ std::make_shared<Cylinder>(Cylinder{}) };
+    cylinder_ptr cyl{ std::make_shared<cylinder>(cylinder{}) };
 
-    Vector n = cyl->LocalNormalAt(Point{ 1, 0, 0 });
+    Vector n = cyl->local_normal_at(Point{ 1, 0, 0 });
 
     EXPECT_EQ(n, Vector(1, 0, 0));
 }
 
 TEST(Cylinders, NormalOnCylinderSurface_02)
 {
-    Cylinder_ptr cyl{ std::make_shared<Cylinder>(Cylinder{}) };
+    cylinder_ptr cyl{ std::make_shared<cylinder>(cylinder{}) };
 
-    Vector n = cyl->LocalNormalAt(Point{ 0, 5, -1 });
+    Vector n = cyl->local_normal_at(Point{ 0, 5, -1 });
 
     EXPECT_EQ(n, Vector(0, 0, -1));
 }
 
 TEST(Cylinders, NormalOnCylinderSurface_03)
 {
-    Cylinder_ptr cyl{ std::make_shared<Cylinder>(Cylinder{}) };
+    cylinder_ptr cyl{ std::make_shared<cylinder>(cylinder{}) };
 
-    Vector n = cyl->LocalNormalAt(Point{ 0, -2, 1 });
+    Vector n = cyl->local_normal_at(Point{ 0, -2, 1 });
 
     EXPECT_EQ(n, Vector(0, 0, 1));
 }
 
 TEST(Cylinders, NormalOnCylinderSurface_04)
 {
-    Cylinder_ptr cyl{ std::make_shared<Cylinder>(Cylinder{}) };
+    cylinder_ptr cyl{ std::make_shared<cylinder>(cylinder{}) };
 
-    Vector n = cyl->LocalNormalAt(Point{ -1, 1, 0 });
+    Vector n = cyl->local_normal_at(Point{ -1, 1, 0 });
 
     EXPECT_EQ(n, Vector(-1, 0, 0));
 }
 
 TEST(Cylinders, DefaultMinAndMaxForCylinder)
 {
-    Cylinder_ptr cyl{ std::make_shared<Cylinder>(Cylinder{}) };
+    cylinder_ptr cyl{ std::make_shared<cylinder>(cylinder{}) };
 
     EXPECT_EQ(cyl->minimum, -std::numeric_limits<double>::infinity());
     EXPECT_EQ(cyl->maximum, std::numeric_limits<double>::infinity());
@@ -558,7 +558,7 @@ TEST(Cylinders, DefaultMinAndMaxForCylinder)
 
 TEST(Cylinders, IntersectingTruncatedCylinder_01)
 {
-    Cylinder_ptr cyl{ std::make_shared<Cylinder>(Cylinder{}) };
+    cylinder_ptr cyl{ std::make_shared<cylinder>(cylinder{}) };
 
     cyl->minimum = 1;
     cyl->maximum = 2;
@@ -566,16 +566,16 @@ TEST(Cylinders, IntersectingTruncatedCylinder_01)
     Vector direction{ 0.1, 1, 0 };
     direction = direction.normalized();
 
-    Ray r{ Point{0, 1.5, 0}, direction };
+    ray r{ Point{0, 1.5, 0}, direction };
 
-    std::vector<Intersection> xs = r.local_intersect(cyl);
+    std::vector<intersection> xs = r.local_intersect(cyl);
 
     EXPECT_EQ(xs.size(), 0);
 }
 
 TEST(Cylinders, IntersectingTruncatedCylinder_02)
 {
-    Cylinder_ptr cyl{ std::make_shared<Cylinder>(Cylinder{}) };
+    cylinder_ptr cyl{ std::make_shared<cylinder>(cylinder{}) };
 
     cyl->minimum = 1;
     cyl->maximum = 2;
@@ -583,16 +583,16 @@ TEST(Cylinders, IntersectingTruncatedCylinder_02)
     Vector direction{ 0, 0, 1 };
     direction = direction.normalized();
 
-    Ray r{ Point{0, 3, -5}, direction };
+    ray r{ Point{0, 3, -5}, direction };
 
-    std::vector<Intersection> xs = r.local_intersect(cyl);
+    std::vector<intersection> xs = r.local_intersect(cyl);
 
     EXPECT_EQ(xs.size(), 0);
 }
 
 TEST(Cylinders, IntersectingTruncatedCylinder_03)
 {
-    Cylinder_ptr cyl{ std::make_shared<Cylinder>(Cylinder{}) };
+    cylinder_ptr cyl{ std::make_shared<cylinder>(cylinder{}) };
 
     cyl->minimum = 1;
     cyl->maximum = 2;
@@ -600,16 +600,16 @@ TEST(Cylinders, IntersectingTruncatedCylinder_03)
     Vector direction{ 0, 0, 1 };
     direction = direction.normalized();
 
-    Ray r{ Point{0, 0, -5}, direction };
+    ray r{ Point{0, 0, -5}, direction };
 
-    std::vector<Intersection> xs = r.local_intersect(cyl);
+    std::vector<intersection> xs = r.local_intersect(cyl);
 
     EXPECT_EQ(xs.size(), 0);
 }
 
 TEST(Cylinders, IntersectingTruncatedCylinder_04)
 {
-    Cylinder_ptr cyl{ std::make_shared<Cylinder>(Cylinder{}) };
+    cylinder_ptr cyl{ std::make_shared<cylinder>(cylinder{}) };
 
     cyl->minimum = 1;
     cyl->maximum = 2;
@@ -617,16 +617,16 @@ TEST(Cylinders, IntersectingTruncatedCylinder_04)
     Vector direction{ 0, 0, 1 };
     direction = direction.normalized();
 
-    Ray r{ Point{0, 2, -5}, direction };
+    ray r{ Point{0, 2, -5}, direction };
 
-    std::vector<Intersection> xs = r.local_intersect(cyl);
+    std::vector<intersection> xs = r.local_intersect(cyl);
 
     EXPECT_EQ(xs.size(), 0);
 }
 
 TEST(Cylinders, IntersectingTruncatedCylinder_05)
 {
-    Cylinder_ptr cyl{ std::make_shared<Cylinder>(Cylinder{}) };
+    cylinder_ptr cyl{ std::make_shared<cylinder>(cylinder{}) };
 
     cyl->minimum = 1;
     cyl->maximum = 2;
@@ -634,16 +634,16 @@ TEST(Cylinders, IntersectingTruncatedCylinder_05)
     Vector direction{ 0, 0, 1 };
     direction = direction.normalized();
 
-    Ray r{ Point{0, 1, -5}, direction };
+    ray r{ Point{0, 1, -5}, direction };
 
-    std::vector<Intersection> xs = r.local_intersect(cyl);
+    std::vector<intersection> xs = r.local_intersect(cyl);
 
     EXPECT_EQ(xs.size(), 0);
 }
 
 TEST(Cylinders, IntersectingTruncatedCylinder_06)
 {
-    Cylinder_ptr cyl{ std::make_shared<Cylinder>(Cylinder{}) };
+    cylinder_ptr cyl{ std::make_shared<cylinder>(cylinder{}) };
 
     cyl->minimum = 1;
     cyl->maximum = 2;
@@ -651,23 +651,23 @@ TEST(Cylinders, IntersectingTruncatedCylinder_06)
     Vector direction{ 0, 0, 1 };
     direction = direction.normalized();
 
-    Ray r{ Point{0, 1.5, -2}, direction };
+    ray r{ Point{0, 1.5, -2}, direction };
 
-    std::vector<Intersection> xs = r.local_intersect(cyl);
+    std::vector<intersection> xs = r.local_intersect(cyl);
 
     EXPECT_EQ(xs.size(), 2);
 }
 
 TEST(Cylinders, DefaultClosedValueForCylinder)
 {
-    Cylinder_ptr cyl{ std::make_shared<Cylinder>(Cylinder{}) };
+    cylinder_ptr cyl{ std::make_shared<cylinder>(cylinder{}) };
 
     EXPECT_FALSE(cyl->closed);
 }
 
 TEST(Cylinders, IntersectingCapsOfClosedCylinder_01)
 {
-    Cylinder_ptr cyl{ std::make_shared<Cylinder>(Cylinder{}) };
+    cylinder_ptr cyl{ std::make_shared<cylinder>(cylinder{}) };
     cyl->closed = true;
 
     cyl->minimum = 1;
@@ -676,16 +676,16 @@ TEST(Cylinders, IntersectingCapsOfClosedCylinder_01)
     Vector direction{ 0, -1, 0 };
     direction = direction.normalized();
 
-    Ray r{ Point{0, 3, 0}, direction };
+    ray r{ Point{0, 3, 0}, direction };
 
-    std::vector<Intersection> xs = r.local_intersect(cyl);
+    std::vector<intersection> xs = r.local_intersect(cyl);
 
     EXPECT_EQ(xs.size(), 2);
 }
 
 TEST(Cylinders, IntersectingCapsOfClosedCylinder_02)
 {
-    Cylinder_ptr cyl{ std::make_shared<Cylinder>(Cylinder{}) };
+    cylinder_ptr cyl{ std::make_shared<cylinder>(cylinder{}) };
     cyl->closed = true;
 
     cyl->minimum = 1;
@@ -694,16 +694,16 @@ TEST(Cylinders, IntersectingCapsOfClosedCylinder_02)
     Vector direction{ 0, -1, 2 };
     direction = direction.normalized();
 
-    Ray r{ Point{0, 3, -2}, direction };
+    ray r{ Point{0, 3, -2}, direction };
 
-    std::vector<Intersection> xs = r.local_intersect(cyl);
+    std::vector<intersection> xs = r.local_intersect(cyl);
 
     EXPECT_EQ(xs.size(), 2);
 }
 
 TEST(Cylinders, IntersectingCapsOfClosedCylinder_03)
 {
-    Cylinder_ptr cyl{ std::make_shared<Cylinder>(Cylinder{}) };
+    cylinder_ptr cyl{ std::make_shared<cylinder>(cylinder{}) };
     cyl->closed = true;
 
     cyl->minimum = 1;
@@ -712,16 +712,16 @@ TEST(Cylinders, IntersectingCapsOfClosedCylinder_03)
     Vector direction{ 0, -1, 1 };
     direction = direction.normalized();
 
-    Ray r{ Point{0, 4, -2}, direction };
+    ray r{ Point{0, 4, -2}, direction };
 
-    std::vector<Intersection> xs = r.local_intersect(cyl);
+    std::vector<intersection> xs = r.local_intersect(cyl);
 
     EXPECT_EQ(xs.size(), 2);
 }
 
 TEST(Cylinders, IntersectingCapsOfClosedCylinder_04)
 {
-    Cylinder_ptr cyl{ std::make_shared<Cylinder>(Cylinder{}) };
+    cylinder_ptr cyl{ std::make_shared<cylinder>(cylinder{}) };
     cyl->closed = true;
 
     cyl->minimum = 1;
@@ -730,16 +730,16 @@ TEST(Cylinders, IntersectingCapsOfClosedCylinder_04)
     Vector direction{ 0, 1, 2 };
     direction = direction.normalized();
 
-    Ray r{ Point{0, 0, -2}, direction };
+    ray r{ Point{0, 0, -2}, direction };
 
-    std::vector<Intersection> xs = r.local_intersect(cyl);
+    std::vector<intersection> xs = r.local_intersect(cyl);
 
     EXPECT_EQ(xs.size(), 2);
 }
 
 TEST(Cylinders, IntersectingCapsOfClosedCylinder_05)
 {
-    Cylinder_ptr cyl{ std::make_shared<Cylinder>(Cylinder{}) };
+    cylinder_ptr cyl{ std::make_shared<cylinder>(cylinder{}) };
     cyl->closed = true;
 
     cyl->minimum = 1;
@@ -748,101 +748,101 @@ TEST(Cylinders, IntersectingCapsOfClosedCylinder_05)
     Vector direction{ 0, 1, 1 };
     direction = direction.normalized();
 
-    Ray r{ Point{0, -1, -2}, direction };
+    ray r{ Point{0, -1, -2}, direction };
 
-    std::vector<Intersection> xs = r.local_intersect(cyl);
+    std::vector<intersection> xs = r.local_intersect(cyl);
 
     EXPECT_EQ(xs.size(), 2);
 }
 
 TEST(Cylinders, NormalOnCylinderCaps_01)
 {
-    Cylinder_ptr cyl{ std::make_shared<Cylinder>(Cylinder{}) };
+    cylinder_ptr cyl{ std::make_shared<cylinder>(cylinder{}) };
     cyl->closed = true;
 
     cyl->minimum = 1;
     cyl->maximum = 2;
 
-    Vector normal{ cyl->LocalNormalAt({0, 1, 0}) };
+    Vector normal{ cyl->local_normal_at({0, 1, 0}) };
 
     EXPECT_EQ(normal, Vector(0, -1, 0));
 }
 
 TEST(Cylinders, NormalOnCylinderCaps_02)
 {
-    Cylinder_ptr cyl{ std::make_shared<Cylinder>(Cylinder{}) };
+    cylinder_ptr cyl{ std::make_shared<cylinder>(cylinder{}) };
     cyl->closed = true;
 
     cyl->minimum = 1;
     cyl->maximum = 2;
 
-    Vector normal{ cyl->LocalNormalAt({0.5, 1, 0}) };
+    Vector normal{ cyl->local_normal_at({0.5, 1, 0}) };
 
     EXPECT_EQ(normal, Vector(0, -1, 0));
 }
 
 TEST(Cylinders, NormalOnCylinderCaps_03)
 {
-    Cylinder_ptr cyl{ std::make_shared<Cylinder>(Cylinder{}) };
+    cylinder_ptr cyl{ std::make_shared<cylinder>(cylinder{}) };
     cyl->closed = true;
 
     cyl->minimum = 1;
     cyl->maximum = 2;
 
-    Vector normal{ cyl->LocalNormalAt({0, 1, 0.5}) };
+    Vector normal{ cyl->local_normal_at({0, 1, 0.5}) };
 
     EXPECT_EQ(normal, Vector(0, -1, 0));
 }
 
 TEST(Cylinders, NormalOnCylinderCaps_04)
 {
-    Cylinder_ptr cyl{ std::make_shared<Cylinder>(Cylinder{}) };
+    cylinder_ptr cyl{ std::make_shared<cylinder>(cylinder{}) };
     cyl->closed = true;
 
     cyl->minimum = 1;
     cyl->maximum = 2;
 
-    Vector normal{ cyl->LocalNormalAt({0, 2, 0}) };
+    Vector normal{ cyl->local_normal_at({0, 2, 0}) };
 
     EXPECT_EQ(normal, Vector(0, 1, 0));
 }
 
 TEST(Cylinders, NormalOnCylinderCaps_05)
 {
-    Cylinder_ptr cyl{ std::make_shared<Cylinder>(Cylinder{}) };
+    cylinder_ptr cyl{ std::make_shared<cylinder>(cylinder{}) };
     cyl->closed = true;
 
     cyl->minimum = 1;
     cyl->maximum = 2;
 
-    Vector normal{ cyl->LocalNormalAt({0.5, 2, 0}) };
+    Vector normal{ cyl->local_normal_at({0.5, 2, 0}) };
 
     EXPECT_EQ(normal, Vector(0, 1, 0));
 }
 
 TEST(Cylinders, NormalOnCylinderCaps_06)
 {
-    Cylinder_ptr cyl{ std::make_shared<Cylinder>(Cylinder{}) };
+    cylinder_ptr cyl{ std::make_shared<cylinder>(cylinder{}) };
     cyl->closed = true;
 
     cyl->minimum = 1;
     cyl->maximum = 2;
 
-    Vector normal{ cyl->LocalNormalAt({0, 2, 0.5}) };
+    Vector normal{ cyl->local_normal_at({0, 2, 0.5}) };
 
     EXPECT_EQ(normal, Vector(0, 1, 0));
 }
 
 TEST(Cones, IntersectingConeWithRay_01)
 {
-    Cone_ptr cone{ std::make_shared<Cone>(Cone{}) };
+    cone_ptr c{ std::make_shared<cone>(cone{}) };
 
     Vector direction{ 0, 0, 1 };
     direction = direction.normalized();
 
-    Ray r{ Point{0, 0, -5}, direction };
+    ray r{ Point{0, 0, -5}, direction };
 
-    std::vector<Intersection> xs{ r.local_intersect(cone) };
+    std::vector<intersection> xs{ r.local_intersect(c) };
 
     ASSERT_EQ(xs.size(), 2);
     EXPECT_TRUE(Math::Equal(xs[0].t, 5));
@@ -851,14 +851,14 @@ TEST(Cones, IntersectingConeWithRay_01)
 
 TEST(Cones, IntersectingConeWithRay_02)
 {
-    Cone_ptr cone{ std::make_shared<Cone>(Cone{}) };
+    cone_ptr c{ std::make_shared<cone>(cone{}) };
 
     Vector direction{ 1, 1, 1 };
     direction = direction.normalized();
 
-    Ray r{ Point{0, 0, -5}, direction };
+    ray r{ Point{0, 0, -5}, direction };
 
-    std::vector<Intersection> xs{ r.local_intersect(cone) };
+    std::vector<intersection> xs{ r.local_intersect(c) };
 
     ASSERT_EQ(xs.size(), 2);
     EXPECT_TRUE(Math::Equal(xs[0].t, 8.66025));
@@ -867,14 +867,14 @@ TEST(Cones, IntersectingConeWithRay_02)
 
 TEST(Cones, IntersectingConeWithRay_03)
 {
-    Cone_ptr cone{ std::make_shared<Cone>(Cone{}) };
+    cone_ptr c{ std::make_shared<cone>(cone{}) };
 
     Vector direction{ -0.5, -1, 1 };
     direction = direction.normalized();
 
-    Ray r{ Point{1, 1, -5}, direction };
+    ray r{ Point{1, 1, -5}, direction };
 
-    std::vector<Intersection> xs{ r.local_intersect(cone) };
+    std::vector<intersection> xs{ r.local_intersect(c) };
 
     ASSERT_EQ(xs.size(), 2);
     EXPECT_TRUE(Math::Equal(xs[0].t, 4.55006));
@@ -883,14 +883,14 @@ TEST(Cones, IntersectingConeWithRay_03)
 
 TEST(Cones, IntersectingConeWithRayParalelToOneHalve)
 {
-    Cone_ptr cone{ std::make_shared<Cone>(Cone{}) };
+    cone_ptr c{ std::make_shared<cone>(cone{}) };
 
     Vector direction{ 0, 1, 1 };
     direction = direction.normalized();
 
-    Ray r{ {0, 0, -1}, direction };
+    ray r{ {0, 0, -1}, direction };
 
-    std::vector<Intersection> xs{ r.local_intersect(cone) };
+    std::vector<intersection> xs{ r.local_intersect(c) };
 
     ASSERT_EQ(xs.size(), 1);
     EXPECT_TRUE(Math::Equal(xs[0].t, 0.35355));
@@ -898,69 +898,69 @@ TEST(Cones, IntersectingConeWithRayParalelToOneHalve)
 
 TEST(Cones, IntersectingConesCaps_01)
 {
-    Cone_ptr cone{ std::make_shared<Cone>(Cone{}) };
-    cone->minimum = -0.5;
-    cone->maximum = 0.5;
-    cone->closed = true;
+    cone_ptr c{ std::make_shared<cone>(cone{}) };
+    c->minimum = -0.5;
+    c->maximum = 0.5;
+    c->closed = true;
 
     Vector direction{ Vector{0, 1, 0}.normalized() };
-    Ray r{ Point{0, 0, -5}, direction };
-    std::vector<Intersection> xs{ r.local_intersect(cone) };
+    ray r{ Point{0, 0, -5}, direction };
+    std::vector<intersection> xs{ r.local_intersect(c) };
 
     ASSERT_EQ(xs.size(), 0);
 }
 
 TEST(Cones, IntersectingConesCaps_02)
 {
-    Cone_ptr cone{ std::make_shared<Cone>(Cone{}) };
-    cone->minimum = -0.5;
-    cone->maximum = 0.5;
-    cone->closed = true;
+    cone_ptr c{ std::make_shared<cone>(cone{}) };
+    c->minimum = -0.5;
+    c->maximum = 0.5;
+    c->closed = true;
 
     Vector direction{ Vector{0, 1, 1}.normalized() };
-    Ray r{ Point{0, 0, -0.25}, direction };
-    std::vector<Intersection> xs{ r.local_intersect(cone) };
+    ray r{ Point{0, 0, -0.25}, direction };
+    std::vector<intersection> xs{ r.local_intersect(c) };
 
     ASSERT_EQ(xs.size(), 2);
 }
 
 TEST(Cones, IntersectingConesCaps_03)
 {
-    Cone_ptr cone{ std::make_shared<Cone>(Cone{}) };
-    cone->minimum = -0.5;
-    cone->maximum = 0.5;
-    cone->closed = true;
+    cone_ptr c{ std::make_shared<cone>(cone{}) };
+    c->minimum = -0.5;
+    c->maximum = 0.5;
+    c->closed = true;
 
     Vector direction{ Vector{0, 1, 0}.normalized() };
-    Ray r{ Point{0, 0, -0.25}, direction };
-    std::vector<Intersection> xs{ r.local_intersect(cone) };
+    ray r{ Point{0, 0, -0.25}, direction };
+    std::vector<intersection> xs{ r.local_intersect(c) };
 
     ASSERT_EQ(xs.size(), 4);
 }
 
 TEST(Cones, NormalOnConeSurface_01)
 {
-    Cone_ptr cone{ std::make_shared<Cone>(Cone{}) };
+    cone_ptr c{ std::make_shared<cone>(cone{}) };
 
-    Vector n{ cone->LocalNormalAt(Point{0, 0, 0}) };
+    Vector n{ c->local_normal_at(Point{0, 0, 0}) };
 
     EXPECT_EQ(n, Vector( 0, 0, 0 ));
 }
 
 TEST(Cones, NormalOnConeSurface_02)
 {
-    Cone_ptr cone{ std::make_shared<Cone>(Cone{}) };
+    cone_ptr c{ std::make_shared<cone>(cone{}) };
 
-    Vector n{ cone->LocalNormalAt(Point{1, 1, 1}) };
+    Vector n{ c->local_normal_at(Point{1, 1, 1}) };
 
     EXPECT_EQ(n, Vector(1, -std::sqrt(2), 1));
 }
 
 TEST(Cones, NormalOnConeSurface_03)
 {
-    Cone_ptr cone{ std::make_shared<Cone>(Cone{}) };
+    cone_ptr c{ std::make_shared<cone>(cone{}) };
 
-    Vector n{ cone->LocalNormalAt(Point{-1, -1, 0}) };
+    Vector n{ c->local_normal_at(Point{-1, -1, 0}) };
 
     EXPECT_EQ(n, Vector(-1, 1, 0));
 }

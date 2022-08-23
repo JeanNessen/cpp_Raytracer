@@ -3,16 +3,16 @@
 //
 #pragma once
 
-#include "Shape.h"
+#include "shape.h"
 
 
-class Plane: public Shape {
+class plane final : public shape {
 //Methods
 public:
-    Plane();
+    plane();
 
-    Vector LocalNormalAt(Point local_point) const override;
+	[[nodiscard]] Vector local_normal_at(Point pLocalPoint) const override;
 };
 
-using Plane_ptr = std::shared_ptr<Plane>;
+using plane_ptr = std::shared_ptr<plane>;
 

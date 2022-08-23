@@ -13,39 +13,39 @@
 
 
 //Forward Declarations
-struct Intersection;
+struct intersection;
 
 
-class Ray
+class ray
 {
 //Methods
 private:
     //returns a vector with two doubles, tmin and tmax
-    static std::vector<double> CheckAxis(double axis_origin, double axis_direction);
+    static std::vector<double> check_axis(double axis_origin, double axis_direction);
 public:
-	Ray(Point origin, Vector direction);
+	ray(Point origin, Vector direction);
 
 	//Returns the position of the Ray at the given distance from the origin
-	Point Position(double distance);
+	Point position(double distance) const;
 
 	//Returns the distances at which the Ray intersects the given sphere
     //Returns empty vector if no intersection
     //Returns std::vector of length 2 on any kind of intersection
-    std::vector<Intersection> Intersect(Shape_ptr s);
+    std::vector<intersection> intersect(shape_ptr s) const;
 
 	//Transforms the Ray according to the given transformation Matrix
-	Ray Transform(Matrix4 matrix);
+	ray transform(Matrix4 matrix) const;
 
-    std::vector<Intersection> local_intersect(Sphere_ptr s);
-    std::vector<Intersection> local_intersect(Plane_ptr p);
-    std::vector<Intersection> local_intersect(Cube_ptr c);
-    std::vector<Intersection> local_intersect(Cylinder_ptr cylinder);
-    std::vector<Intersection> local_intersect(Cone_ptr cone);
+    std::vector<intersection> local_intersect(sphere_ptr s) const;
+    std::vector<intersection> local_intersect(plane_ptr p) const;
+    std::vector<intersection> local_intersect(cube_ptr c) const;
+    std::vector<intersection> local_intersect(cylinder_ptr cylinder)const;
+    std::vector<intersection> local_intersect(cone_ptr cone) const;
 
     //methods for intersecting cylinders and cones
 	[[nodiscard]] bool check_cap(double t, double radius = 1) const;
-    void intersect_caps(Cylinder_ptr cylinder, std::vector<Intersection>& xs);
-    void intersect_caps(Cone_ptr cone, std::vector<Intersection>& xs);
+    void intersect_caps(cylinder_ptr cylinder, std::vector<intersection>& xs) const;
+    void intersect_caps(cone_ptr cone, std::vector<intersection>& xs) const;
 
 //Members
 private:

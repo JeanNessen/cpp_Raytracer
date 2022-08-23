@@ -3,14 +3,14 @@
 //#include "Intersection.h"
 
 Sphere::Sphere():
-        Shape(EShapeType::sphere)
+        shape(shape_type::sphere)
 {
 
 }
 
-Vector Sphere::LocalNormalAt(Point local_point) const{
+Vector Sphere::local_normal_at(const Point pLocalPoint) const{
     //Calculate Object Space normals
-    return Vector{local_point - Point(0, 0, 0)};
+    return Vector{pLocalPoint - Point(0, 0, 0)};
 }
 
 

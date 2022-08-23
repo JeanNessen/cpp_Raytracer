@@ -3,17 +3,17 @@
 //
 #pragma once
 
-#include "Shape.h"
+#include "shape.h"
 
 
-class Cube: public Shape {
+class cube final : public shape {
 //Methods
 private:
 public:
-    Cube();
+    cube();
 
-[[nodiscard]] Vector LocalNormalAt(Point local_point) const override;
+[[nodiscard]] Vector local_normal_at(Point pLocalPoint) const override;
 
 };
 
-using Cube_ptr = std::shared_ptr<Cube>;
+using cube_ptr = std::shared_ptr<cube>;

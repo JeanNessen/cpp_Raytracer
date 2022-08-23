@@ -4,26 +4,26 @@
 
 #include "Light.h"
 
-Color Lighting(Material m, Shape_ptr object, PointLight light, Point position, Vector eye_v, Vector normal_v, bool in_shadow) {
+color Lighting(Material m, shape_ptr object, PointLight light, Point position, Vector eye_v, Vector normal_v, bool in_shadow) {
 
-    Color color;
+    color light_color;
 
     //check if the material has a m_pattern
     if(m.GetPattern())
     {
-        color = object->StripeAtObject(position);
+        light_color = object->stripe_at_object(position);
     } else
     {
-        color = m.color;
+        light_color = m.color;
     }
 
     //Combine surface color with lights intensity/color
-    Color effective_color = color * light.intensity;
+    color effective_color = light_color * light.intensity;
 
     if(in_shadow)
     {
         //If the point is in shadow, only the ambient light will affect it
-        Color ambient = effective_color * m.ambient;
+        color ambient = effective_color * m.ambient;
 
         return ambient;
     }
@@ -33,15 +33,15 @@ Color Lighting(Material m, Shape_ptr object, PointLight light, Point position, V
         Vector light_v = Vector(light.position - position).normalized();
 
         //Compute the ambient contribution
-        Color ambient = effective_color * m.ambient;
+        color ambient = effective_color * m.ambient;
 
         //light_dot_normal represents the cosine of the angle between
         //the light vector and the normal vector. A negative number means the
         //light is on the other side of the surface
         double light_dot_normal = Math::Dot(light_v, normal_v);
 
-        Color diffuse{0, 0, 0};
-        Color specular{0, 0, 0};
+        color diffuse{0, 0, 0};
+        color specular{0, 0, 0};
 
         if (light_dot_normal >= 0)
         {
@@ -57,7 +57,7 @@ Color Lighting(Material m, Shape_ptr object, PointLight light, Point position, V
 
             if(reflect_dot_eye <= 0)
             {
-                specular = Color(0, 0, 0);
+                specular = color(0, 0, 0);
             } else
             {
                 double factor = std::pow(reflect_dot_eye, m.shininess);

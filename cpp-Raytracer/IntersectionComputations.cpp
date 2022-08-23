@@ -7,22 +7,22 @@
 #include <utility>
 
 
-IntersectionComputations::IntersectionComputations(double t, Shape_ptr  object, Point point, Vector eye_v, Vector normal_v, double n1, double n2):
-        t(t),
-        object(std::move(object)),
-        point(point),
-        eye_v(eye_v),
-        normal_v(normal_v),
-        n1(n1),
-        n2(n2)
+IntersectionComputations::IntersectionComputations(const double pT, shape_ptr  pObject, const Point pPoint, const Vector pEyeV, const Vector pNormalV, const double pN1, const double pN2):
+        t(pT),
+        object(std::move(pObject)),
+        point(pPoint),
+        eye_v(pEyeV),
+        normal_v(pNormalV),
+        n1(pN1),
+        n2(pN2)
 {
-    if(Math::Dot(normal_v, eye_v) < 0)
+    if(Math::Dot(pNormalV, pEyeV) < 0)
     {
         //The hit occurred inside the object, invert the normal
         inside = true;
-        this->normal_v.x = -normal_v.x;
-        this->normal_v.y = -normal_v.y;
-        this->normal_v.z = -normal_v.z;
+        this->normal_v.x = -pNormalV.x;
+        this->normal_v.y = -pNormalV.y;
+        this->normal_v.z = -pNormalV.z;
     }
     else
     {
@@ -35,50 +35,50 @@ IntersectionComputations::IntersectionComputations(double t, Shape_ptr  object, 
 
 
 
-IntersectionComputations PrepareComputations(const Intersection& intersection, Ray ray, std::vector<Intersection> xs) {
+IntersectionComputations PrepareComputations(const intersection& pIntersection, const ray pRay, std::vector<intersection> xs) {
     if(xs.empty())
     {
-        xs.push_back(intersection);
+        xs.push_back(pIntersection);
     }
 
     //Copy intersection properties for convenience
-    double comps_t {intersection.t};
-    const Shape_ptr comps_object {intersection.object};
+    const double compsT {pIntersection.t};
+    const shape_ptr compsObject {pIntersection.object};
 
     //precompute needed values
-    Point comps_point{ray.Position(intersection.t)};
-    Vector comps_eye_v{-ray.direction.x, -ray.direction.y, -ray.direction.z};
-    Vector comps_normal_v{intersection.object->NormalAt(ray.Position(intersection.t))};
+    const Point compsPoint{pRay.position(pIntersection.t)};
+    const Vector compsEyeV{-pRay.direction.x, -pRay.direction.y, -pRay.direction.z};
+    const Vector compsNormalV{pIntersection.object->normal_at(pRay.position(pIntersection.t))};
 
-    std::vector<double> n1_n2 = FindRefractiveIndices(intersection, xs);
+    const std::vector<double> n1n2 = find_refractive_indices(pIntersection, xs);
 
 
 
     IntersectionComputations comps{
-            comps_t,
-            comps_object,
-            comps_point,
-            comps_eye_v,
-            comps_normal_v,
-            n1_n2[0],
-            n1_n2[1]
+            compsT,
+            compsObject,
+            compsPoint,
+            compsEyeV,
+            compsNormalV,
+            n1n2[0],
+            n1n2[1]
     };
 
-    comps.reflect_v = ray.direction.Reflect(comps_normal_v);
+    comps.reflect_v = pRay.direction.Reflect(compsNormalV);
 
     return comps;
 }
-std::vector<double> FindRefractiveIndices(const Intersection& intersection, const std::vector<Intersection>& xs) {
+std::vector<double> find_refractive_indices(const intersection& pIntersection, const std::vector<intersection>& xs) {
 
     double local_n1, local_n2;
 
-    std::vector<Shape_ptr> containers;
+    std::vector<shape_ptr> containers;
 
     //Find the refractive indices for the materials of this intersection
-    for (const Intersection& i: xs) {
+    for (const intersection& i: xs) {
 
         //If i is the hit, n1 is the refractive index of the last object in containers, or 1 if containers is empty
-        if (i == intersection)
+        if (i == pIntersection)
         {
             if(containers.empty())
             {
@@ -86,7 +86,7 @@ std::vector<double> FindRefractiveIndices(const Intersection& intersection, cons
             }
             else
             {
-                local_n1 = containers[containers.size()-1]->GetMaterial().refractive_index;
+                local_n1 = containers[containers.size()-1]->get_material().refractive_index;
             }
         }
 
@@ -101,7 +101,7 @@ std::vector<double> FindRefractiveIndices(const Intersection& intersection, cons
             containers.push_back(i.object);
         }
 
-        if(i == intersection)
+        if(i == pIntersection)
         {
             if(containers.empty())
             {
@@ -109,7 +109,7 @@ std::vector<double> FindRefractiveIndices(const Intersection& intersection, cons
             }
             else
             {
-                local_n2 = containers[containers.size()-1]->GetMaterial().refractive_index;
+                local_n2 = containers[containers.size()-1]->get_material().refractive_index;
             }
             break;
         }

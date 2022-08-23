@@ -1,32 +1,32 @@
 #include "Canvas.h"
 #include <fstream>
-#include "Color.h"
+#include "color.h"
 
-Canvas::Canvas(int width, int height):
-	width(width),
-	height(height)
+canvas::canvas(const int pWidth, const int pHeight):
+	m_width(pWidth),
+	m_height(pHeight)
 {
-	for (int i = 0; i < height; i++)
+	for (int i = 0; i < pHeight; i++)
 	{
-		grid.push_back(std::vector<Color>(width, Color{0,0,0}));
+		m_grid.push_back(std::vector<color>(pWidth, color{0,0,0}));
 	}
 }
 
-Color Canvas::PixelAt(int x, int y) const
+color canvas::pixel_at(const int pX, const int pY) const
 {
-	return grid[y][x];
+	return m_grid[pY][pX];
 }
 
-void Canvas::WritePixel(int x, int y, Color col)
+void canvas::write_pixel(const int pX, const int pY, const color pCol)
 {
-	grid[y][x] = col;
+	m_grid[pY][pX] = pCol;
 }
 
-std::string Canvas::ToPPM()
+std::string canvas::to_ppm() const
 {
 	std::remove("output.ppm");
 	std::string line1 = "P3\n";
-	std::string line2 = std::to_string(width) + " " + std::to_string(height) + "\n";
+	std::string line2 = std::to_string(m_width) + " " + std::to_string(m_height) + "\n";
 	std::string line3 = "255\n";
 
 	std::string header = line1 + line2 + line3;
@@ -35,16 +35,16 @@ std::string Canvas::ToPPM()
 	out << header;
 
 	std::string body;
-	for (int y = 0; y < height; ++y)
+	for (int y = 0; y < m_height; ++y)
 	{
 		std::string line;
-		for (int x = 0; x < width; ++x)
+		for (int x = 0; x < m_width; ++x)
 		{
-			int red = PixelAt(x, y).RGBRed();
-			int green = PixelAt(x, y).RGBGreen();
-			int blue = PixelAt(x, y).RGBBlue();
+			int red = pixel_at(x, y).rgb_red();
+			int green = pixel_at(x, y).rgb_green();
+			int blue = pixel_at(x, y).rgb_blue();
 			std::string colorString = std::to_string(red) + " " + std::to_string(green) + " " + std::to_string(blue);
-			if (x != width - 1)
+			if (x != m_width - 1)
 			{
 				colorString += " ";
 			}
@@ -61,43 +61,47 @@ std::string Canvas::ToPPM()
 	return header + body;
 }
 
-Canvas Canvas::operator+(const Canvas &other) {
-    Canvas sum{width, height};
-    for (int x = 0; x < width; ++x) {
-        for (int y = 0; y < height; ++y) {
-            Color color_sum = PixelAt(x, y) + other.PixelAt(x, y);
-            sum.WritePixel(x, y, color_sum);
+canvas canvas::operator+(const canvas &pOther) const
+{
+    canvas sum{m_width, m_height};
+    for (int x = 0; x < m_width; ++x) {
+        for (int y = 0; y < m_height; ++y) {
+	        const color colorSum = pixel_at(x, y) + pOther.pixel_at(x, y);
+            sum.write_pixel(x, y, colorSum);
         }
     }
     return sum;
 }
 
-Canvas& Canvas::operator+=(const Canvas &other) {
-    for (int x = 0; x < width; ++x) {
-        for (int y = 0; y < height; ++y) {
-            Color color_sum = PixelAt(x, y) + other.PixelAt(x, y);
-            WritePixel(x, y, color_sum);
+canvas& canvas::operator+=(const canvas &pOther)
+{
+    for (int x = 0; x < m_width; ++x) {
+        for (int y = 0; y < m_height; ++y) {
+	        const color colorSum = pixel_at(x, y) + pOther.pixel_at(x, y);
+            write_pixel(x, y, colorSum);
         }
     }
     return *this;
 }
 
-Canvas Canvas::operator/(const double& other) {
-    Canvas quotient{width, height};
-    for (int x = 0; x < width; ++x) {
-        for (int y = 0; y < height; ++y) {
-            Color color_quotient = PixelAt(x, y) / other;
-            quotient.WritePixel(x, y, color_quotient);
+canvas canvas::operator/(const double& pOther) const
+{
+    canvas quotient{m_width, m_height};
+    for (int x = 0; x < m_width; ++x) {
+        for (int y = 0; y < m_height; ++y) {
+	        const color colorQuotient = pixel_at(x, y) / pOther;
+            quotient.write_pixel(x, y, colorQuotient);
         }
     }
     return quotient;
 }
 
-bool Canvas::operator==(const Canvas &other) const {
+bool canvas::operator==(const canvas &pOther) const
+{
 
-    for (int x = 0; x < width; ++x) {
-        for (int y = 0; y < height; ++y) {
-            if (PixelAt(x, y) != other.PixelAt(x, y))
+    for (int x = 0; x < m_width; ++x) {
+        for (int y = 0; y < m_height; ++y) {
+            if (pixel_at(x, y) != pOther.pixel_at(x, y))
             {
                 return false;
             }
@@ -106,6 +110,7 @@ bool Canvas::operator==(const Canvas &other) const {
     return true;
 }
 
-bool Canvas::operator!=(const Canvas &other) const {
-    return !(*this == other);
+bool canvas::operator!=(const canvas &pOther) const
+{
+    return !(*this == pOther);
 }

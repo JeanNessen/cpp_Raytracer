@@ -1,20 +1,19 @@
 //
 // Created by Jean-Luc von Nessen on 21.02.22.
 //
-
-#ifndef CPP_RAYTRACER_CSHAPE_H
-#define CPP_RAYTRACER_CSHAPE_H
+#pragma once
 
 #include <memory>
+#include <utility>
 #include "../Math.h"
 #include "../Material.h"
 
 
 
 
-class Shape {
+class shape {
 public:
-    enum EShapeType{
+    enum class shape_type{
         sphere,
         plane,
         cube,
@@ -23,41 +22,40 @@ public:
     };
 
 protected:
-    Matrix4 transform;
+    Matrix4 m_transform;
 
-    Material material;
+    Material m_material;
 
-    static int latest_id;
+    static int m_latest_id;
 
-    explicit Shape(EShapeType t);
+    explicit shape(shape_type pT);
 
-    [[nodiscard]] virtual Vector LocalNormalAt(Point local_point) const = 0;
+    [[nodiscard]] virtual Vector local_normal_at(Point local_point) const = 0;
 
 public:
     const int id;
 
-    const EShapeType type;
+    const shape_type type;
 
-    [[nodiscard]] Matrix4 GetTransform() const { return transform; }
-    void SetTransform(Matrix4 t){ transform = t; }
+    [[nodiscard]] Matrix4 get_transform() const { return m_transform; }
+    void set_transform(const Matrix4 pT){ m_transform = pT; }
 
-    Material& GetMaterial() { return material; }
-    [[nodiscard]] Material GetMaterialConst() const {return material;}
-    void SetMaterial(Material m){ material = m; }
+    Material& get_material() { return m_material; }
+    [[nodiscard]] Material get_material_const() const {return m_material;}
+    void set_material(Material pM){ m_material = std::move(pM); }
 
-    bool operator==(const Shape& other) const;
-    bool operator!=(const Shape& other) const;
+    bool operator==(const shape& pOther) const;
+    bool operator!=(const shape& pOther) const;
 
-    virtual ~Shape()= default;
+    virtual ~shape()= default;
 
-    [[nodiscard]] Vector NormalAt(Point world_point) const;
-    [[nodiscard]] Color StripeAtObject(Point world_point) const;
+    [[nodiscard]] Vector normal_at(Point pWorldPoint) const;
+    [[nodiscard]] color stripe_at_object(Point pWorldPoint) const;
 
     Point saved_ray_origin;
     Vector saved_ray_direction;
 
 };
 
-using Shape_ptr = std::shared_ptr<Shape>;
+using shape_ptr = std::shared_ptr<shape>;
 
-#endif //CPP_RAYTRACER_CSHAPE_H

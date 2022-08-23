@@ -31,15 +31,15 @@ TEST(World, WorldCreation)
 
 TEST(World, DefaultWorld)
 {
-    PointLight light{Color(1, 1, 1), Point(-10, 10, -10)};
+    PointLight light{color(1, 1, 1), Point(-10, 10, -10)};
 
     Sphere sphere_1{};
-    sphere_1.GetMaterial().color = Color{0.8, 1.0, 0.6};
-    sphere_1.GetMaterial().diffuse = 0.7;
-    sphere_1.GetMaterial().specular = 0.2;
+    sphere_1.get_material().color = color{0.8, 1.0, 0.6};
+    sphere_1.get_material().diffuse = 0.7;
+    sphere_1.get_material().specular = 0.2;
 
     Sphere sphere_2{};
-    sphere_2.SetTransform(Math::Scaling(0.5, 0.5, 0.5));
+    sphere_2.set_transform(Math::Scaling(0.5, 0.5, 0.5));
 
     World w = DefaultWorld();
 
@@ -54,19 +54,19 @@ TEST(World, DefaultWorld)
     auto default_sphere_2_it = std::find(w.GetWorldObjects().begin(), w.GetWorldObjects().end(), sphere_2);
     EXPECT_NE(default_sphere_2_it, w.GetWorldObjects().end());*/
 
-    EXPECT_EQ(w.get_world_objects()[0]->GetMaterial(), sphere_1.GetMaterial());
-    EXPECT_EQ(w.get_world_objects()[0]->GetTransform(), sphere_1.GetTransform());
+    EXPECT_EQ(w.get_world_objects()[0]->get_material(), sphere_1.get_material());
+    EXPECT_EQ(w.get_world_objects()[0]->get_transform(), sphere_1.get_transform());
 
-    EXPECT_EQ(w.get_world_objects()[1]->GetMaterial(), sphere_2.GetMaterial());
-    EXPECT_EQ(w.get_world_objects()[1]->GetTransform(), sphere_2.GetTransform());
+    EXPECT_EQ(w.get_world_objects()[1]->get_material(), sphere_2.get_material());
+    EXPECT_EQ(w.get_world_objects()[1]->get_transform(), sphere_2.get_transform());
 }
 
 TEST(World, IntersectWorldWithRay)
 {
     World w = DefaultWorld();
-    Ray r{Point(0, 0, -5), Vector(0, 0, 1)};
+    ray r{Point(0, 0, -5), Vector(0, 0, 1)};
 
-    std::vector<Intersection> xs = w.intersect_world(r);
+    std::vector<intersection> xs = w.intersect_world(r);
 
     EXPECT_EQ(xs.size(), 4);
     EXPECT_EQ(xs[0].t, 4);
@@ -78,61 +78,61 @@ TEST(World, IntersectWorldWithRay)
 TEST(World, ShadingAnIntersection)
 {
     World w = DefaultWorld();
-    Ray r{Point(0, 0, -5), Vector(0, 0, 1)};
+    ray r{Point(0, 0, -5), Vector(0, 0, 1)};
     auto shape = w.get_world_objects()[0];
-    Intersection i{4, shape};
+    intersection i{4, shape};
 
     IntersectionComputations comps = PrepareComputations(i, r);
-    Color c = w.shade_hit(comps);
+    color c = w.shade_hit(comps);
 
-    EXPECT_EQ(c, Color(0.38066, 0.47583, 0.2855));
+    EXPECT_EQ(c, color(0.38066, 0.47583, 0.2855));
 }
 
 TEST(World, ShadingAnIntersectionFromInside)
 {
     World w = DefaultWorld();
-    w.get_world_lights()[0] = PointLight{Color(1, 1, 1), Point(0, 0.25, 0)};
-    Ray r{Point(0, 0, 0), Vector(0, 0, 1)};
+    w.get_world_lights()[0] = PointLight{color(1, 1, 1), Point(0, 0.25, 0)};
+    ray r{Point(0, 0, 0), Vector(0, 0, 1)};
     auto shape = w.get_world_objects()[1];
-    Intersection i{0.5, shape};
+    intersection i{0.5, shape};
 
     IntersectionComputations comps = PrepareComputations(i, r);
-    Color c = w.shade_hit(comps);
-    EXPECT_EQ(c, Color(0.90498, 0.90498, 0.90498));
+    color c = w.shade_hit(comps);
+    EXPECT_EQ(c, color(0.90498, 0.90498, 0.90498));
 }
 
 TEST(World, ColorWhenRayMisses)
 {
     World w = DefaultWorld();
-    Ray r{Point(0, 0, -5), Vector(0, 1, 0)};
+    ray r{Point(0, 0, -5), Vector(0, 1, 0)};
 
-    Color c = w.calculate_color_at(r);
+    color c = w.calculate_color_at(r);
 
-    EXPECT_EQ(c, Color(0, 0, 0));
+    EXPECT_EQ(c, color(0, 0, 0));
 }
 
 TEST(World, ColorWhenRayHits)
 {
     World w = DefaultWorld();
-    Ray r{Point(0, 0, -5), Vector(0, 0, 1)};
+    ray r{Point(0, 0, -5), Vector(0, 0, 1)};
 
-    Color c = w.calculate_color_at(r);
+    color c = w.calculate_color_at(r);
 
-    EXPECT_EQ(c, Color(0.38066, 0.47583, 0.2855));
+    EXPECT_EQ(c, color(0.38066, 0.47583, 0.2855));
 }
 
 TEST(World, ColorWithIntersectionBehinRay)
 {
     World w = DefaultWorld();
     auto outer = w.get_world_objects()[0];
-    outer->GetMaterial().ambient = 1;
+    outer->get_material().ambient = 1;
     auto inner = w.get_world_objects()[1];
-    inner->GetMaterial().ambient = 1;
-    Ray r{Point(0, 0, 0.75), Vector(0, 0, -1)};
+    inner->get_material().ambient = 1;
+    ray r{Point(0, 0, 0.75), Vector(0, 0, -1)};
 
-    Color c = w.calculate_color_at(r);
+    color c = w.calculate_color_at(r);
 
-    EXPECT_EQ(c, inner->GetMaterial().color);
+    EXPECT_EQ(c, inner->get_material().color);
 }
 
 TEST(Camera, ConstructingACamera)
@@ -141,33 +141,33 @@ TEST(Camera, ConstructingACamera)
     int v_size{120};
     double fov{M_PI / 2};
 
-    Camera c{h_size, v_size, fov};
+    camera c{h_size, v_size, fov};
 
-    EXPECT_EQ(c.GetHSize(), 160);
-    EXPECT_EQ(c.GetVSize(), 120);
-    EXPECT_TRUE(Math::Equal(c.GetFOV(), M_PI/2));
-    EXPECT_EQ(c.GetTransform(), Math::identiy_matrix);
+    EXPECT_EQ(c.get_h_size(), 160);
+    EXPECT_EQ(c.get_v_size(), 120);
+    EXPECT_TRUE(Math::Equal(c.get_fov(), M_PI/2));
+    EXPECT_EQ(c.get_transform(), Math::identiy_matrix);
 }
 
 TEST(Camera, PixelSizeHorizontalCanvas)
 {
-    Camera c{200, 125, M_PI / 2};
+    camera c{200, 125, M_PI / 2};
 
-    EXPECT_TRUE(Math::Equal(c.GetPixelSize(), 0.01));
+    EXPECT_TRUE(Math::Equal(c.get_pixel_size(), 0.01));
 }
 
 TEST(Camera, PixelSizeVerticalCanvas)
 {
-    Camera c{125, 200, M_PI / 2};
+    camera c{125, 200, M_PI / 2};
 
-    EXPECT_TRUE(Math::Equal(c.GetPixelSize(), 0.01));
+    EXPECT_TRUE(Math::Equal(c.get_pixel_size(), 0.01));
 }
 
 TEST(Camera, ConstructingRayThroughCenterOfCanvas)
 {
-    Camera c{201, 101, M_PI / 2};
+    camera c{201, 101, M_PI / 2};
 
-    Ray r = c.RayForPixel(100, 50);
+    ray r = c.ray_for_pixel(100, 50);
 
     EXPECT_TRUE(Math::Equal(r.origin, Point(0, 0, 0)));
     EXPECT_TRUE(Math::Equal(r.direction, Vector(0, 0, -1)));
@@ -175,10 +175,10 @@ TEST(Camera, ConstructingRayThroughCenterOfCanvas)
 
 TEST(Camera, ConstructingRayThroughCorneOfCanvas)
 {
-    Camera c{201, 101, M_PI / 2};
-    c.SetFocalLength(1);
+    camera c{201, 101, M_PI / 2};
+    c.set_focal_length(1);
 
-    Ray r = c.RayForPixel(0, 0);
+    ray r = c.ray_for_pixel(0, 0);
 
     EXPECT_TRUE(Math::Equal(r.origin, Point(0, 0, 0)));
     EXPECT_TRUE(Math::Equal(r.direction, Vector(0.66519, 0.33259, -0.66851)));
@@ -186,10 +186,10 @@ TEST(Camera, ConstructingRayThroughCorneOfCanvas)
 
 TEST(Camera, ConsturctingRayWhenCameraIsTransformed)
 {
-    Camera c{201, 101, M_PI / 2};
+    camera c{201, 101, M_PI / 2};
 
-    c.SetTransform(Math::Rotation_Y(M_PI/4) * Math::Translation(0, -2, 5));
-    Ray r = c.RayForPixel(100, 50);
+    c.set_transform(Math::Rotation_Y(M_PI/4) * Math::Translation(0, -2, 5));
+    ray r = c.ray_for_pixel(100, 50);
 
     EXPECT_TRUE(Math::Equal(r.origin, Point(0, 2, -5)));
     EXPECT_TRUE(Math::Equal(r.direction, Vector(std::sqrt(2)/2, 0, -sqrt(2)/2)));
@@ -198,15 +198,15 @@ TEST(Camera, ConsturctingRayWhenCameraIsTransformed)
 TEST(Camera, RenderingAWorldWithACamera)
 {
     World w = DefaultWorld();
-    Camera c{11, 11, M_PI / 2};
+    camera c{11, 11, M_PI / 2};
     Point from{0, 0, -5};
     Point to{0, 0, 0};
     Vector up{0, 1, 0};
-    c.SetTransform(Math::ViewTransform(from, to, up));
+    c.set_transform(Math::ViewTransform(from, to, up));
 
-    Canvas image = w.render_multi_thread(c, 1);
+    canvas image = w.render_multi_thread(c, 1);
 
-    EXPECT_EQ(image.PixelAt(5, 5), Color(0.38066, 0.47583, 0.2855));
+    EXPECT_EQ(image.pixel_at(5, 5), color(0.38066, 0.47583, 0.2855));
 }
 
 TEST(World, NoShadowWhenNothingIsCollinearWithPointAndLight)
@@ -244,22 +244,22 @@ TEST(World, NoShadowWhenObjectIsBehindPoint)
 TEST(Lighting, ShadeHitIsGivenIntersectionInShadow)
 {
     World w{};
-    w.add_light(PointLight{Color(1, 1, 1), Point(0, 0, -10)});
+    w.add_light(PointLight{color(1, 1, 1), Point(0, 0, -10)});
 
     //Add the first sphere
-    Sphere_ptr s1 (new Sphere());
+    sphere_ptr s1 (new Sphere());
     w.add_object(s1);
 
     //Add the second sphere
-    Sphere_ptr s2 (new Sphere());
-    s2->SetTransform(Math::Translation(0, 0, 10));
+    sphere_ptr s2 (new Sphere());
+    s2->set_transform(Math::Translation(0, 0, 10));
     w.add_object(s2);
 
-    Ray r{Point(0, 0, 5), Vector(0, 0, 1)};
-    Intersection i{4, s2};
+    ray r{Point(0, 0, 5), Vector(0, 0, 1)};
+    intersection i{4, s2};
 
     IntersectionComputations comps = PrepareComputations(i, r);
-    Color c = w.shade_hit(comps);
+    color c = w.shade_hit(comps);
 
-    EXPECT_EQ(c, Color(0.1, 0.1, 0.1));
+    EXPECT_EQ(c, color(0.1, 0.1, 0.1));
 }

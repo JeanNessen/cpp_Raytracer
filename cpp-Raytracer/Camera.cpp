@@ -6,73 +6,75 @@
 #include "Ray.h"
 #include <random>
 
-Camera::Camera(int h_size, int v_size, double fov):
-        m_horizontalSize(h_size),
-        m_verticalSize(v_size),
-        m_fieldOfView(fov),
+camera::camera(const int pHSize, const int pVSize, const double pFOV):
+        m_horizontal_size(pHSize),
+        m_vertical_size(pVSize),
+        m_field_of_view(pFOV),
         m_transform(Math::identiy_matrix)
 {
-    CalculatePixelSize();
+    calculate_pixel_size();
 }
 
-void Camera::CalculatePixelSize() {
-    double half_view = std::tan(m_fieldOfView / 2);
+void camera::calculate_pixel_size() {
+	const double halfView = std::tan(m_field_of_view / 2);
 
-    double aspect = double(m_horizontalSize) / double(m_verticalSize);
+	const double aspect = static_cast<double>(m_horizontal_size) / static_cast<double>(m_vertical_size);
 
     if (aspect >= 1)
     {
-        m_half_width = half_view;
-        m_half_height = half_view / aspect;
+        m_half_width = halfView;
+        m_half_height = halfView / aspect;
     } else
     {
-        m_half_width = half_view * aspect;
-        m_half_height = half_view;
+        m_half_width = halfView * aspect;
+        m_half_height = halfView;
     }
 
-    m_pixel_size = (m_half_width * 2) / m_horizontalSize;
+    m_pixel_size = (m_half_width * 2) / m_horizontal_size;
 }
 
-Ray Camera::RayForPixel(int x, int y) {
+ray camera::ray_for_pixel(const int pX, const int pY) const
+{
     //The offset from the edge of the canvas to a point in the pixel
-    double x_offset = CalculatePixelOffset(x);
-    double y_offset = CalculatePixelOffset(y);
+    const double xOffset = calculate_pixel_offset(pX);
+    const double yOffset = calculate_pixel_offset(pY);
 
     //The untransformed coordinates of the pixel in world space
-    double world_x = m_half_width - x_offset;
-    double world_y = m_half_height - y_offset;
+    const double worldX = m_half_width - xOffset;
+    const double worldY = m_half_height - yOffset;
 
     //Using the camera matrix, m_transform the canvas point and the origin, and then compute the ray's direction vector, the canvas is at z = -m_focalLength
-    Point pixel{m_transform.Inversed() * Point(world_x, world_y, -m_focalLength)};
+    const Point pixel{m_transform.Inversed() * Point(worldX, worldY, -m_focal_length)};
 
-    Point origin = CalculateRayOrigin();
+    Point origin = calculate_ray_origin();
 
     Vector direction{Vector{pixel - origin}.normalized()};
 
     return {origin, direction};
 }
 
-double Camera::CalculatePixelOffset(int pixel) const {
+double camera::calculate_pixel_offset(const int pPixel) const {
     double offset;
     //If Anti Aliasing is enabled the ray will pass through a random point inside the pixel.
     if(anti_aliasing)
     {
-        offset = (double(pixel) + Math::GetRandomDouble(0, 1)) * m_pixel_size;
+        offset = (static_cast<double>(pPixel) + Math::GetRandomDouble(0, 1)) * m_pixel_size;
     }
     //If Anti Aliasing is disabled the ray will pass through the center of the pixel.
     else
     {
-        offset = (double(pixel) + 0.5f) * m_pixel_size;
+        offset = (static_cast<double>(pPixel) + 0.5) * m_pixel_size;
     }
     return offset;
 }
 
-Point Camera::CalculateRayOrigin() {
+Point camera::calculate_ray_origin() const
+{
     Point origin;
     //If Depth of field is enabled, the ray will originate from a random point on the aperture
     if(depth_of_field)
     {
-        origin = Point{m_transform.Inversed() * GetRandomPointOnAperture()};
+        origin = Point{m_transform.Inversed() * get_random_point_on_aperture()};
     }
     //If Depth of field is disabled, the ray will originate from (0, 0, 0)
     else
@@ -84,9 +86,9 @@ Point Camera::CalculateRayOrigin() {
 
 
 
-Point Camera::GetRandomPointOnAperture() const {
-    double x = Math::GetRandomDouble(0, m_apertureSize) - (m_apertureSize / 2);
-    double y = Math::GetRandomDouble(0, m_apertureSize) - (m_apertureSize / 2);
+Point camera::get_random_point_on_aperture() const {
+    double x = Math::GetRandomDouble(0, m_aperture_size) - (m_aperture_size / 2);
+    double y = Math::GetRandomDouble(0, m_aperture_size) - (m_aperture_size / 2);
 
     return {x, y, 0};
 }

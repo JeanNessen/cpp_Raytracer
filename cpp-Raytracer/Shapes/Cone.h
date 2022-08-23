@@ -1,13 +1,13 @@
 #pragma once
 
-#include "Shape.h"
+#include "shape.h"
 
-class Cone: public Shape
+class cone final : public shape
 {
 public:
-	Cone();
+	cone();
 
-	[[nodiscard]] Vector LocalNormalAt(Point local_point) const override;
+	[[nodiscard]] Vector local_normal_at(Point pLocalPoint) const override;
 
 	double minimum = -std::numeric_limits<double>::infinity();
 	double maximum = std::numeric_limits<double>::infinity();
@@ -17,4 +17,4 @@ private:
 
 };
 
-using Cone_ptr = std::shared_ptr<Cone>;
+using cone_ptr = std::shared_ptr<cone>;

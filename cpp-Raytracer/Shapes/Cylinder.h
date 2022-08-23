@@ -1,13 +1,13 @@
 #pragma once
 
-#include "Shape.h"
+#include "shape.h"
 
-class Cylinder: public Shape
+class cylinder final : public shape
 {
 public:
-	Cylinder();
+	cylinder();
 
-	Vector LocalNormalAt(Point local_point) const override;
+	[[nodiscard]] Vector local_normal_at(Point pLocalPoint) const override;
 
 public:
 	double minimum = -std::numeric_limits<double>::infinity();
@@ -19,4 +19,4 @@ private:
 };
 
 
-using Cylinder_ptr = std::shared_ptr<Cylinder>;
+using cylinder_ptr = std::shared_ptr<cylinder>;

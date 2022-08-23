@@ -3,66 +3,71 @@
 
 #include "Intersection.h"
 
-Ray::Ray(Point origin, Vector direction):
+ray::ray(const Point origin, const Vector direction):
 	origin(origin),
 	direction(direction)
 {
 
 }
 
-Point Ray::Position(double distance)
+Point ray::position(const double distance) const
 {
-	Tuple distance_travelled = direction * distance;
-	Point position{ distance_travelled.x + origin.x,
-					distance_travelled.y + origin.y,
-					distance_travelled.z + origin.z };
+	const Tuple distanceTraveled = direction * distance;
+	const Point position{ distanceTraveled.x + origin.x,
+					distanceTraveled.y + origin.y,
+					distanceTraveled.z + origin.z };
 	return position;
 }
 
-Ray Ray::Transform(Matrix4 matrix)
+ray ray::transform(const Matrix4 matrix) const
 {
-	Tuple origin_tuple{ matrix * origin };
-	Tuple direction_tuple{ matrix * direction };
+	const Tuple originTuple{ matrix * origin };
+	const Tuple directionTuple{ matrix * direction };
 
-	Point origin{ origin_tuple.x, origin_tuple.y, origin_tuple.z };
-	Vector direction{ direction_tuple.x, direction_tuple.y, direction_tuple.z };
+	const Point newOrigin{ originTuple.x, originTuple.y, originTuple.z };
+	const Vector newDirection{ directionTuple.x, directionTuple.y, directionTuple.z };
 
-	Ray r = Ray{origin, direction };
+	ray r = ray{newOrigin, newDirection };
 	return r;
 }
 
-std::vector<Intersection> Ray::Intersect(Shape_ptr s) {
+std::vector<intersection> ray::intersect(shape_ptr s) const
+{
 
     //Transform the Ray before calculating intersections, to account for the m_transform of the intersected sphere
-    Ray local_ray{Transform(s->GetTransform().Inversed()) };
+    const ray localRay{transform(s->get_transform().Inversed()) };
 
-    s->saved_ray_direction = local_ray.direction;
-    s->saved_ray_origin = local_ray.origin;
+    s->saved_ray_direction = localRay.direction;
+    s->saved_ray_origin = localRay.origin;
 
 
     switch (s->type) {
-        case Shape::EShapeType::sphere:
-            return local_ray.local_intersect(std::dynamic_pointer_cast<Sphere>(s));
-        case Shape::EShapeType::plane:
-            return local_ray.local_intersect(std::dynamic_pointer_cast<Plane>(s));
-        case Shape::EShapeType::cube:
-            return local_ray.local_intersect(std::dynamic_pointer_cast<Cube>(s));
-		case Shape::EShapeType::cylinder:
-			return local_ray.local_intersect(std::dynamic_pointer_cast<Cylinder>(s));
-		case Shape::EShapeType::cone:
-            return local_ray.local_intersect(std::dynamic_pointer_cast<Cone>(s));
+        case shape::shape_type::sphere:
+            return localRay.local_intersect(std::dynamic_pointer_cast<Sphere>(s));
+        case shape::shape_type::plane:
+            return localRay.local_intersect(std::dynamic_pointer_cast<plane>(s));
+        case shape::shape_type::cube:
+            return localRay.local_intersect(std::dynamic_pointer_cast<cube>(s));
+		case shape::shape_type::cylinder:
+			return localRay.local_intersect(std::dynamic_pointer_cast<cylinder>(s));
+		case shape::shape_type::cone:
+            return localRay.local_intersect(std::dynamic_pointer_cast<cone>(s));
+		default:
+			std::cout << "Shape not recognized in intersection.\n";
+    		return {};
     }
 }
 
-std::vector<Intersection> Ray::local_intersect(Sphere_ptr s) {
-    Tuple sphere_to_ray_tmp = origin - Point(0, 0, 0); //vector from the center of the sphere to the ray origin
-    Vector sphere_to_ray{ sphere_to_ray_tmp.x, sphere_to_ray_tmp.y, sphere_to_ray_tmp.z };
+std::vector<intersection> ray::local_intersect(sphere_ptr s) const
+{
+	const Tuple sphereToRayTmp = origin - Point(0, 0, 0); //vector from the center of the sphere to the ray origin
+	const Vector sphereToRay{ sphereToRayTmp.x, sphereToRayTmp.y, sphereToRayTmp.z };
 
-    double a = Math::Dot(direction, direction);
-    double b = 2 * Math::Dot(direction, sphere_to_ray);
-    double c = Math::Dot(sphere_to_ray, sphere_to_ray) - 1;
+	const double a = Math::Dot(direction, direction);
+	const double b = 2 * Math::Dot(direction, sphereToRay);
+	const double c = Math::Dot(sphereToRay, sphereToRay) - 1;
 
-    double discriminant = std::pow(b, 2) - 4 * a * c;
+	const double discriminant = std::pow(b, 2) - 4 * a * c;
 
     //If the discriminant is smaller than 0, the ray does not intersect the sphere
     if (discriminant < 0 )
@@ -70,50 +75,52 @@ std::vector<Intersection> Ray::local_intersect(Sphere_ptr s) {
         return {};
     }
 
-    double t1 = (-b - std::sqrt(discriminant)) / (2 * a);
-    Intersection i1{t1, s };
-    double t2 = (-b + std::sqrt(discriminant)) / (2 * a);
-    Intersection i2{t2, s };
-    return std::vector<Intersection>{i1, i2};
+	const double t1 = (-b - std::sqrt(discriminant)) / (2 * a);
+	const intersection i1{t1, s };
+	const double t2 = (-b + std::sqrt(discriminant)) / (2 * a);
+	const intersection i2{t2, s };
+    return std::vector<intersection>{i1, i2};
 }
 
-std::vector<Intersection> Ray::local_intersect(Plane_ptr p) {
+std::vector<intersection> ray::local_intersect(plane_ptr p) const
+{
     if(std::abs(direction.y) < EPSILON)
     {
         return{};
     } else
     {
         double t{-origin.y / direction.y};
-        return std::vector<Intersection>{Intersection(t, p)};
+        return std::vector<intersection>{intersection(t, p)};
     }
 }
 
-std::vector<Intersection> Ray::local_intersect(Cube_ptr c) {
+std::vector<intersection> ray::local_intersect(cube_ptr c) const
+{
     //Find the minimum and maximum intersections for the ray with each of the axes
-    std::vector<double> x_tmin_tmax = CheckAxis(origin.x, direction.x);
-    std::vector<double> y_tmin_tmax = CheckAxis(origin.y, direction.y);
-    std::vector<double> z_tmin_tmax = CheckAxis(origin.z, direction.z);
+    std::vector<double> xTminTmax = check_axis(origin.x, direction.x);
+    std::vector<double> yTminTmax = check_axis(origin.y, direction.y);
+    std::vector<double> zTminTmax = check_axis(origin.z, direction.z);
 
-    double tmin = std::max({x_tmin_tmax[0], y_tmin_tmax[0], z_tmin_tmax[0]});
-    double tmax = std::min({x_tmin_tmax[1], y_tmin_tmax[1], z_tmin_tmax[1]});
+    double tmin = std::max({xTminTmax[0], yTminTmax[0], zTminTmax[0]});
+    double tmax = std::min({xTminTmax[1], yTminTmax[1], zTminTmax[1]});
 
     if (tmin > tmax)
     //The Ray misses the Cube
     {
-        return std::vector<Intersection>{};
+        return std::vector<intersection>{};
     }
 
-    return std::vector<Intersection>{Intersection(tmin, c), Intersection(tmax, c)};
+    return std::vector<intersection>{intersection(tmin, c), intersection(tmax, c)};
 }
 
-std::vector<Intersection> Ray::local_intersect(Cylinder_ptr cylinder)
+std::vector<intersection> ray::local_intersect(cylinder_ptr cylinder) const
 {
     double a = std::pow(direction.x, 2) + std::pow(direction.z, 2);
 
     //Ray is parallel to the y axis
     if(Math::Equal(a, 0))
     {
-        std::vector<Intersection> xs;
+        std::vector<intersection> xs;
         intersect_caps(cylinder, xs);
         return xs;
     }
@@ -139,7 +146,7 @@ std::vector<Intersection> Ray::local_intersect(Cylinder_ptr cylinder)
         t1 = temp;
     }
 
-    std::vector<Intersection> xs{};
+    std::vector<intersection> xs{};
 
     const double y0{ origin.y + t0 * direction.y };
     if(cylinder->minimum < y0 && y0 < cylinder->maximum)
@@ -158,7 +165,7 @@ std::vector<Intersection> Ray::local_intersect(Cylinder_ptr cylinder)
     return xs;
 }
 
-std::vector<Intersection> Ray::local_intersect(Cone_ptr cone)
+std::vector<intersection> ray::local_intersect(cone_ptr cone) const
 {
     double a{ std::pow(direction.x, 2) - std::pow(direction.y, 2) + std::pow(direction.z, 2) };
     double b{ (2 * origin.x * direction.x) - (2 * origin.y * direction.y) + (2 * origin.z * direction.z) };
@@ -172,7 +179,7 @@ std::vector<Intersection> Ray::local_intersect(Cone_ptr cone)
     if(Math::Equal(a, 0) && !Math::Equal(b, 0))
     {
         double t{ -c / (2 * b) };
-        std::vector<Intersection> xs{ {t, cone} };
+        std::vector<intersection> xs{ {t, cone} };
 
         intersect_caps(cone, xs);
 
@@ -197,7 +204,7 @@ std::vector<Intersection> Ray::local_intersect(Cone_ptr cone)
         t1 = temp;
     }
 
-    std::vector<Intersection> xs{};
+    std::vector<intersection> xs{};
 
     const double y0{ origin.y + t0 * direction.y };
     if (cone->minimum < y0 && y0 < cone->maximum)
@@ -216,7 +223,7 @@ std::vector<Intersection> Ray::local_intersect(Cone_ptr cone)
     return xs;
 }
 
-bool Ray::check_cap(const double t, const double radius) const
+bool ray::check_cap(const double t, const double radius) const
 {
     double x{ origin.x + t * direction.x };
     double z{ origin.z + t * direction.z };
@@ -224,7 +231,7 @@ bool Ray::check_cap(const double t, const double radius) const
     return (std::pow(x, 2) + std::pow(z, 2)) <= std::abs(radius);
 }
 
-void Ray::intersect_caps(Cylinder_ptr cylinder, std::vector<Intersection>& xs)
+void ray::intersect_caps(cylinder_ptr cylinder, std::vector<intersection>& xs) const
 {
     //Caps only matter if the cylinder is closed, and might possibly be intersected by the ray
     if(!cylinder->closed || Math::Equal(direction.y, 0))
@@ -247,7 +254,7 @@ void Ray::intersect_caps(Cylinder_ptr cylinder, std::vector<Intersection>& xs)
     }
 }
 
-void Ray::intersect_caps(Cone_ptr cone, std::vector<Intersection>& xs)
+void ray::intersect_caps(cone_ptr cone, std::vector<intersection>& xs) const
 {
     //Caps only matter if the cylinder is closed, and might possibly be intersected by the ray
     if (!cone->closed || Math::Equal(direction.y, 0))
@@ -270,30 +277,30 @@ void Ray::intersect_caps(Cone_ptr cone, std::vector<Intersection>& xs)
     }
 }
 
-std::vector<double> Ray::CheckAxis(double axis_origin, double axis_direction)
+std::vector<double> ray::check_axis(const double axis_origin, const double axis_direction)
 {
-    double tmin_enumerator{-1 - axis_origin};
-    double tmax_enumerator{1 - axis_origin};
-    double tmin;
-    double tmax;
+	const double tMinEnumerator{-1 - axis_origin};
+	const double tMaxEnumerator{1 - axis_origin};
+    double tMin;
+    double tMax;
 
     if (std::abs(axis_direction) >= EPSILON)
     {
-        tmin = tmin_enumerator / axis_direction;
-        tmax = tmax_enumerator / axis_direction;
+        tMin = tMinEnumerator / axis_direction;
+        tMax = tMaxEnumerator / axis_direction;
     }
     else
     {
-        tmin = tmin_enumerator * INFINITY;
-        tmax = tmax_enumerator * INFINITY;
+        tMin = tMinEnumerator * INFINITY;
+        tMax = tMaxEnumerator * INFINITY;
     }
 
-    if (tmin > tmax)
+    if (tMin > tMax)
     {
-        std::swap(tmin, tmax);
+        std::swap(tMin, tMax);
     }
 
-    return std::vector<double>{tmin, tmax};
+    return std::vector<double>{tMin, tMax};
 }
 
 

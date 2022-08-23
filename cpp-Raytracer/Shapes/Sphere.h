@@ -1,16 +1,16 @@
 #pragma once
 
 #include <vector>
-#include "Shape.h"
+#include "shape.h"
 
 
 
-class Sphere: public Shape
+class Sphere: public shape
 {
 public:
 	explicit Sphere();
 
-    Vector LocalNormalAt(Point local_point) const override;
+	[[nodiscard]] Vector local_normal_at(Point pLocalPoint) const override;
 };
 
-using Sphere_ptr = std::shared_ptr<Sphere>;
+using sphere_ptr = std::shared_ptr<Sphere>;

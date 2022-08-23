@@ -1,26 +1,26 @@
 #include "Cylinder.h"
 
 
-Cylinder::Cylinder():
-		Shape(EShapeType::cylinder)
+cylinder::cylinder():
+		shape(shape_type::cylinder)
 {
 
 }
 
-Vector Cylinder::LocalNormalAt(Point local_point) const
+Vector cylinder::local_normal_at(Point pLocalPoint) const
 {
-	double distance{ std::pow(local_point.x, 2) + std::pow(local_point.z, 2) };
+	const double distance{ std::pow(pLocalPoint.x, 2) + std::pow(pLocalPoint.z, 2) };
 
-	if(distance < 1 && local_point.y >= maximum - EPSILON)
+	if(distance < 1 && pLocalPoint.y >= maximum - EPSILON)
 	{
 		return { 0, 1, 0 };
 	}
 
-	if(distance < 1 && local_point.y <= minimum + EPSILON)
+	if(distance < 1 && pLocalPoint.y <= minimum + EPSILON)
 	{
 		return { 0, -1, 0 };
 	}
 
 
-	return{ local_point.x, 0, local_point.z };
+	return{ pLocalPoint.x, 0, pLocalPoint.z };
 }

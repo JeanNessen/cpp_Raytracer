@@ -3,24 +3,24 @@
 //
 
 #pragma once
-#include "Shapes/Shape.h"
+#include "Shapes/shape.h"
 #include <vector>
 
-struct Intersection {
+struct intersection {
 
 public:
     //Distance at which the intersection took place, along the given ray
     double t{};
 
     //The object with which this intersection occurred
-    const Shape_ptr object;
+    const shape_ptr object;
 
-    bool operator==(const Intersection& other) const;
+    bool operator==(const intersection& pOther) const;
 
-    Intersection(double t, Shape_ptr  shape);
+    intersection(double pT, shape_ptr  pShape);
 
 };
 
 //Returns the closest not negative intersection
-Intersection* Hit(std::vector<Intersection> &intersections);
+intersection* hit(std::vector<intersection> &pIntersections);
 

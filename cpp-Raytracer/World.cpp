@@ -21,18 +21,18 @@ using namespace std::chrono_literals;
 World DefaultWorld() {
     World w{};
 
-    PointLight default_light{Color(1, 1, 1), Point(-10, 10, -10)};
+    PointLight default_light{color(1, 1, 1), Point(-10, 10, -10)};
     w.add_light(default_light);
 
-    Sphere_ptr default_sphere_1 (new Sphere());
-    default_sphere_1->GetMaterial().color = Color(0.8, 1.0, 0.6);
-    default_sphere_1->GetMaterial().diffuse = 0.7;
-    default_sphere_1->GetMaterial().specular = 0.2;
+    sphere_ptr default_sphere_1 (new Sphere());
+    default_sphere_1->get_material().color = color(0.8, 1.0, 0.6);
+    default_sphere_1->get_material().diffuse = 0.7;
+    default_sphere_1->get_material().specular = 0.2;
 
     w.add_object(default_sphere_1);
 
-    Sphere_ptr default_sphere_2 (new Sphere());
-    default_sphere_2->SetTransform(Math::Scaling(0.5, 0.5, 0.5));
+    sphere_ptr default_sphere_2 (new Sphere());
+    default_sphere_2->set_transform(Math::Scaling(0.5, 0.5, 0.5));
 
     w.add_object(default_sphere_2);
 
@@ -43,30 +43,30 @@ void World::add_light(PointLight light) {
     m_world_lights.push_back(light);
 }
 
-void World::add_object(Shape_ptr obj) {
+void World::add_object(shape_ptr obj) {
     m_world_objects.push_back(obj);
 }
 
-std::vector<Intersection> World::intersect_world(Ray ray) {
+std::vector<intersection> World::intersect_world(ray ray) {
 
-    std::vector<std::unique_ptr<Intersection>> world_intersections_ptr;
+    std::vector<std::unique_ptr<intersection>> world_intersections_ptr;
 
     //Add all the intersections to the vector
     for (const auto& obj: m_world_objects) {
-        std::vector<Intersection> intersections = ray.Intersect(obj);
+        std::vector<intersection> intersections = ray.intersect(obj);
 
         for (auto i: intersections) {
-            world_intersections_ptr.push_back(std::make_unique<Intersection>(i));
+            world_intersections_ptr.push_back(std::make_unique<intersection>(i));
         }
     }
 
     //Sort the pointer vector
-    std::sort(world_intersections_ptr.begin(), world_intersections_ptr.end(), [](std::unique_ptr<Intersection>& lhs, std::unique_ptr<Intersection>& rhs) {
+    std::sort(world_intersections_ptr.begin(), world_intersections_ptr.end(), [](std::unique_ptr<intersection>& lhs, std::unique_ptr<intersection>& rhs) {
         return lhs->t > rhs->t;
     });
 
     //Make new vector with sorted Intersections
-    std::vector<Intersection> world_intersections;
+    std::vector<intersection> world_intersections;
 
     world_intersections.reserve(world_intersections_ptr.size());
 
@@ -78,8 +78,8 @@ std::vector<Intersection> World::intersect_world(Ray ray) {
     return world_intersections;
 }
 
-Color World::shade_hit(IntersectionComputations comps, int remaining) {
-    Color surface = Lighting(comps.object->GetMaterialConst(),
+color World::shade_hit(IntersectionComputations comps, int remaining) {
+    color surface = Lighting(comps.object->get_material_const(),
                               comps.object,
                               m_world_lights[0],
                               comps.over_point,
@@ -87,10 +87,10 @@ Color World::shade_hit(IntersectionComputations comps, int remaining) {
                               comps.normal_v,
                               calculate_shadow(comps.over_point));
 
-    Color reflected = calculate_reflected_color(comps, remaining);
-    Color refracted = calculate_refracted_color(comps, remaining);
+    color reflected = calculate_reflected_color(comps, remaining);
+    color refracted = calculate_refracted_color(comps, remaining);
 
-    Material material = comps.object->GetMaterial();
+    Material material = comps.object->get_material();
     if (material.reflective > 0 && material.transparency > 0)
     {
         double reflectance = Schlick(comps);
@@ -103,64 +103,65 @@ Color World::shade_hit(IntersectionComputations comps, int remaining) {
     }
 }
 
-Color World::calculate_color_at(Ray r, int remaining) {
+//TODO Bounce light for diffuse materials
+color World::calculate_color_at(ray r, int remaining) {
 
-    std::vector<Intersection> intersections = intersect_world(r);
+    std::vector<intersection> intersections = intersect_world(r);
 
-    if(!intersections.empty() && Hit(intersections))
+    if(!intersections.empty() && hit(intersections))
     {
-        Intersection hit = *Hit(intersections);
-        IntersectionComputations comps = PrepareComputations(hit, r);
-        Color color = shade_hit(comps, remaining);
+        intersection currentHit = *hit(intersections);
+        IntersectionComputations comps = PrepareComputations(currentHit, r);
+        color color = shade_hit(comps, remaining);
         return color;
     }
     else
     {
-        return color::black;
+        return colors::black;
     }
 
 }
 
-Canvas World::render_multi_thread(Camera c, int num_threads) {
+canvas World::render_multi_thread(camera c, int num_threads) {
 
     auto start = std::chrono::high_resolution_clock::now();
 
-    if(c.GetSamplesPerPixel() < num_threads)
+    if(c.get_samples_per_pixel() < num_threads)
     {
-        num_threads = c.GetSamplesPerPixel();
+        num_threads = c.get_samples_per_pixel();
     }
 
     std::cout << "Starting render using " << num_threads << " threads." << std::endl;
 
-    Canvas image_sum{c.GetHSize(), c.GetVSize()};
+    canvas image_sum{c.get_h_size(), c.get_v_size()};
 
     //Set m_remaining_lines to the total number of lines to be calculated.
-    m_remaining_lines = c.GetSamplesPerPixel() * c.GetVSize();
+    m_remaining_lines = c.get_samples_per_pixel() * c.get_v_size();
     m_total_lines = m_remaining_lines;
 
     std::vector<std::thread> workers;
     workers.reserve(num_threads);
 
-    std::vector<std::future<Canvas>> render_pass_canvases;
+    std::vector<std::future<canvas>> render_pass_canvases;
     render_pass_canvases.reserve(num_threads);
 
     //calculate number of passes per thread
 
-    int num_passes_last_thread = c.GetSamplesPerPixel() % num_threads;
+    int num_passes_last_thread = c.get_samples_per_pixel() % num_threads;
     int num_passes_per_thread{ 0 };
     if(num_passes_last_thread > 0)
     {
-        num_passes_per_thread = c.GetSamplesPerPixel() / (num_threads - 1);
+        num_passes_per_thread = c.get_samples_per_pixel() / (num_threads - 1);
     }
     else
     {
-        num_passes_per_thread = c.GetSamplesPerPixel() / num_threads;
+        num_passes_per_thread = c.get_samples_per_pixel() / num_threads;
         num_passes_last_thread = num_passes_per_thread;
     }
 
     
     for (int i = 0; i < num_threads; ++i) {
-        std::cout << "Starting render pass " << i + 1 << " of " << c.GetSamplesPerPixel() << "." << std::endl;
+        std::cout << "Starting render pass " << i + 1 << " of " << c.get_samples_per_pixel() << "." << std::endl;
         if(i == num_threads-1)
         {
             render_pass_canvases.push_back(std::async(&World::execute_multiple_passes, this, c, num_passes_last_thread));
@@ -188,7 +189,7 @@ Canvas World::render_multi_thread(Camera c, int num_threads) {
         image_sum += render_pass_canvas.get();
     }
     
-    Canvas image_average = image_sum / num_threads;
+    canvas image_average = image_sum / num_threads;
 
 
 
@@ -196,30 +197,30 @@ Canvas World::render_multi_thread(Camera c, int num_threads) {
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
     double seconds = duration.count() / 1000.0f;
 
-    std::cout << "Finished in " << seconds << " seconds with " << c.GetSamplesPerPixel()  << " samples per pixel on one" << " thread." << std::endl;
+    std::cout << "Finished in " << seconds << " seconds with " << c.get_samples_per_pixel()  << " samples per pixel on one" << " thread." << std::endl;
 
     return image_average;
 }
 
 
-Canvas World::execute_single_pass(Camera c) {
-    Canvas image{c.GetHSize(), c.GetVSize()};
+canvas World::execute_single_pass(camera c) {
+    canvas image{c.get_h_size(), c.get_v_size()};
 
-	for (int y = 0; y < c.GetVSize(); ++y) 
+	for (int y = 0; y < c.get_v_size(); ++y) 
     {
-		for (int x = 0; x < c.GetHSize(); ++x) 
+		for (int x = 0; x < c.get_h_size(); ++x) 
         {
-			Color color = get_color_for_pixel(c, x, y);
-			image.WritePixel(x, y, color);
+			color color = get_color_for_pixel(c, x, y);
+			image.write_pixel(x, y, color);
 		}
 		--m_remaining_lines;
 	}
     return image;
 }
 
-Canvas World::execute_multiple_passes(Camera c, int num_passes)
+canvas World::execute_multiple_passes(camera c, int num_passes)
 {
-    Canvas image{ c.GetHSize(), c.GetVSize() };
+    canvas image{ c.get_h_size(), c.get_v_size() };
 
     for (int i = 0; i < num_passes; ++i)
     {
@@ -234,14 +235,14 @@ bool World::calculate_shadow(Point p) {
     double distance_to_light = (v_point_to_light).magnitude();
     Vector direction_to_light = v_point_to_light.normalized();
 
-    Ray r_point_to_light{p, direction_to_light};
+    ray r_point_to_light{p, direction_to_light};
 
-    std::vector<Intersection> intersections = intersect_world(r_point_to_light);
+    std::vector<intersection> intersections = intersect_world(r_point_to_light);
 
-    if(Intersection* hit = Hit(intersections))
+    if(intersection* currentHit = hit(intersections))
     {
-        bool blocking_shape_throws_shadow = hit->object->GetMaterial().throws_shadow;
-        if (hit->t < distance_to_light && blocking_shape_throws_shadow)
+        bool blocking_shape_throws_shadow = currentHit->object->get_material().throws_shadow;
+        if (currentHit->t < distance_to_light && blocking_shape_throws_shadow)
         {
             return true;
         }
@@ -250,22 +251,22 @@ bool World::calculate_shadow(Point p) {
     return false;
 }
 
-Color World::calculate_reflected_color(IntersectionComputations comps, int remaining) {
-    if(comps.object->GetMaterial().reflective == 0 || remaining <= 0)
+color World::calculate_reflected_color(IntersectionComputations comps, int remaining) {
+    if(comps.object->get_material().reflective == 0 || remaining <= 0)
     {
-        return color::black;
+        return colors::black;
     } else
     {
-        Ray reflected_ray{comps.over_point, comps.reflect_v};
-        Color color = calculate_color_at(reflected_ray, remaining - 1);
+        ray reflected_ray{comps.over_point, comps.reflect_v};
+        color color = calculate_color_at(reflected_ray, remaining - 1);
 
-        return color * comps.object->GetMaterial().reflective;
+        return color * comps.object->get_material().reflective;
     }
 }
 
-Color World::get_color_for_pixel(Camera c, int x, int y) {
-    Ray r = c.RayForPixel(x, y);
-    Color pixel_color = calculate_color_at(r);
+color World::get_color_for_pixel(camera c, int x, int y) {
+    ray r = c.ray_for_pixel(x, y);
+    color pixel_color = calculate_color_at(r);
     return pixel_color;
 }
 
@@ -278,7 +279,7 @@ void World::print_progress_update() const
 	std::cout << "Progress: " << progress_percentage << "%" << std::endl;
 }
 
-Color World::calculate_refracted_color(IntersectionComputations comps, int remaining)
+color World::calculate_refracted_color(IntersectionComputations comps, int remaining)
 {
     //Aplly snells law to check for total internal reflection
     double n_ratio = comps.n1 / comps.n2;
@@ -287,17 +288,17 @@ Color World::calculate_refracted_color(IntersectionComputations comps, int remai
 
 
 
-    if (comps.object->GetMaterial().transparency == 0)
+    if (comps.object->get_material().transparency == 0)
     {
-        return color::black;
+        return colors::black;
     }
     else if(remaining == 0)
     {
-        return color::black;
+        return colors::black;
     }
     else if(sin2_t > 1)
     {
-        return color::black;
+        return colors::black;
     }
     else
     {
@@ -306,9 +307,9 @@ Color World::calculate_refracted_color(IntersectionComputations comps, int remai
         Vector direction {comps.normal_v * (n_ratio * cos_i - cos_t) -
                 comps.eye_v * n_ratio};
 
-        Ray refracted_ray{comps.under_point, direction};
+        ray refracted_ray{comps.under_point, direction};
 
-        return calculate_color_at(refracted_ray, remaining - 1) * comps.object->GetMaterial().transparency;
+        return calculate_color_at(refracted_ray, remaining - 1) * comps.object->get_material().transparency;
     }
 }
 
