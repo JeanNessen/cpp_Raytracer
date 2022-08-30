@@ -12,7 +12,7 @@ private:
 public:
     cube();
 
-[[nodiscard]] Vector local_normal_at(Point pLocalPoint) const override;
+[[nodiscard]] Vector local_normal_at(point pLocalPoint) const override;
 
 };
 

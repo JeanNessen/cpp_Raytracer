@@ -132,7 +132,7 @@ struct Templates<Head_> {
   using Tail = None;
 };
 
-// Tuple-like type lists
+// tuple-like type lists
 template <typename Head_, typename... Tail_>
 struct Types {
   using Head = Head_;

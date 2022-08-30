@@ -4,7 +4,7 @@
 
 #include "Light.h"
 
-color Lighting(Material m, shape_ptr object, PointLight light, Point position, Vector eye_v, Vector normal_v, bool in_shadow) {
+color Lighting(material m, shape_ptr object, point_light light, point position, Vector eye_v, Vector normal_v, bool in_shadow) {
 
     color light_color;
 
@@ -69,7 +69,7 @@ color Lighting(Material m, shape_ptr object, PointLight light, Point position, V
     }
 }
 
-bool PointLight::operator==(const PointLight &other) const {
+bool point_light::operator==(const point_light &other) const {
     if (intensity == other.intensity && position == other.position)
     {
         return true;

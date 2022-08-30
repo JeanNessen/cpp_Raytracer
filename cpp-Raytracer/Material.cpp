@@ -6,7 +6,7 @@
 
 #include <memory>
 
-bool Material::operator==(const Material &other) const {
+bool material::operator==(const material &other) const {
     return (
             Math::Equal(ambient, other.ambient) &&
             Math::Equal(diffuse, other.diffuse) &&
@@ -18,17 +18,17 @@ bool Material::operator==(const Material &other) const {
             );
 }
 
-Material::Material(std::shared_ptr<Pattern> pattern)
+material::material(std::shared_ptr<Pattern> pattern)
 {
     this->m_pattern = pattern;
 }
 
-Material::Material()
+material::material()
 {
 
 }
 
-void Material::SetPattern(std::shared_ptr<Pattern> pattern) {
+void material::SetPattern(std::shared_ptr<Pattern> pattern) {
     this->m_pattern = pattern;
 }
 

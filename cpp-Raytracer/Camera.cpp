@@ -44,9 +44,9 @@ ray camera::ray_for_pixel(const int pX, const int pY) const
     const double worldY = m_half_height - yOffset;
 
     //Using the camera matrix, m_transform the canvas point and the origin, and then compute the ray's direction vector, the canvas is at z = -m_focalLength
-    const Point pixel{m_transform.Inversed() * Point(worldX, worldY, -m_focal_length)};
+    const point pixel{m_transform.Inversed() * point(worldX, worldY, -m_focal_length)};
 
-    Point origin = calculate_ray_origin();
+    point origin = calculate_ray_origin();
 
     Vector direction{Vector{pixel - origin}.normalized()};
 
@@ -68,25 +68,25 @@ double camera::calculate_pixel_offset(const int pPixel) const {
     return offset;
 }
 
-Point camera::calculate_ray_origin() const
+point camera::calculate_ray_origin() const
 {
-    Point origin;
+    point origin;
     //If Depth of field is enabled, the ray will originate from a random point on the aperture
     if(depth_of_field)
     {
-        origin = Point{m_transform.Inversed() * get_random_point_on_aperture()};
+        origin = point{m_transform.Inversed() * get_random_point_on_aperture()};
     }
     //If Depth of field is disabled, the ray will originate from (0, 0, 0)
     else
     {
-        origin = Point{m_transform.Inversed() * Point(0, 0, 0)};
+        origin = point{m_transform.Inversed() * point(0, 0, 0)};
     }
     return origin;
 }
 
 
 
-Point camera::get_random_point_on_aperture() const {
+point camera::get_random_point_on_aperture() const {
     double x = Math::GetRandomDouble(0, m_aperture_size) - (m_aperture_size / 2);
     double y = Math::GetRandomDouble(0, m_aperture_size) - (m_aperture_size / 2);
 

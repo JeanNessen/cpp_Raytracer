@@ -5,42 +5,42 @@
 # define M_PI           3.14159265358979323846  /* pi */
 # define EPSILON 0.00001
 
-	struct Tuple
+	struct tuple
 	{
 		double x, y, z, w;
 
-		Tuple() = default;
-		Tuple(double x, double y, double z);
-		Tuple(double x, double y, double z, double w);
+		tuple() = default;
+		tuple(double x, double y, double z);
+		tuple(double x, double y, double z, double w);
 
-		bool operator==(const Tuple& other) const;
-        bool operator!=(const Tuple& other) const;
-		Tuple operator+(const Tuple& other) const;
-		Tuple operator-(const Tuple& other) const;
+		bool operator==(const tuple& other) const;
+        bool operator!=(const tuple& other) const;
+		tuple operator+(const tuple& other) const;
+		tuple operator-(const tuple& other) const;
 
-		Tuple operator*(const double& other) const;
-        Tuple operator-(const double& other) const;
+		tuple operator*(const double& other) const;
+        tuple operator-(const double& other) const;
 
-        Tuple operator-();
+        tuple operator-();
 
 		double magnitude() const;
 
-        friend std::ostream& operator<<(std::ostream& os, const Tuple& t);
+        friend std::ostream& operator<<(std::ostream& os, const tuple& t);
 
 	};
 
-	struct Point : public Tuple
+	struct point : public tuple
 	{
-		Point();
-		Point(double x, double y, double z);
-        explicit Point(Tuple t);
+		point();
+		point(double x, double y, double z);
+        explicit point(tuple t);
 	};
 
-	struct Vector : public Tuple
+	struct Vector : public tuple
 	{
 		Vector();
 		Vector(double x, double y, double z);
-        explicit Vector(Tuple t);
+        explicit Vector(tuple t);
 
 		[[nodiscard]]Vector normalized() const;
 
@@ -112,7 +112,7 @@
 		bool operator!=(const Matrix4& other) const;
 
 		Matrix4 operator*(const Matrix4& A) const;
-		Tuple operator*(const Tuple& b) const;
+		tuple operator*(const tuple& b) const;
 		Matrix4 operator*(const double& b) const;
 
 		friend std::ostream& operator<<(std::ostream& os, const Matrix4& c);
@@ -135,7 +135,7 @@
         double GetRandomDouble(double min, double max);
 
         bool Equal(const double a, const double b);
-		bool Equal(const Tuple a, const Tuple b);
+		bool Equal(const tuple a, const tuple b);
 
 		double Dot(const Vector& a, const Vector& b);
 		Vector Cross(const Vector& a, const Vector& b);
@@ -147,15 +147,15 @@
 		Matrix2 Submatrix(const Matrix3& input, const int row, const int column);
 		Matrix3 Submatrix(const Matrix4& input, const int row, const int column);
 
-		//Translates a Point in space, does not affect Vectors
+		//Translates a point in space, does not affect Vectors
 		Matrix4 Translation(const double x, const double y, const double z);
 
-		//Scales a Point or Vector in Space
+		//Scales a point or Vector in Space
 		Matrix4 Scaling(const double x, const double y, const double z);
-        //Scales a Point or Vector uniformly in all dimensions
+        //Scales a point or Vector uniformly in all dimensions
         Matrix4 Scaling(const double s);
 
-		//Rotates a Point around the given Axis
+		//Rotates a point around the given Axis
 		Matrix4 Rotation_X(const double r);
 		Matrix4 Rotation_Y(const double r);
 		Matrix4 Rotation_Z(const double r);
@@ -173,7 +173,7 @@
         //From: Where should the eye be
         //To: Where should the eye be oriented towards
         //Up: What direction is up
-        Matrix4 ViewTransform(Point from, Point to, Vector up);
+        Matrix4 ViewTransform(point from, point to, Vector up);
 
 		extern Matrix4 identiy_matrix;
 	}

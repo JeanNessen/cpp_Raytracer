@@ -77,10 +77,10 @@
 //   void ::testing::internal::UniversalPrint(const T& value, ostream*);
 //
 //   // Prints the fields of a tuple tersely to a string vector, one
-//   // element for each field. Tuple support must be enabled in
+//   // element for each field. tuple support must be enabled in
 //   // gtest-port.h.
 //   std::vector<string> UniversalTersePrintTupleFieldsToStrings(
-//       const Tuple& value);
+//       const tuple& value);
 //
 // Known limitation:
 //

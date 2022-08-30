@@ -15,7 +15,7 @@ void Pattern::SetTransform(Matrix4 new_transform) {
     m_transform = new_transform;
 }
 
-color CStripePattern::PatternAt(Point p) const {
+color CStripePattern::PatternAt(point p) const {
     if(int(std::floor(p.x)) % 2 == 0)
     {
         return a;
@@ -37,7 +37,7 @@ CGradientPattern::CGradientPattern(color a, color b):
 
 }
 
-color CGradientPattern::PatternAt(Point p) const {
+color CGradientPattern::PatternAt(point p) const {
     color distance = b - a;
     double fraction = p.x - std::floor(p.x);
     return a + distance * fraction;
@@ -49,7 +49,7 @@ CCheckersPattern::CCheckersPattern(color a, color b) :
 
 }
 
-color CCheckersPattern::PatternAt(Point p) const {
+color CCheckersPattern::PatternAt(point p) const {
     if((int(floor(p.x)) + int(floor(p.y)) + int(floor(p.z))) % 2 == 0) {
         return a;
     } else
@@ -62,6 +62,6 @@ CTestPattern::CTestPattern(color a, color b) : Pattern(a, b) {
 
 }
 
-color CTestPattern::PatternAt(Point p) const {
+color CTestPattern::PatternAt(point p) const {
     return color(p.x, p.y, p.z);
 }

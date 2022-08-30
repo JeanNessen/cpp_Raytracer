@@ -11,7 +11,7 @@ class plane final : public shape {
 public:
     plane();
 
-	[[nodiscard]] Vector local_normal_at(Point pLocalPoint) const override;
+	[[nodiscard]] Vector local_normal_at(point pLocalPoint) const override;
 };
 
 using plane_ptr = std::shared_ptr<plane>;

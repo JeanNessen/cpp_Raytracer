@@ -2,11 +2,11 @@
 #include "World.h"
 #include <random>
 
-bool CheckSpot(Point spot, const std::vector<Point>& taken_spots)
+bool CheckSpot(point spot, const std::vector<point>& taken_spots)
 {
     double max_distance = 0.5;
     bool spot_is_free = true;
-    for(Point s: taken_spots)
+    for(point s: taken_spots)
     {
         double taken_x = s.x;
         double taken_z = s.z;
@@ -22,7 +22,7 @@ bool CheckSpot(Point spot, const std::vector<Point>& taken_spots)
 
 void PlaceSpheres(World &w)
 {
-    std::vector<Point> taken_spots;
+    std::vector<point> taken_spots;
 
     for (int i = 0; i < 25; ++i) {
         sphere_ptr sphere(new Sphere());
@@ -33,10 +33,10 @@ void PlaceSpheres(World &w)
         sphere->get_material().shininess = 150;
         double sphere_scaling_s = Math::GetRandomDouble(0.1, 0.25);
         Matrix4 scaling = Math::Scaling(sphere_scaling_s);
-        Point spot{Math::GetRandomDouble(-5, 5), sphere_scaling_s, Math::GetRandomDouble(10, 20)};
+        point spot{Math::GetRandomDouble(-5, 5), sphere_scaling_s, Math::GetRandomDouble(10, 20)};
         while(!CheckSpot(spot, taken_spots))
         {
-            spot = Point{Math::GetRandomDouble(-5, 5), sphere_scaling_s, Math::GetRandomDouble(10, 20)};
+            spot = point{Math::GetRandomDouble(-5, 5), sphere_scaling_s, Math::GetRandomDouble(10, 20)};
         }
         taken_spots.push_back(spot);
         sphere->set_transform(Math::Translation(spot.x, spot.y, spot.z) * scaling);
@@ -51,7 +51,7 @@ int main()
     w.set_recursion_depth(5);
 
     //Initialize the light
-    PointLight default_light{ color{254.0/255.0, 216.0/255.0, 177.0/255.0}, Point(0, 6, 0) };
+    point_light default_light{ color{254.0/255.0, 216.0/255.0, 177.0/255.0}, point(0, 6, 0) };
     w.add_light(default_light);
 
 
@@ -110,7 +110,7 @@ int main()
 
 
     //Set Glass material
-    Material glass_mat{};
+    material glass_mat{};
     glass_mat.color = colors::black;
     glass_mat.transparency = 0.8;
     glass_mat.refractive_index = 1.51;
@@ -130,8 +130,8 @@ int main()
     camera c{1000, 1000, 3 * (M_PI / 4)};
 
     //Position the Camera
-    c.set_transform(Math::ViewTransform(Point(0, 5, -29.5), Point(0, 5, 0), Vector(0, 1, 0)));
-    //c.SetTransform(Math::ViewTransform(Point(0, 1, -20), Point(0, 1, 8), Vector(0, 1, 0)));
+    c.set_transform(Math::ViewTransform(point(0, 5, -29.5), point(0, 5, 0), Vector(0, 1, 0)));
+    //c.SetTransform(Math::ViewTransform(point(0, 1, -20), point(0, 1, 8), Vector(0, 1, 0)));
 
     c.set_samples_per_pixel(20);
 

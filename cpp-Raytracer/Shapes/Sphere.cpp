@@ -8,9 +8,9 @@ Sphere::Sphere():
 
 }
 
-Vector Sphere::local_normal_at(const Point pLocalPoint) const{
+Vector Sphere::local_normal_at(const point pLocalPoint) const{
     //Calculate Object Space normals
-    return Vector{pLocalPoint - Point(0, 0, 0)};
+    return Vector{pLocalPoint - point(0, 0, 0)};
 }
 
 

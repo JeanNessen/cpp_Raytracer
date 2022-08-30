@@ -27,21 +27,21 @@ public:
     static int get_recursion_depth(){ return m_recursion_depth; }
 	static void set_recursion_depth(int new_depth){ m_recursion_depth = new_depth; }
 
-    std::vector<PointLight>& get_world_lights(){ return m_world_lights; }
-    void add_light(PointLight light);
+    std::vector<point_light>& get_world_lights(){ return m_world_lights; }
+    void add_light(point_light light);
 
     std::vector<shape_ptr>& get_world_objects(){ return m_world_objects; }
     void add_object(shape_ptr obj);
 
     std::vector<intersection> intersect_world(ray ray);
 
-    bool calculate_shadow(Point p);
+    bool calculate_shadow(point p);
 
-    color calculate_reflected_color(IntersectionComputations comps, int remaining = m_recursion_depth);
+    color calculate_reflected_color(intersection_computations comps, int remaining = m_recursion_depth);
 
-    color calculate_refracted_color(IntersectionComputations comps, int remaining = m_recursion_depth);
+    color calculate_refracted_color(intersection_computations comps, int remaining = m_recursion_depth);
 
-    color shade_hit(IntersectionComputations comps, int remaining = m_recursion_depth);
+    color shade_hit(intersection_computations comps, int remaining = m_recursion_depth);
 
     color calculate_color_at(ray r, int remaining = m_recursion_depth);
 
@@ -52,7 +52,7 @@ private:
 
     static int m_recursion_depth;
 
-    std::vector<PointLight> m_world_lights{};
+    std::vector<point_light> m_world_lights{};
 
     std::vector<shape_ptr> m_world_objects{};
 

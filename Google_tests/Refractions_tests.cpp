@@ -17,7 +17,7 @@ sphere_ptr GlassSphere()
 
 TEST(Refractions, TransparencyAndRefractiveIndexOfDefaultMaterial)
 {
-    Material m{};
+    material m{};
 
     EXPECT_EQ(m.transparency, 0);
     EXPECT_EQ(m.refractive_index, 1);
@@ -46,7 +46,7 @@ TEST(Refractions, Findingn1Andn2AtVariousIntersections)
     C->set_transform(Math::Translation(0, 0, 0.25));
     C->get_material().refractive_index = 2.5;
 
-    ray r{Point(0, 0, -4), Vector(0, 0, 1)};
+    ray r{point(0, 0, -4), Vector(0, 0, 1)};
 
     std::vector<intersection> xs{intersection(2, A),
                                   intersection(2.75, B),
@@ -55,53 +55,53 @@ TEST(Refractions, Findingn1Andn2AtVariousIntersections)
                                   intersection(5.25, C),
                                   intersection(6, A)};
 
-    IntersectionComputations comps_01 = PrepareComputations(xs[0], r, xs);
+    intersection_computations comps_01 = PrepareComputations(xs[0], r, xs);
     EXPECT_EQ(comps_01.n1, 1);
     EXPECT_EQ(comps_01.n2, 1.5);
 
-    IntersectionComputations comps_02 = PrepareComputations(xs[1], r, xs);
+    intersection_computations comps_02 = PrepareComputations(xs[1], r, xs);
     EXPECT_EQ(comps_02.n1, 1.5);
     EXPECT_EQ(comps_02.n2, 2);
 
-    IntersectionComputations comps_03 = PrepareComputations(xs[2], r, xs);
+    intersection_computations comps_03 = PrepareComputations(xs[2], r, xs);
     EXPECT_EQ(comps_03.n1, 2);
     EXPECT_EQ(comps_03.n2, 2.5);
 
-    IntersectionComputations comps_04 = PrepareComputations(xs[3], r, xs);
+    intersection_computations comps_04 = PrepareComputations(xs[3], r, xs);
     EXPECT_EQ(comps_04.n1, 2.5);
     EXPECT_EQ(comps_04.n2, 2.5);
 
-    IntersectionComputations comps_05 = PrepareComputations(xs[4], r, xs);
+    intersection_computations comps_05 = PrepareComputations(xs[4], r, xs);
     EXPECT_EQ(comps_05.n1, 2.5);
     EXPECT_EQ(comps_05.n2, 1.5);
 
-    IntersectionComputations comps_06 = PrepareComputations(xs[5], r, xs);
+    intersection_computations comps_06 = PrepareComputations(xs[5], r, xs);
     EXPECT_EQ(comps_06.n1, 1.5);
     EXPECT_EQ(comps_06.n2, 1);
 }
 
 TEST(Refractions, TheUnderPointIfOffsetBelowTheSurface)
 {
-    ray r{Point(0, 0, -5), Vector(0, 0, 1)};
+    ray r{point(0, 0, -5), Vector(0, 0, 1)};
 
     sphere_ptr shape = GlassSphere();
     shape->set_transform(Math::Translation(0, 0, 1));
     intersection i{5, shape};
 
-    IntersectionComputations comps = PrepareComputations(i, r);
+    intersection_computations comps = PrepareComputations(i, r);
 
     EXPECT_TRUE(comps.under_point.z > EPSILON/2);
-    EXPECT_TRUE(comps.point.z < comps.under_point.z);
+    EXPECT_TRUE(comps.intersect_point.z < comps.under_point.z);
 }
 
 TEST(Refractions, TheRefractedColorWithOpaqueSurface)
 {
     World w = DefaultWorld();
     shape_ptr shape = w.get_world_objects()[0];
-    ray r{Point(0, 0, -5), Vector(0, 0, 1)};
+    ray r{point(0, 0, -5), Vector(0, 0, 1)};
     std::vector<intersection> xs{intersection(4, shape), intersection(6, shape)};
 
-    IntersectionComputations comps = PrepareComputations(xs[0], r, xs);
+    intersection_computations comps = PrepareComputations(xs[0], r, xs);
     color c = w.calculate_refracted_color(comps, 5);
 
     EXPECT_EQ(c, colors::black);
@@ -113,10 +113,10 @@ TEST(Refractions, RefractedColorAtMaxRecursiveDepth)
     shape_ptr shape = w.get_world_objects()[0];
     shape->get_material().transparency = 1;
     shape->get_material().refractive_index = 1.5;
-    ray r{Point(0, 0, -5), Vector(0, 0, 1)};
+    ray r{point(0, 0, -5), Vector(0, 0, 1)};
     std::vector<intersection> xs{intersection(4, shape), intersection(6, shape)};
 
-    IntersectionComputations comps = PrepareComputations(xs[0], r, xs);
+    intersection_computations comps = PrepareComputations(xs[0], r, xs);
     color c = w.calculate_refracted_color(comps, 0);
 
     EXPECT_EQ(c, colors::black);
@@ -128,10 +128,10 @@ TEST(Refractions, TheRefractedColorUnderTotalInternalReflection)
     shape_ptr shape = w.get_world_objects()[0];
     shape->get_material().transparency = 1;
     shape->get_material().refractive_index = 1.5;
-    ray r{Point(0, 0, sqrt(2) / 2), Vector(0, 1, 0)};
+    ray r{point(0, 0, sqrt(2) / 2), Vector(0, 1, 0)};
     std::vector<intersection> xs{intersection(-sqrt(2) / 2, shape), intersection(sqrt(2) / 2, shape)};
 
-    IntersectionComputations comps = PrepareComputations(xs[1], r, xs);
+    intersection_computations comps = PrepareComputations(xs[1], r, xs);
     color c = w.calculate_refracted_color(comps, 5);
 
     EXPECT_EQ(c, colors::black);
@@ -150,13 +150,13 @@ TEST(Refractions, RefractedColorWithRefractedRay)
     B->get_material().transparency = 1;
     B->get_material().refractive_index = 1.5;
 
-    ray r{Point(0, 0, 0.1), Vector(0, 1, 0)};
+    ray r{point(0, 0, 0.1), Vector(0, 1, 0)};
     std::vector<intersection> xs{intersection(-0.9899, A),
                                   intersection(-0.4899, B),
                                   intersection(0.4899, B),
                                   intersection(0.9899, A)};
 
-    IntersectionComputations comps = PrepareComputations(xs[2], r, xs);
+    intersection_computations comps = PrepareComputations(xs[2], r, xs);
     color c = w.calculate_refracted_color(comps, 5);
 
     EXPECT_EQ(c, color(0, 0.99888, 0.04725));
@@ -179,10 +179,10 @@ TEST(Refractions, ShadeHitWithTransparentMaterial)
     ball->set_transform(Math::Translation(0, -3.5, -0.5));
     w.add_object(ball);
 
-    ray r{Point(0, 0, -3), Vector(0, -sqrt(2) / 2, sqrt(2) / 2)};
+    ray r{point(0, 0, -3), Vector(0, -sqrt(2) / 2, sqrt(2) / 2)};
     std::vector<intersection> xs{intersection(sqrt(2), floor)};
 
-    IntersectionComputations comps = PrepareComputations(xs[0], r, xs);
+    intersection_computations comps = PrepareComputations(xs[0], r, xs);
 
     color refraction_color = w.shade_hit(comps, 5);
 
@@ -193,10 +193,10 @@ TEST(Refractions, SchlickApproximationUnterTotalInternalReflection)
 {
     sphere_ptr shape = GlassSphere();
 
-    ray r{Point(0, 0, sqrt(2) / 2), Vector(0, 1, 0)};
+    ray r{point(0, 0, sqrt(2) / 2), Vector(0, 1, 0)};
     std::vector<intersection> xs{intersection(-sqrt(2) / 2, shape), intersection(sqrt(2) / 2, shape)};
 
-    IntersectionComputations comps = PrepareComputations(xs[1], r, xs);
+    intersection_computations comps = PrepareComputations(xs[1], r, xs);
     double reflectance = Schlick(comps);
 
     EXPECT_TRUE(Math::Equal(reflectance, 1));
@@ -204,10 +204,10 @@ TEST(Refractions, SchlickApproximationUnterTotalInternalReflection)
 
 TEST(Refractions, SchlickApproximationWithPerpendicularViewingAngle) {
     shape_ptr shape = GlassSphere();
-    ray r{Point(0, 0, 0), Vector(0, 1, 0)};
+    ray r{point(0, 0, 0), Vector(0, 1, 0)};
     std::vector<intersection> xs{intersection(-1, shape), intersection(1, shape)};
 
-    IntersectionComputations comps = PrepareComputations(xs[1], r, xs);
+    intersection_computations comps = PrepareComputations(xs[1], r, xs);
     double reflectance = Schlick(comps);
 
     EXPECT_TRUE(Math::Equal(reflectance, 0.04));
@@ -217,10 +217,10 @@ TEST(Refractions, SchlickApproximationWithSmallAngleAndn2Biggern1)
 {
     shape_ptr shape = GlassSphere();
 
-    ray r{Point(0, 0.99, -2), Vector(0, 0, 1)};
+    ray r{point(0, 0.99, -2), Vector(0, 0, 1)};
     std::vector<intersection> xs{intersection(1.8589, shape)};
 
-    IntersectionComputations comps = PrepareComputations(xs[0], r, xs);
+    intersection_computations comps = PrepareComputations(xs[0], r, xs);
     double reflectance = Schlick(comps);
 
     EXPECT_TRUE(Math::Equal(reflectance, 0.48873));
@@ -243,10 +243,10 @@ TEST(Refractions, ShadeHitWithAReflectiveTransparentMaterial)
     ball->set_transform(Math::Translation(0, -3.5, -0.5));
     w.add_object(ball);
 
-    ray r{Point(0, 0, -3), Vector(0, -sqrt(2) / 2, sqrt(2) / 2)};
+    ray r{point(0, 0, -3), Vector(0, -sqrt(2) / 2, sqrt(2) / 2)};
     std::vector<intersection> xs{intersection(sqrt(2), floor)};
 
-    IntersectionComputations comps = PrepareComputations(xs[0], r, xs);
+    intersection_computations comps = PrepareComputations(xs[0], r, xs);
 
     color floor_color = w.shade_hit(comps, 5);
 

@@ -26,24 +26,24 @@ bool shape::operator!=(const shape &pOther) const {
 
 shape::shape(const shape_type pT):
 	m_transform(Math::identiy_matrix),
-	m_material(Material{}),
+	m_material(material{}),
 	id(m_latest_id),
 	type(pT)
 {
     ++m_latest_id;
 }
 
-Vector shape::normal_at(const Point pWorldPoint) const{
-	const Point localPoint{get_transform().Inversed() * pWorldPoint};
+Vector shape::normal_at(const point pWorldPoint) const{
+	const point localPoint{get_transform().Inversed() * pWorldPoint};
 	const Vector localNormal{local_normal_at(localPoint)};
     Vector worldNormal{get_transform().Inversed().Transposed() * localNormal};
     worldNormal.w = 0;
     return worldNormal.normalized();
 }
 
-color shape::stripe_at_object(const Point pWorldPoint) const {
-	const Point objectPoint{ m_transform.Inversed() * pWorldPoint};
-	const Point patternPoint{get_material_const().GetPattern()->GetTransform().Inversed() * objectPoint};
+color shape::stripe_at_object(const point pWorldPoint) const {
+	const point objectPoint{ m_transform.Inversed() * pWorldPoint};
+	const point patternPoint{get_material_const().GetPattern()->GetTransform().Inversed() * objectPoint};
     return get_material_const().GetPattern()->PatternAt(patternPoint);
 }
 

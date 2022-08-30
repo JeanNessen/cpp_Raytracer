@@ -11,7 +11,7 @@ cube::cube()
 
 }
 
-Vector cube::local_normal_at(Point pLocalPoint) const {
+Vector cube::local_normal_at(point pLocalPoint) const {
 	const double maxc = std::max({std::abs(pLocalPoint.x), std::abs(pLocalPoint.y), std::abs(pLocalPoint.z)});
 
     if (maxc == std::abs(pLocalPoint.x))

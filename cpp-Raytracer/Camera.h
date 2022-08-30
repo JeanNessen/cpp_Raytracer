@@ -43,12 +43,12 @@ public:
 private:
     void calculate_pixel_size();
 
-	[[nodiscard]] Point calculate_ray_origin() const;
+	[[nodiscard]] point calculate_ray_origin() const;
 
     [[nodiscard]] double calculate_pixel_offset(int pPixel) const;
 
 
-    [[nodiscard]] Point get_random_point_on_aperture() const;
+    [[nodiscard]] point get_random_point_on_aperture() const;
 
 
 //Members

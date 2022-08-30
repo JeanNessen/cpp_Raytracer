@@ -3,17 +3,17 @@
 
 #include "Intersection.h"
 
-ray::ray(const Point origin, const Vector direction):
+ray::ray(const point origin, const Vector direction):
 	origin(origin),
 	direction(direction)
 {
 
 }
 
-Point ray::position(const double distance) const
+point ray::position(const double distance) const
 {
-	const Tuple distanceTraveled = direction * distance;
-	const Point position{ distanceTraveled.x + origin.x,
+	const tuple distanceTraveled = direction * distance;
+	const point position{ distanceTraveled.x + origin.x,
 					distanceTraveled.y + origin.y,
 					distanceTraveled.z + origin.z };
 	return position;
@@ -21,10 +21,10 @@ Point ray::position(const double distance) const
 
 ray ray::transform(const Matrix4 matrix) const
 {
-	const Tuple originTuple{ matrix * origin };
-	const Tuple directionTuple{ matrix * direction };
+	const tuple originTuple{ matrix * origin };
+	const tuple directionTuple{ matrix * direction };
 
-	const Point newOrigin{ originTuple.x, originTuple.y, originTuple.z };
+	const point newOrigin{ originTuple.x, originTuple.y, originTuple.z };
 	const Vector newDirection{ directionTuple.x, directionTuple.y, directionTuple.z };
 
 	ray r = ray{newOrigin, newDirection };
@@ -60,7 +60,7 @@ std::vector<intersection> ray::intersect(shape_ptr s) const
 
 std::vector<intersection> ray::local_intersect(sphere_ptr s) const
 {
-	const Tuple sphereToRayTmp = origin - Point(0, 0, 0); //vector from the center of the sphere to the ray origin
+	const tuple sphereToRayTmp = origin - point(0, 0, 0); //vector from the center of the sphere to the ray origin
 	const Vector sphereToRay{ sphereToRayTmp.x, sphereToRayTmp.y, sphereToRayTmp.z };
 
 	const double a = Math::Dot(direction, direction);

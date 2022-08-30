@@ -8,8 +8,8 @@
 
 TEST(Tuples, CreatePoint)
 {
-    Point p = Point(4, -4, 3);
-    Tuple target = Tuple(4, -4, 3, 1);
+    point p = point(4, -4, 3);
+    tuple target = tuple(4, -4, 3, 1);
 
     EXPECT_EQ(p, target);
 }
@@ -17,7 +17,7 @@ TEST(Tuples, CreatePoint)
 TEST(Tuples, CreateVector)
 {
     Vector v = Vector(4, -4, 3);
-    Tuple target{ 4, -4, 3, 0 };
+    tuple target{ 4, -4, 3, 0 };
     EXPECT_EQ(v, target);
 }
 
@@ -33,9 +33,9 @@ TEST(GeneralMath, FloatComparison)
 
 TEST(GeneralMath, TupleComparison)
 {
-    Tuple a{ 1, 2, 3, 4 };
-    Tuple b{ 1, 2, 3, 4.01 };
-    Tuple c{ 1, 2 ,3, 4.00001 };
+    tuple a{ 1, 2, 3, 4 };
+    tuple b{ 1, 2, 3, 4.01 };
+    tuple c{ 1, 2 ,3, 4.00001 };
 
     EXPECT_FALSE(Math::Equal(a, b));
     EXPECT_TRUE(Math::Equal(a, c));
@@ -43,17 +43,17 @@ TEST(GeneralMath, TupleComparison)
 
 TEST(Tuples, TupleAddition)
 {
-    Tuple a1{ 3, -2, 5, 1 };
-    Tuple a2{ -2, 3, 1, 0 };
-    Tuple target{ 1, 1, 6, 1 };
+    tuple a1{ 3, -2, 5, 1 };
+    tuple a2{ -2, 3, 1, 0 };
+    tuple target{ 1, 1, 6, 1 };
 
     EXPECT_EQ(a1+a2, target);
 }
 
 TEST(Tuples, PointMinusPoint)
 {
-    Point p1 = Point(3, 2, 1);
-    Point p2 = Point(5, 6, 7);
+    point p1 = point(3, 2, 1);
+    point p2 = point(5, 6, 7);
     Vector target = Vector(-2, -4, -6);
 
     EXPECT_EQ(p1-p2, target);
@@ -61,9 +61,9 @@ TEST(Tuples, PointMinusPoint)
 
 TEST(Tuples, PointMinusVector)
 {
-    Point p = Point(3, 2, 1);
+    point p = point(3, 2, 1);
     Vector v = Vector(5, 6, 7);
-    Point target = Point(-2, -4, -6);
+    point target = point(-2, -4, -6);
 
     EXPECT_EQ(p-v, target);
 }
@@ -78,24 +78,24 @@ TEST(Tuples, VectorMinusVector)
 }
 TEST(Tuples, TupleNegation)
 {
-    Tuple a{ 1, -2, 3, -4 };
-    Tuple target{ -1, 2, -3, 4 };
+    tuple a{ 1, -2, 3, -4 };
+    tuple target{ -1, 2, -3, 4 };
 
     EXPECT_EQ(-a, target);
 }
 
 TEST(Tuples, TupleScalarMultiplicaiton)
 {
-    Tuple a{ 1, -2, 3, -4 };
-    Tuple target{ 3.5, -7, 10.5, -14 };
+    tuple a{ 1, -2, 3, -4 };
+    tuple target{ 3.5, -7, 10.5, -14 };
 
     EXPECT_EQ(a*3.5, target);
 }
 
 TEST(Tuples, TupleFractionMultiplication)
 {
-    Tuple a{ 1, -2, 3, -4 };
-    Tuple target{ 0.5, -1, 1.5, -2 };
+    tuple a{ 1, -2, 3, -4 };
+    tuple target{ 0.5, -1, 1.5, -2 };
 
     EXPECT_EQ(a*0.5, target);
 }
@@ -324,9 +324,9 @@ TEST(Matricies, Matrix4VectorMultiplication)
             0, 0, 0, 1
     };
 
-    Tuple b{ 1, 2, 3, 1 };
+    tuple b{ 1, 2, 3, 1 };
 
-    Tuple target{ 18, 24, 33, 1 };
+    tuple target{ 18, 24, 33, 1 };
 
     EXPECT_EQ(A*b, target);
 }
@@ -604,8 +604,8 @@ TEST(Matricies, MultiplyMatrix4ProductByInverse)
 TEST(Matricies, MultiplyByTranslationMatrix)
 {
     Matrix4 transform = Math::Translation(5, -3, 2);
-    Point p{ -3, 4, 5 };
-    Point target{2, 1, 7};
+    point p{ -3, 4, 5 };
+    point target{2, 1, 7};
 
     EXPECT_EQ(transform * p, target);
 }
@@ -614,8 +614,8 @@ TEST(Matricies, MultiplyByInverseOfTranslationMatrix)
 {
     Matrix4 transform = Math::Translation(5, -3, 2);
     Matrix4 inv = transform.Inversed();
-    Point p{ -3, 4, 5 };
-    Point target{-8, 7, 3};
+    point p{ -3, 4, 5 };
+    point target{-8, 7, 3};
 
     EXPECT_EQ(inv * p, target);
 }
@@ -631,8 +631,8 @@ TEST(Matricies, TranslationDoesNotAffectVectors)
 TEST(Matricies, ScalingMatrixAppliedToAPoint)
 {
     Matrix4 transform = Math::Scaling(2, 3, 4);
-    Point p{ -4, 6, 8 };
-    Point target{-8, 18, 32};
+    point p{ -4, 6, 8 };
+    point target{-8, 18, 32};
 
     EXPECT_EQ(transform * p, target);
 }
@@ -659,19 +659,19 @@ TEST(Matricies, MultiplyingByInverseOfScalingMatrix)
 TEST(Matricies, ReflectionIsScalingByNegativeValue)
 {
     Matrix4 transform = Math::Scaling(-1, 1, 1);
-    Point p{ 2, 3, 4 };
-    Point target{-2, 3, 4};
+    point p{ 2, 3, 4 };
+    point target{-2, 3, 4};
 
     EXPECT_EQ(transform * p, target);
 }
 
 TEST(Matricies, RotatingAPointAroundXAxis)
 {
-    Point p{ 0, 1, 0 };
+    point p{ 0, 1, 0 };
     Matrix4 half_quater = Math::Rotation_X(M_PI / 4);
     Matrix4 full_quater = Math::Rotation_X(M_PI / 2);
-    Point target1{0,static_cast<float>(std::sqrt(2)/2), static_cast<float>(std::sqrt(2)/2)};
-    Point target2{0, 0, 1};
+    point target1{0,static_cast<float>(std::sqrt(2)/2), static_cast<float>(std::sqrt(2)/2)};
+    point target2{0, 0, 1};
 
     EXPECT_TRUE(Math::Equal(half_quater * p, target1));
     EXPECT_TRUE(Math::Equal(full_quater * p, target2));
@@ -679,21 +679,21 @@ TEST(Matricies, RotatingAPointAroundXAxis)
 
 TEST(Matricies, InverseOfXRotation)
 {
-    Point p{ 0,1,0 };
+    point p{ 0,1,0 };
     Matrix4 half_quater = Math::Rotation_X(M_PI / 4);
     Matrix4 inverse = half_quater.Inversed();
-    Point target{0, static_cast<float>(std::sqrt(2)/2), static_cast<float>(-(std::sqrt(2)/2))};
+    point target{0, static_cast<float>(std::sqrt(2)/2), static_cast<float>(-(std::sqrt(2)/2))};
 
     EXPECT_TRUE(Math::Equal(inverse * p, target));
 }
 
 TEST(Matricies, RotatingAPointAroundYAxis)
 {
-    Point p{ 0,0,1 };
+    point p{ 0,0,1 };
     Matrix4 half_quater = Math::Rotation_Y(M_PI / 4);
     Matrix4 full_quater = Math::Rotation_Y(M_PI / 2);
-    Point target1{static_cast<float>(std::sqrt(2) / 2), 0, static_cast<float>(std::sqrt(2) / 2)};
-    Point target2{1, 0, 0};
+    point target1{static_cast<float>(std::sqrt(2) / 2), 0, static_cast<float>(std::sqrt(2) / 2)};
+    point target2{1, 0, 0};
 
     EXPECT_TRUE(Math::Equal(half_quater * p, target1));
     EXPECT_TRUE(Math::Equal(full_quater * p, target2));
@@ -701,11 +701,11 @@ TEST(Matricies, RotatingAPointAroundYAxis)
 
 TEST(Matricies, RotatingAPointAroundZAxis)
 {
-    Point p{ 0,1,0 };
+    point p{ 0,1,0 };
     Matrix4 half_quater = Math::Rotation_Z(M_PI / 4);
     Matrix4 full_quater = Math::Rotation_Z(M_PI / 2);
-    Point target1{static_cast<float>(-std::sqrt(2) / 2), static_cast<float>(std::sqrt(2) / 2), 0};
-    Point target2{-1, 0, 0};
+    point target1{static_cast<float>(-std::sqrt(2) / 2), static_cast<float>(std::sqrt(2) / 2), 0};
+    point target2{-1, 0, 0};
 
     EXPECT_TRUE(Math::Equal(half_quater * p, target1));
     EXPECT_TRUE(Math::Equal(full_quater * p, target2));
@@ -714,8 +714,8 @@ TEST(Matricies, RotatingAPointAroundZAxis)
 TEST(Matricies, ShearingXToY)
 {
     Matrix4 transform = Math::Shearing(1, 0, 0, 0, 0, 0);
-    Point p{ 2, 3, 4 };
-    Point target{5, 3, 4};
+    point p{ 2, 3, 4 };
+    point target{5, 3, 4};
 
     EXPECT_TRUE(Math::Equal(transform *p, target));
 }
@@ -723,57 +723,57 @@ TEST(Matricies, ShearingXToY)
 TEST(Matricies, ShearingXToZ)
 {
     Matrix4 transform = Math::Shearing(0, 1, 0, 0, 0, 0);
-    Point p{ 2, 3, 4 };
-    Point target{6, 3, 4};
+    point p{ 2, 3, 4 };
+    point target{6, 3, 4};
     EXPECT_TRUE(Math::Equal(transform *p, target));
 }
 
 TEST(Matricies, ShearingYToX)
 {
     Matrix4 transform = Math::Shearing(0, 0, 1, 0, 0, 0);
-    Point p{ 2, 3, 4 };
-    Point target{2, 5, 4};
+    point p{ 2, 3, 4 };
+    point target{2, 5, 4};
     EXPECT_TRUE(Math::Equal(transform *p, target));
 }
 
 TEST(Matricies, ShearingYToZ)
 {
     Matrix4 transform = Math::Shearing(0, 0, 0, 1, 0, 0);
-    Point p{ 2, 3, 4 };
-    Point target{2, 7, 4};
+    point p{ 2, 3, 4 };
+    point target{2, 7, 4};
     EXPECT_TRUE(Math::Equal(transform *p, target));
 }
 
 TEST(Matricies, ShearingZToX)
 {
     Matrix4 transform = Math::Shearing(0, 0, 0, 0, 1, 0);
-    Point p{ 2, 3, 4 };
-    Point target{2, 3, 6};
+    point p{ 2, 3, 4 };
+    point target{2, 3, 6};
     EXPECT_TRUE(Math::Equal(transform *p, target));
 }
 
 TEST(Matricies, ShearingZToY)
 {
     Matrix4 transform = Math::Shearing(0, 0, 0, 0, 0, 1);
-    Point p{ 2, 3, 4 };
-    Point target{2, 3, 7};
+    point p{ 2, 3, 4 };
+    point target{2, 3, 7};
     EXPECT_TRUE(Math::Equal(transform *p, target));
 }
 
 TEST(Matricies, IndividualTransformations)
 {
-    Point p{ 1, 0, 1 };
+    point p{ 1, 0, 1 };
     Matrix4 A = Math::Rotation_X(M_PI / 2);
     Matrix4 B = Math::Scaling(5, 5, 5);
     Matrix4 C = Math::Translation(10, 5, 7);
 
-    Tuple p2 = A * p;
-    Tuple p3 = B * p2;
-    Tuple p4 = C * p3;
+    tuple p2 = A * p;
+    tuple p3 = B * p2;
+    tuple p4 = C * p3;
 
-    Point target2{1, -1, 0};
-    Point target3{5, -5, 0};
-    Point target4{15, 0, 7};
+    point target2{1, -1, 0};
+    point target3{5, -5, 0};
+    point target4{15, 0, 7};
 
     EXPECT_TRUE(Math::Equal(p2, target2));
     EXPECT_TRUE(Math::Equal(p3, target3));
@@ -782,22 +782,22 @@ TEST(Matricies, IndividualTransformations)
 
 TEST(Matricies, ChainedTransformations)
 {
-    Point p{ 1, 0, 1 };
+    point p{ 1, 0, 1 };
     Matrix4 A = Math::Rotation_X(M_PI / 2);
     Matrix4 B = Math::Scaling(5, 5, 5);
     Matrix4 C = Math::Translation(10, 5, 7);
 
     Matrix4 T = C * B * A;
 
-    Point target{15, 0, 7};
+    point target{15, 0, 7};
 
     EXPECT_TRUE(Math::Equal(T * p, target));
 }
 
 TEST(Matricies, TransformationMatrixForDefaultorientation)
 {
-    Point from{0, 0, 0};
-    Point to{0, 0, -1};
+    point from{0, 0, 0};
+    point to{0, 0, -1};
     Vector up{0, 1, 0};
 
     Matrix4 t = Math::ViewTransform(from, to, up);
@@ -807,8 +807,8 @@ TEST(Matricies, TransformationMatrixForDefaultorientation)
 
 TEST(Matricies, TransformationMatrixLookingInPositiveDirection)
 {
-    Point from{0, 0, 0};
-    Point to{0, 0, 1};
+    point from{0, 0, 0};
+    point to{0, 0, 1};
     Vector up{0, 1, 0};
 
     Matrix4 t = Math::ViewTransform(from, to, up);
@@ -818,8 +818,8 @@ TEST(Matricies, TransformationMatrixLookingInPositiveDirection)
 
 TEST(Matricies, TransfomationMovesTheWorld)
 {
-    Point from{0, 0, 8};
-    Point to{0, 0, 0};
+    point from{0, 0, 8};
+    point to{0, 0, 0};
     Vector up{0, 1, 0};
 
     Matrix4 t = Math::ViewTransform(from, to, up);
@@ -829,8 +829,8 @@ TEST(Matricies, TransfomationMovesTheWorld)
 
 TEST(Matricies, ArbitraryViewTransformation)
 {
-    Point from{1, 3, 2};
-    Point to{4, -2, 8};
+    point from{1, 3, 2};
+    point to{4, -2, 8};
     Vector up{1, 1, 0};
 
     Matrix4 t = Math::ViewTransform(from, to, up);

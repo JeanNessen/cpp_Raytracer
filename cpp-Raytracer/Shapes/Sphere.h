@@ -10,7 +10,7 @@ class Sphere: public shape
 public:
 	explicit Sphere();
 
-	[[nodiscard]] Vector local_normal_at(Point pLocalPoint) const override;
+	[[nodiscard]] Vector local_normal_at(point pLocalPoint) const override;
 };
 
 using sphere_ptr = std::shared_ptr<Sphere>;

@@ -7,17 +7,17 @@
 
 #include "Pattern.h"
 
-class Material {
+class material {
 //Methods
 private:
 public:
-    explicit Material();
-    explicit Material(std::shared_ptr<Pattern> pattern);
+    explicit material();
+    explicit material(std::shared_ptr<Pattern> pattern);
 
     std::shared_ptr<Pattern> GetPattern(){return m_pattern;}
     void SetPattern(std::shared_ptr<Pattern> pattern);
 
-    bool operator==(const Material& other) const;
+    bool operator==(const material& other) const;
 
 //Members
 private:

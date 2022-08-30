@@ -22,7 +22,7 @@ bool Math::Equal(const double a, const double b)
 	return false;
 }
 
-bool Math::Equal(const Tuple a, const Tuple b)
+bool Math::Equal(const tuple a, const tuple b)
 {
 	return Equal(a.x, b.x) && Equal(a.y, b.y) && Equal(a.z, b.z) && Equal(a.w, b.w);
 }
@@ -170,7 +170,7 @@ Matrix4 Math::Shearing(const int x_y, const int x_z, const int y_x, const int y_
 	return transform;
 }
 
-Matrix4 Math::ViewTransform(Point from, Point to, Vector up) {
+Matrix4 Math::ViewTransform(point from, point to, Vector up) {
     Vector forward = Vector(to-from).normalized();
     Vector left = Math::Cross(forward, up.normalized());
     Vector true_up = Math::Cross(left, forward);
@@ -202,7 +202,7 @@ double Math::GetRandomDouble(double min, double max) {
 	return distribution(generator);
 }
 
-Tuple::Tuple(double x, double y, double z)
+tuple::tuple(double x, double y, double z)
 {
 	this->x = x;
 	this->y = y;
@@ -210,7 +210,7 @@ Tuple::Tuple(double x, double y, double z)
 
 }
 
-Tuple::Tuple(double x, double y, double z, double w)
+tuple::tuple(double x, double y, double z, double w)
 {
 	this->x = x;
 	this->y = y;
@@ -218,41 +218,41 @@ Tuple::Tuple(double x, double y, double z, double w)
 	this->w = w;
 }
 
-bool Tuple::operator==(const Tuple& other) const
+bool tuple::operator==(const tuple& other) const
 {
     //return (Math::Equal(x, other.x) && Math::Equal(y, other.y), Math::Equal(z, other.z));
 	return (x == other.x && y == other.y && z == other.z && w == other.w);
 }
 
-Tuple Tuple::operator+(const Tuple& other) const
+tuple tuple::operator+(const tuple& other) const
 {
-	Tuple sum{ x + other.x, y + other.y, z + other.z, w + other.w };
+	tuple sum{ x + other.x, y + other.y, z + other.z, w + other.w };
 	return sum;
 }
 
-Tuple Tuple::operator-(const Tuple& other) const
+tuple tuple::operator-(const tuple& other) const
 {
-	Tuple diff{ x - other.x, y - other.y, z - other.z, w - other.w };
+	tuple diff{ x - other.x, y - other.y, z - other.z, w - other.w };
 	return diff;
 }
 
-Tuple Tuple::operator*(const double& other) const
+tuple tuple::operator*(const double& other) const
 {
-	Tuple product{ x * other, y * other, z * other, w * other };
+	tuple product{ x * other, y * other, z * other, w * other };
 	return product;
 }
 
-double Tuple::magnitude() const
+double tuple::magnitude() const
 {
 	return std::sqrt(std::pow(x, 2)+std::pow(y, 2) + std::pow(z, 2) + std::pow(w, 2));
 }
 
-Tuple Tuple::operator-() {
-    Tuple negative{-x, -y, -z, -w};
+tuple tuple::operator-() {
+    tuple negative{-x, -y, -z, -w};
     return negative;
 }
 
-std::ostream &operator<<(std::ostream &os, const Tuple &t) {
+std::ostream &operator<<(std::ostream &os, const tuple &t) {
     if(t.w == 0)
     {
         os << "v(" << t.x << ", " << t.y << ", " << t.z << ")";
@@ -275,11 +275,11 @@ std::ostream& operator<<(std::ostream& os, const Matrix4& c)
 	return os;
 }
 
-bool Tuple::operator!=(const Tuple &other) const {
+bool tuple::operator!=(const tuple &other) const {
     return !(*this == other);
 }
 
-Tuple Tuple::operator-(const double &other) const {
+tuple tuple::operator-(const double &other) const {
     return {x-other, y-other, z-other, w};
 }
 
@@ -352,9 +352,9 @@ Matrix4 Matrix4::operator*(const Matrix4& other) const
 	return output;
 }
 
-Tuple Matrix4::operator*(const Tuple& b) const
+tuple Matrix4::operator*(const tuple& b) const
 {
-	Tuple product;
+	tuple product;
 	product.x = (*this)(0, 0) * b.x + (*this)(0, 1) * b.y + (*this)(0, 2) * b.z + (*this)(0, 3) * b.w;
 	product.y = (*this)(1, 0) * b.x + (*this)(1, 1) * b.y + (*this)(1, 2) * b.z + (*this)(1, 3) * b.w;
 	product.z = (*this)(2, 0) * b.x + (*this)(2, 1) * b.y + (*this)(2, 2) * b.z + (*this)(2, 3) * b.w;
@@ -621,7 +621,7 @@ double Matrix3::Cofactor(const int row, const int column)
 	}
 }
 
-Point::Point()
+point::point()
 {
 	x = 0;
 	y = 0;
@@ -629,13 +629,13 @@ Point::Point()
 	w = 1;
 }
 
-Point::Point(double x, double y, double z):
-	Tuple(x, y, z)
+point::point(double x, double y, double z):
+	tuple(x, y, z)
 {
 	w = 1;
 }
 
-Point::Point(Tuple t) {
+point::point(tuple t) {
     x = t.x;
     y = t.y;
     z = t.z;
@@ -651,12 +651,12 @@ Vector::Vector()
 }
 
 Vector::Vector(double x, double y, double z):
-	Tuple(x, y, z)
+	tuple(x, y, z)
 {
 	w = 0;
 }
 
-Vector::Vector(Tuple t)
+Vector::Vector(tuple t)
 {
     x = t.x;
     y = t.y;

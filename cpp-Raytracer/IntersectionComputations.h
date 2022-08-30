@@ -8,29 +8,30 @@
 #include "Shapes/shape.h"
 #include "Intersection.h"
 #include "Ray.h"
+#include "Math.h"
 
 //Data structure to hold precalculated Computations about an Intersection
-struct IntersectionComputations {
+struct intersection_computations {
     double t;
     const shape_ptr object;
-    Point point;
+    point intersect_point;
     Vector eye_v;
     Vector normal_v;
     Vector reflect_v;
     bool inside;
-    Point over_point, under_point;
+    point over_point, under_point;
     double n1, n2;
 
-    IntersectionComputations(double pT, shape_ptr  pObject, Point pPoint, Vector pEyeV, Vector pNormalV, double pN1, double pN2);
+    intersection_computations(double pT, shape_ptr  pObject, point pPoint, Vector pEyeV, Vector pNormalV, double pN1, double pN2);
 
 
 };
 
-IntersectionComputations PrepareComputations(const intersection& pIntersection, ray pRay, std::vector<intersection> xs = {});
+intersection_computations PrepareComputations(const intersection& pIntersection, ray pRay, std::vector<intersection> xs = {});
 
 std::vector<double> find_refractive_indices(const intersection& pIntersection, const std::vector<intersection>& xs);
 
-double Schlick(const IntersectionComputations& comps);
+double Schlick(const intersection_computations& comps);
 
 
 

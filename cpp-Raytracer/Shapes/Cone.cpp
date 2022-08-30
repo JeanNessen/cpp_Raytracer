@@ -6,7 +6,7 @@ cone::cone():
 
 }
 
-Vector cone::local_normal_at(Point pLocalPoint) const
+Vector cone::local_normal_at(point pLocalPoint) const
 {
 	const double distance{ std::pow(pLocalPoint.x, 2) + std::pow(pLocalPoint.z, 2) };
 

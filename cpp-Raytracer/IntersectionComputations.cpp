@@ -7,10 +7,10 @@
 #include <utility>
 
 
-IntersectionComputations::IntersectionComputations(const double pT, shape_ptr  pObject, const Point pPoint, const Vector pEyeV, const Vector pNormalV, const double pN1, const double pN2):
+intersection_computations::intersection_computations(const double pT, shape_ptr  pObject, const point pPoint, const Vector pEyeV, const Vector pNormalV, const double pN1, const double pN2):
         t(pT),
         object(std::move(pObject)),
-        point(pPoint),
+		intersect_point(pPoint),
         eye_v(pEyeV),
         normal_v(pNormalV),
         n1(pN1),
@@ -28,14 +28,14 @@ IntersectionComputations::IntersectionComputations(const double pT, shape_ptr  p
     {
         inside = false;
     }
-    over_point = Point{this->point + this->normal_v * EPSILON};
-    under_point = Point{this->point - this->normal_v * EPSILON};
+    over_point = point{this->intersect_point + this->normal_v * EPSILON};
+    under_point = point{this->intersect_point - this->normal_v * EPSILON};
 
 }
 
 
 
-IntersectionComputations PrepareComputations(const intersection& pIntersection, const ray pRay, std::vector<intersection> xs) {
+intersection_computations PrepareComputations(const intersection& pIntersection, const ray pRay, std::vector<intersection> xs) {
     if(xs.empty())
     {
         xs.push_back(pIntersection);
@@ -46,7 +46,7 @@ IntersectionComputations PrepareComputations(const intersection& pIntersection, 
     const shape_ptr compsObject {pIntersection.object};
 
     //precompute needed values
-    const Point compsPoint{pRay.position(pIntersection.t)};
+    const point compsPoint{pRay.position(pIntersection.t)};
     const Vector compsEyeV{-pRay.direction.x, -pRay.direction.y, -pRay.direction.z};
     const Vector compsNormalV{pIntersection.object->normal_at(pRay.position(pIntersection.t))};
 
@@ -54,7 +54,7 @@ IntersectionComputations PrepareComputations(const intersection& pIntersection, 
 
 
 
-    IntersectionComputations comps{
+    intersection_computations comps{
             compsT,
             compsObject,
             compsPoint,
@@ -118,7 +118,7 @@ std::vector<double> find_refractive_indices(const intersection& pIntersection, c
     return std::vector<double>{local_n1, local_n2};
 }
 
-double Schlick(const IntersectionComputations& comps) {
+double Schlick(const intersection_computations& comps) {
     //Find the cosine of the angle between the eye and normal vector
     double cos = Math::Dot(comps.eye_v, comps.normal_v);
 

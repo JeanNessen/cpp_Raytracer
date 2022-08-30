@@ -31,7 +31,7 @@ TEST(World, WorldCreation)
 
 TEST(World, DefaultWorld)
 {
-    PointLight light{color(1, 1, 1), Point(-10, 10, -10)};
+    point_light light{color(1, 1, 1), point(-10, 10, -10)};
 
     Sphere sphere_1{};
     sphere_1.get_material().color = color{0.8, 1.0, 0.6};
@@ -64,7 +64,7 @@ TEST(World, DefaultWorld)
 TEST(World, IntersectWorldWithRay)
 {
     World w = DefaultWorld();
-    ray r{Point(0, 0, -5), Vector(0, 0, 1)};
+    ray r{point(0, 0, -5), Vector(0, 0, 1)};
 
     std::vector<intersection> xs = w.intersect_world(r);
 
@@ -78,11 +78,11 @@ TEST(World, IntersectWorldWithRay)
 TEST(World, ShadingAnIntersection)
 {
     World w = DefaultWorld();
-    ray r{Point(0, 0, -5), Vector(0, 0, 1)};
+    ray r{point(0, 0, -5), Vector(0, 0, 1)};
     auto shape = w.get_world_objects()[0];
     intersection i{4, shape};
 
-    IntersectionComputations comps = PrepareComputations(i, r);
+    intersection_computations comps = PrepareComputations(i, r);
     color c = w.shade_hit(comps);
 
     EXPECT_EQ(c, color(0.38066, 0.47583, 0.2855));
@@ -91,12 +91,12 @@ TEST(World, ShadingAnIntersection)
 TEST(World, ShadingAnIntersectionFromInside)
 {
     World w = DefaultWorld();
-    w.get_world_lights()[0] = PointLight{color(1, 1, 1), Point(0, 0.25, 0)};
-    ray r{Point(0, 0, 0), Vector(0, 0, 1)};
+    w.get_world_lights()[0] = point_light{color(1, 1, 1), point(0, 0.25, 0)};
+    ray r{point(0, 0, 0), Vector(0, 0, 1)};
     auto shape = w.get_world_objects()[1];
     intersection i{0.5, shape};
 
-    IntersectionComputations comps = PrepareComputations(i, r);
+    intersection_computations comps = PrepareComputations(i, r);
     color c = w.shade_hit(comps);
     EXPECT_EQ(c, color(0.90498, 0.90498, 0.90498));
 }
@@ -104,7 +104,7 @@ TEST(World, ShadingAnIntersectionFromInside)
 TEST(World, ColorWhenRayMisses)
 {
     World w = DefaultWorld();
-    ray r{Point(0, 0, -5), Vector(0, 1, 0)};
+    ray r{point(0, 0, -5), Vector(0, 1, 0)};
 
     color c = w.calculate_color_at(r);
 
@@ -114,7 +114,7 @@ TEST(World, ColorWhenRayMisses)
 TEST(World, ColorWhenRayHits)
 {
     World w = DefaultWorld();
-    ray r{Point(0, 0, -5), Vector(0, 0, 1)};
+    ray r{point(0, 0, -5), Vector(0, 0, 1)};
 
     color c = w.calculate_color_at(r);
 
@@ -128,7 +128,7 @@ TEST(World, ColorWithIntersectionBehinRay)
     outer->get_material().ambient = 1;
     auto inner = w.get_world_objects()[1];
     inner->get_material().ambient = 1;
-    ray r{Point(0, 0, 0.75), Vector(0, 0, -1)};
+    ray r{point(0, 0, 0.75), Vector(0, 0, -1)};
 
     color c = w.calculate_color_at(r);
 
@@ -169,7 +169,7 @@ TEST(Camera, ConstructingRayThroughCenterOfCanvas)
 
     ray r = c.ray_for_pixel(100, 50);
 
-    EXPECT_TRUE(Math::Equal(r.origin, Point(0, 0, 0)));
+    EXPECT_TRUE(Math::Equal(r.origin, point(0, 0, 0)));
     EXPECT_TRUE(Math::Equal(r.direction, Vector(0, 0, -1)));
 }
 
@@ -180,7 +180,7 @@ TEST(Camera, ConstructingRayThroughCorneOfCanvas)
 
     ray r = c.ray_for_pixel(0, 0);
 
-    EXPECT_TRUE(Math::Equal(r.origin, Point(0, 0, 0)));
+    EXPECT_TRUE(Math::Equal(r.origin, point(0, 0, 0)));
     EXPECT_TRUE(Math::Equal(r.direction, Vector(0.66519, 0.33259, -0.66851)));
 }
 
@@ -191,7 +191,7 @@ TEST(Camera, ConsturctingRayWhenCameraIsTransformed)
     c.set_transform(Math::Rotation_Y(M_PI/4) * Math::Translation(0, -2, 5));
     ray r = c.ray_for_pixel(100, 50);
 
-    EXPECT_TRUE(Math::Equal(r.origin, Point(0, 2, -5)));
+    EXPECT_TRUE(Math::Equal(r.origin, point(0, 2, -5)));
     EXPECT_TRUE(Math::Equal(r.direction, Vector(std::sqrt(2)/2, 0, -sqrt(2)/2)));
 }
 
@@ -199,8 +199,8 @@ TEST(Camera, RenderingAWorldWithACamera)
 {
     World w = DefaultWorld();
     camera c{11, 11, M_PI / 2};
-    Point from{0, 0, -5};
-    Point to{0, 0, 0};
+    point from{0, 0, -5};
+    point to{0, 0, 0};
     Vector up{0, 1, 0};
     c.set_transform(Math::ViewTransform(from, to, up));
 
@@ -212,7 +212,7 @@ TEST(Camera, RenderingAWorldWithACamera)
 TEST(World, NoShadowWhenNothingIsCollinearWithPointAndLight)
 {
     World w = DefaultWorld();
-    Point p{0, 10, 0};
+    point p{0, 10, 0};
 
     EXPECT_FALSE(w.calculate_shadow(p));
 }
@@ -220,7 +220,7 @@ TEST(World, NoShadowWhenNothingIsCollinearWithPointAndLight)
 TEST(World, ShadowWhenObjectIsBetweenPointAndLight)
 {
     World w = DefaultWorld();
-    Point p{10, -10, 10};
+    point p{10, -10, 10};
 
     EXPECT_TRUE(w.calculate_shadow(p));
 }
@@ -228,7 +228,7 @@ TEST(World, ShadowWhenObjectIsBetweenPointAndLight)
 TEST(World, NoShadowWhenObjectIsBehindLight)
 {
     World w = DefaultWorld();
-    Point p{-20, 20, -20};
+    point p{-20, 20, -20};
 
     EXPECT_FALSE(w.calculate_shadow(p));
 }
@@ -236,7 +236,7 @@ TEST(World, NoShadowWhenObjectIsBehindLight)
 TEST(World, NoShadowWhenObjectIsBehindPoint)
 {
     World w = DefaultWorld();
-    Point p{-2, 2,-2};
+    point p{-2, 2,-2};
 
     EXPECT_FALSE(w.calculate_shadow(p));
 }
@@ -244,7 +244,7 @@ TEST(World, NoShadowWhenObjectIsBehindPoint)
 TEST(Lighting, ShadeHitIsGivenIntersectionInShadow)
 {
     World w{};
-    w.add_light(PointLight{color(1, 1, 1), Point(0, 0, -10)});
+    w.add_light(point_light{color(1, 1, 1), point(0, 0, -10)});
 
     //Add the first sphere
     sphere_ptr s1 (new Sphere());
@@ -255,10 +255,10 @@ TEST(Lighting, ShadeHitIsGivenIntersectionInShadow)
     s2->set_transform(Math::Translation(0, 0, 10));
     w.add_object(s2);
 
-    ray r{Point(0, 0, 5), Vector(0, 0, 1)};
+    ray r{point(0, 0, 5), Vector(0, 0, 1)};
     intersection i{4, s2};
 
-    IntersectionComputations comps = PrepareComputations(i, r);
+    intersection_computations comps = PrepareComputations(i, r);
     color c = w.shade_hit(comps);
 
     EXPECT_EQ(c, color(0.1, 0.1, 0.1));

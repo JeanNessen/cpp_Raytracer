@@ -15,7 +15,7 @@ protected:
     Matrix4 m_transform = Math::identiy_matrix;
 
 public:
-    [[nodiscard]] virtual color PatternAt(Point p) const = 0;
+    [[nodiscard]] virtual color PatternAt(point p) const = 0;
 
     Matrix4 GetTransform(){return m_transform;}
     void SetTransform(Matrix4 new_transform);
@@ -32,7 +32,7 @@ class CStripePattern: public Pattern {
 public:
     CStripePattern(color a, color b);
 
-    [[nodiscard]] color PatternAt(Point p) const override;
+    [[nodiscard]] color PatternAt(point p) const override;
 };
 
 class CGradientPattern: public Pattern {
@@ -40,7 +40,7 @@ class CGradientPattern: public Pattern {
 public:
     CGradientPattern(color a, color b);
 
-    [[nodiscard]] color PatternAt(Point p) const override;
+    [[nodiscard]] color PatternAt(point p) const override;
 
 };
 
@@ -49,7 +49,7 @@ class CCheckersPattern: public Pattern {
 public:
     CCheckersPattern(color a, color b);
 
-    [[nodiscard]] color PatternAt(Point p) const override;
+    [[nodiscard]] color PatternAt(point p) const override;
 
 };
 
@@ -58,6 +58,6 @@ class CTestPattern: public Pattern {
 public:
     CTestPattern(color a, color b);
 
-    color PatternAt(Point p) const override;
+    color PatternAt(point p) const override;
 };
 

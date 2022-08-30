@@ -21,7 +21,7 @@ using namespace std::chrono_literals;
 World DefaultWorld() {
     World w{};
 
-    PointLight default_light{color(1, 1, 1), Point(-10, 10, -10)};
+    point_light default_light{color(1, 1, 1), point(-10, 10, -10)};
     w.add_light(default_light);
 
     sphere_ptr default_sphere_1 (new Sphere());
@@ -39,7 +39,7 @@ World DefaultWorld() {
     return w;
 }
 
-void World::add_light(PointLight light) {
+void World::add_light(point_light light) {
     m_world_lights.push_back(light);
 }
 
@@ -78,7 +78,7 @@ std::vector<intersection> World::intersect_world(ray ray) {
     return world_intersections;
 }
 
-color World::shade_hit(IntersectionComputations comps, int remaining) {
+color World::shade_hit(intersection_computations comps, int remaining) {
     color surface = Lighting(comps.object->get_material_const(),
                               comps.object,
                               m_world_lights[0],
@@ -90,7 +90,7 @@ color World::shade_hit(IntersectionComputations comps, int remaining) {
     color reflected = calculate_reflected_color(comps, remaining);
     color refracted = calculate_refracted_color(comps, remaining);
 
-    Material material = comps.object->get_material();
+    material material = comps.object->get_material();
     if (material.reflective > 0 && material.transparency > 0)
     {
         double reflectance = Schlick(comps);
@@ -111,7 +111,7 @@ color World::calculate_color_at(ray r, int remaining) {
     if(!intersections.empty() && hit(intersections))
     {
         intersection currentHit = *hit(intersections);
-        IntersectionComputations comps = PrepareComputations(currentHit, r);
+        intersection_computations comps = PrepareComputations(currentHit, r);
         color color = shade_hit(comps, remaining);
         return color;
     }
@@ -230,7 +230,7 @@ canvas World::execute_multiple_passes(camera c, int num_passes)
     return image / num_passes;
 }
 
-bool World::calculate_shadow(Point p) {
+bool World::calculate_shadow(point p) {
     Vector v_point_to_light{m_world_lights[0].position - p};
     double distance_to_light = (v_point_to_light).magnitude();
     Vector direction_to_light = v_point_to_light.normalized();
@@ -251,7 +251,7 @@ bool World::calculate_shadow(Point p) {
     return false;
 }
 
-color World::calculate_reflected_color(IntersectionComputations comps, int remaining) {
+color World::calculate_reflected_color(intersection_computations comps, int remaining) {
     if(comps.object->get_material().reflective == 0 || remaining <= 0)
     {
         return colors::black;
@@ -279,7 +279,7 @@ void World::print_progress_update() const
 	std::cout << "Progress: " << progress_percentage << "%" << std::endl;
 }
 
-color World::calculate_refracted_color(IntersectionComputations comps, int remaining)
+color World::calculate_refracted_color(intersection_computations comps, int remaining)
 {
     //Aplly snells law to check for total internal reflection
     double n_ratio = comps.n1 / comps.n2;

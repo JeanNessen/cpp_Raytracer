@@ -9,18 +9,18 @@
 #include "Math.h"
 #include "Shapes/shape.h"
 
-struct PointLight{
+struct point_light{
     color intensity{};
-    Point position;
+    point position;
 
-    PointLight(color i, Point p)
+    point_light(color i, point p)
     {
         intensity = i;
         position = p;
     }
 
-    bool operator==(const PointLight& other) const;
+    bool operator==(const point_light& other) const;
 };
 
-color Lighting(Material m, shape_ptr object, PointLight light, Point position, Vector eye_v, Vector normal_v, bool in_shadow);
+color Lighting(material m, shape_ptr object, point_light light, point position, Vector eye_v, Vector normal_v, bool in_shadow);
 

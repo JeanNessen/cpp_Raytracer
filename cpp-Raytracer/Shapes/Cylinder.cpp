@@ -7,7 +7,7 @@ cylinder::cylinder():
 
 }
 
-Vector cylinder::local_normal_at(Point pLocalPoint) const
+Vector cylinder::local_normal_at(point pLocalPoint) const
 {
 	const double distance{ std::pow(pLocalPoint.x, 2) + std::pow(pLocalPoint.z, 2) };
 

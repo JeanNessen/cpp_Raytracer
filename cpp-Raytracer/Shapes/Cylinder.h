@@ -7,7 +7,7 @@ class cylinder final : public shape
 public:
 	cylinder();
 
-	[[nodiscard]] Vector local_normal_at(Point pLocalPoint) const override;
+	[[nodiscard]] Vector local_normal_at(point pLocalPoint) const override;
 
 public:
 	double minimum = -std::numeric_limits<double>::infinity();
