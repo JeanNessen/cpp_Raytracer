@@ -18,7 +18,7 @@ bool material::operator==(const material &other) const {
             );
 }
 
-material::material(std::shared_ptr<Pattern> pattern)
+material::material(std::shared_ptr<pattern> pattern)
 {
     this->m_pattern = pattern;
 }
@@ -28,7 +28,7 @@ material::material()
 
 }
 
-void material::SetPattern(std::shared_ptr<Pattern> pattern) {
+void material::SetPattern(std::shared_ptr<pattern> pattern) {
     this->m_pattern = pattern;
 }
 

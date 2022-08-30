@@ -5,23 +5,23 @@
 
 #include <memory>
 
-#include "Pattern.h"
+#include "pattern.h"
 
 class material {
 //Methods
 private:
 public:
     explicit material();
-    explicit material(std::shared_ptr<Pattern> pattern);
+    explicit material(std::shared_ptr<pattern> pattern);
 
-    std::shared_ptr<Pattern> GetPattern(){return m_pattern;}
-    void SetPattern(std::shared_ptr<Pattern> pattern);
+    std::shared_ptr<pattern> GetPattern(){return m_pattern;}
+    void SetPattern(std::shared_ptr<pattern> pattern);
 
     bool operator==(const material& other) const;
 
 //Members
 private:
-    std::shared_ptr<Pattern> m_pattern = nullptr;
+    std::shared_ptr<pattern> m_pattern = nullptr;
 
 public:
     double ambient = 0.1;

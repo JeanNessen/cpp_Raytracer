@@ -2,16 +2,16 @@
 // Created by Jean-Luc von Nessen on 24.02.22.
 //
 
-#include "Pattern.h"
+#include "pattern.h"
 
-Pattern::Pattern(color a, color b):
+pattern::pattern(color a, color b):
     a(a),
     b(b)
 {
 
 }
 
-void Pattern::SetTransform(matrix4 new_transform) {
+void pattern::SetTransform(matrix4 new_transform) {
     m_transform = new_transform;
 }
 
@@ -26,13 +26,13 @@ color CStripePattern::PatternAt(point p) const {
 }
 
 CStripePattern::CStripePattern(color a, color b):
-        Pattern(a, b)
+        pattern(a, b)
 {
 
 }
 
 CGradientPattern::CGradientPattern(color a, color b):
-        Pattern(a, b)
+        pattern(a, b)
 {
 
 }
@@ -44,7 +44,7 @@ color CGradientPattern::PatternAt(point p) const {
 }
 
 CCheckersPattern::CCheckersPattern(color a, color b) :
-        Pattern(a, b)
+        pattern(a, b)
 {
 
 }
@@ -58,7 +58,7 @@ color CCheckersPattern::PatternAt(point p) const {
     }
 }
 
-CTestPattern::CTestPattern(color a, color b) : Pattern(a, b) {
+CTestPattern::CTestPattern(color a, color b) : pattern(a, b) {
 
 }
 

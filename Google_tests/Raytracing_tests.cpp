@@ -27,8 +27,8 @@
 #include "../cpp-Raytracer/Material.h"
 #include "../cpp-Raytracer/Material.cpp"
 
-#include "../cpp-Raytracer/Pattern.h"
-#include "../cpp-Raytracer/Pattern.cpp"
+#include "../cpp-Raytracer/pattern.h"
+#include "../cpp-Raytracer/pattern.cpp"
 
 #include <limits>
 
@@ -551,7 +551,7 @@ TEST(Lighting, HitShouldOffsetPoint)
 TEST(Lighting, LightingWithPatternApplied)
 {
     material m{};
-    std::shared_ptr<Pattern> pattern (new CStripePattern(colors::white, colors::black));
+    std::shared_ptr<pattern> pattern (new CStripePattern(colors::white, colors::black));
     m.SetPattern(pattern);
     m.ambient = 1;
     m.diffuse = 0;

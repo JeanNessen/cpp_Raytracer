@@ -7,10 +7,10 @@
 #include "Math.h"
 
 
-class Pattern {
+class pattern {
 //Methods
 protected:
-    Pattern(color a, color b);
+    pattern(color a, color b);
 
     matrix4 m_transform = Math::identiy_matrix;
 
@@ -27,7 +27,7 @@ public:
     color b;
 };
 
-class CStripePattern: public Pattern {
+class CStripePattern: public pattern {
 
 public:
     CStripePattern(color a, color b);
@@ -35,7 +35,7 @@ public:
     [[nodiscard]] color PatternAt(point p) const override;
 };
 
-class CGradientPattern: public Pattern {
+class CGradientPattern: public pattern {
 
 public:
     CGradientPattern(color a, color b);
@@ -44,7 +44,7 @@ public:
 
 };
 
-class CCheckersPattern: public Pattern {
+class CCheckersPattern: public pattern {
 
 public:
     CCheckersPattern(color a, color b);
@@ -53,7 +53,7 @@ public:
 
 };
 
-class CTestPattern: public Pattern {
+class CTestPattern: public pattern {
 
 public:
     CTestPattern(color a, color b);

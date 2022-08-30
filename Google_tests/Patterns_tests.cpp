@@ -4,14 +4,14 @@
 
 #include "gtest/gtest.h"
 
-#include "../cpp-Raytracer/Pattern.h"
+#include "../cpp-Raytracer/pattern.h"
 //#include "../cpp-Raytracer/Pattern.cpp"
 
 #include "../cpp-Raytracer/Shapes/Sphere.h"
 
 TEST(Patterns, CreatingAStripePattern)
 {
-    std::shared_ptr<Pattern> pattern (new CStripePattern(colors::white, colors::black));
+    std::shared_ptr<pattern> pattern (new CStripePattern(colors::white, colors::black));
 
     EXPECT_EQ(pattern->a, colors::white);
     EXPECT_EQ(pattern->b, colors::black);
@@ -19,7 +19,7 @@ TEST(Patterns, CreatingAStripePattern)
 
 TEST(Patterns, AStripePatternsIsConstantInY)
 {
-    std::shared_ptr<Pattern> pattern (new CStripePattern(colors::white, colors::black));
+    std::shared_ptr<pattern> pattern (new CStripePattern(colors::white, colors::black));
 
     EXPECT_EQ(pattern->PatternAt(point(0, 0, 0)), colors::white);
     EXPECT_EQ(pattern->PatternAt(point(0, 1, 0)), colors::white);
@@ -28,7 +28,7 @@ TEST(Patterns, AStripePatternsIsConstantInY)
 
 TEST(Patterns, AStripePatternsIsConstantInZ)
 {
-    std::shared_ptr<Pattern> pattern (new CStripePattern(colors::white, colors::black));
+    std::shared_ptr<pattern> pattern (new CStripePattern(colors::white, colors::black));
 
 
     EXPECT_EQ(pattern->PatternAt(point(0, 0, 0)), colors::white);
@@ -38,7 +38,7 @@ TEST(Patterns, AStripePatternsIsConstantInZ)
 
 TEST(Patterns, AStripePatternAlternatesInX)
 {
-    std::shared_ptr<Pattern> pattern (new CStripePattern(colors::white, colors::black));
+    std::shared_ptr<pattern> pattern (new CStripePattern(colors::white, colors::black));
 
 
     EXPECT_EQ(pattern->PatternAt(point(0, 0, 0)), colors::white);
@@ -53,7 +53,7 @@ TEST(Patterns, StripesWithObjectTransformation)
 {
     Sphere object{};
     object.set_transform(Math::Scaling(2, 2, 2));
-    std::shared_ptr<Pattern> pattern (new CStripePattern(colors::white, colors::black));
+    std::shared_ptr<pattern> pattern (new CStripePattern(colors::white, colors::black));
     object.get_material().SetPattern(pattern);
 
     color c = object.stripe_at_object(point(1.5, 0, 0));
@@ -64,7 +64,7 @@ TEST(Patterns, StripesWithObjectTransformation)
 TEST(Patterns, StripesWithPatternTransformation)
 {
     Sphere object{};
-    std::shared_ptr<Pattern> pattern (new CStripePattern(colors::white, colors::black));
+    std::shared_ptr<pattern> pattern (new CStripePattern(colors::white, colors::black));
     pattern->SetTransform(Math::Scaling(2, 2, 2));
     object.get_material().SetPattern(pattern);
 
@@ -78,7 +78,7 @@ TEST(Patterns, StripesWithBothObjectAndPatternTransformation)
 {
     Sphere object{};
     object.set_transform(Math::Scaling(2, 2, 2));
-    std::shared_ptr<Pattern> pattern (new CStripePattern(colors::white, colors::black));
+    std::shared_ptr<pattern> pattern (new CStripePattern(colors::white, colors::black));
     pattern->SetTransform(Math::Translation(0.5, 0, 0));
     object.get_material().SetPattern(pattern);
 
