@@ -4,7 +4,7 @@
 #include <random>
 #include <thread>
 
-Matrix4 Math::identiy_matrix = Matrix4{
+matrix4 Math::identiy_matrix = matrix4{
 			1, 0, 0, 0,
 			0, 1, 0, 0,
 			0, 0, 1, 0,
@@ -42,9 +42,9 @@ vector Math::Cross(const vector & a, const vector & b)
 	return crossProduct;
 }
 
-Matrix4 Math::Identity4()
+matrix4 Math::Identity4()
 {
-	return Matrix4{
+	return matrix4{
 		1, 0, 0, 0,
 		0, 1, 0, 0,
 		0, 0, 1, 0,
@@ -52,9 +52,9 @@ Matrix4 Math::Identity4()
 	};
 }
 
-Matrix2 Math::Submatrix(const Matrix3& input, const int row, const int column)
+matrix2 Math::Submatrix(const matrix3& input, const int row, const int column)
 {
-	Matrix2 submatrix;
+	matrix2 submatrix;
 	int sub_x = 0;
 	int sub_y = 0;
 	for (int x = 0; x < 3; x++)
@@ -78,9 +78,9 @@ Matrix2 Math::Submatrix(const Matrix3& input, const int row, const int column)
 	return submatrix;
 }
 
-Matrix3 Math::Submatrix(const Matrix4& input, const int row, const int column)
+matrix3 Math::Submatrix(const matrix4& input, const int row, const int column)
 {
-	Matrix3 submatrix;
+	matrix3 submatrix;
 	int sub_x = 0;
 	int sub_y = 0;
 	for (int x = 0; x < 4; x++)
@@ -104,9 +104,9 @@ Matrix3 Math::Submatrix(const Matrix4& input, const int row, const int column)
 	return submatrix;
 }
 
-Matrix4 Math::Translation(const double x, const double y, const double z)
+matrix4 Math::Translation(const double x, const double y, const double z)
 {
-	Matrix4 transform{
+	matrix4 transform{
 		1, 0, 0, x,
 		0, 1, 0, y,
 		0, 0, 1, z,
@@ -115,9 +115,9 @@ Matrix4 Math::Translation(const double x, const double y, const double z)
 	return transform;
 }
 
-Matrix4 Math::Scaling(const double x, const double y, const double z)
+matrix4 Math::Scaling(const double x, const double y, const double z)
 {
-	Matrix4 transform{
+	matrix4 transform{
 		x, 0, 0, 0,
 		0, y, 0, 0,
 		0, 0, z, 0,
@@ -126,9 +126,9 @@ Matrix4 Math::Scaling(const double x, const double y, const double z)
 	return transform;
 }
 
-Matrix4 Math::Rotation_X(const double r)
+matrix4 Math::Rotation_X(const double r)
 {
-	Matrix4 rotation{
+	matrix4 rotation{
 		1, 0, 0, 0,
 		0, std::cos(r), -std::sin(r), 0,
 		0, std::sin(r), std::cos(r), 0,
@@ -137,9 +137,9 @@ Matrix4 Math::Rotation_X(const double r)
 	return rotation;
 }
 
-Matrix4 Math::Rotation_Y(const double r)
+matrix4 Math::Rotation_Y(const double r)
 {
-	Matrix4 rotation{
+	matrix4 rotation{
 		std::cos(r), 0, std::sin(r), 0,
 		0, 1, 0, 0,
 		-std::sin(r), 0, std::cos(r), 0,
@@ -148,9 +148,9 @@ Matrix4 Math::Rotation_Y(const double r)
 	return rotation;
 }
 
-Matrix4 Math::Rotation_Z(const double r)
+matrix4 Math::Rotation_Z(const double r)
 {
-	Matrix4 rotation{
+	matrix4 rotation{
 		std::cos(r), -std::sin(r), 0, 0,
 		std::sin(r), std::cos(r), 0, 0,
 		0, 0, 1, 0,
@@ -159,9 +159,9 @@ Matrix4 Math::Rotation_Z(const double r)
 	return rotation;
 }
 
-Matrix4 Math::Shearing(const int x_y, const int x_z, const int y_x, const int y_z, const int z_x, const int z_y)
+matrix4 Math::Shearing(const int x_y, const int x_z, const int y_x, const int y_z, const int z_x, const int z_y)
 {
-	Matrix4 transform{
+	matrix4 transform{
 		1, double(x_y), double(x_z), 0,
 		double(y_x), 1, double(y_z), 0,
 		double(z_x), double(z_y), 1, 0,
@@ -170,12 +170,12 @@ Matrix4 Math::Shearing(const int x_y, const int x_z, const int y_x, const int y_
 	return transform;
 }
 
-Matrix4 Math::ViewTransform(point from, point to, vector up) {
+matrix4 Math::ViewTransform(point from, point to, vector up) {
     vector forward = vector(to-from).normalized();
     vector left = Math::Cross(forward, up.normalized());
     vector true_up = Math::Cross(left, forward);
 
-    Matrix4 orientation{
+    matrix4 orientation{
         left.x, left.y, left.z, 0,
         true_up.x, true_up.y, true_up.z, 0,
         -forward.x, -forward.y, -forward.z, 0,
@@ -185,7 +185,7 @@ Matrix4 Math::ViewTransform(point from, point to, vector up) {
     return orientation * Math::Translation(-from.x, -from.y, -from.z);
 }
 
-Matrix4 Math::Scaling(const double s) {
+matrix4 Math::Scaling(const double s) {
     return Scaling(s, s, s);
 }
 
@@ -265,7 +265,7 @@ std::ostream &operator<<(std::ostream &os, const tuple &t) {
     return os;
 }
 
-std::ostream& operator<<(std::ostream& os, const Matrix4& c)
+std::ostream& operator<<(std::ostream& os, const matrix4& c)
 {
 	os << "|" << c(0, 0) << ", " << c(0, 1) << ", " << c(0, 2) << ", " << c(0, 3) << "|\n" <<
 		"|" << c(1, 0) << ", " << c(1, 1) << ", " << c(1, 2) << ", " << c(1, 3) << "|\n" <<
@@ -283,7 +283,7 @@ tuple tuple::operator-(const double &other) const {
     return {x-other, y-other, z-other, w};
 }
 
-Matrix4::Matrix4(
+matrix4::matrix4(
 	double n00, double n01, double n02, double n03,
 	double n10, double n11, double n12, double n13,
 	double n20, double n21, double n22, double n23,
@@ -296,7 +296,7 @@ Matrix4::Matrix4(
 	n[3][0] = n03; n[3][1] = n13; n[3][2] = n23; n[3][3] = n33;
 }
 
-bool Matrix4::operator==(const Matrix4& other) const
+bool matrix4::operator==(const matrix4& other) const
 {
 	if (!Math::Equal((*this)(0, 0), other(0, 0))) return false;
 	if (!Math::Equal((*this)(1, 0), other(1, 0))) return false;
@@ -321,14 +321,14 @@ bool Matrix4::operator==(const Matrix4& other) const
 	return true;
 }
 
-bool Matrix4::operator!=(const Matrix4& other) const
+bool matrix4::operator!=(const matrix4& other) const
 {
 	return !(*this==other);
 }
 
-Matrix4 Matrix4::operator*(const Matrix4& other) const
+matrix4 matrix4::operator*(const matrix4& other) const
 {
-	Matrix4 output{
+	matrix4 output{
 		(*this)(0,0) * other(0,0) + (*this)(0,1) * other(1,0) + (*this)(0,2) * other(2,0) + (*this)(0,3) * other(3,0),
 		(*this)(0,0) * other(0,1) + (*this)(0,1) * other(1,1) + (*this)(0,2) * other(2,1) + (*this)(0,3) * other(3,1),
 		(*this)(0,0) * other(0,2) + (*this)(0,1) * other(1,2) + (*this)(0,2) * other(2,2) + (*this)(0,3) * other(3,2),
@@ -352,7 +352,7 @@ Matrix4 Matrix4::operator*(const Matrix4& other) const
 	return output;
 }
 
-tuple Matrix4::operator*(const tuple& b) const
+tuple matrix4::operator*(const tuple& b) const
 {
 	tuple product;
 	product.x = (*this)(0, 0) * b.x + (*this)(0, 1) * b.y + (*this)(0, 2) * b.z + (*this)(0, 3) * b.w;
@@ -362,9 +362,9 @@ tuple Matrix4::operator*(const tuple& b) const
 	return product;
 }
 
-Matrix4 Matrix4::operator*(const double& b) const
+matrix4 matrix4::operator*(const double& b) const
 {
-	Matrix4 output{
+	matrix4 output{
 		(*this)(0,0)* b, (*this)(0,1)* b, (*this)(0,2)* b, (*this)(0,3)* b,
 		(*this)(1,0)* b, (*this)(1,1)* b, (*this)(1,2)* b, (*this)(1,3)* b,
 		(*this)(2,0)* b, (*this)(2,1)* b, (*this)(2,2)* b, (*this)(2,3)* b,
@@ -374,9 +374,9 @@ Matrix4 Matrix4::operator*(const double& b) const
 	
 }
 
-Matrix4 Matrix4::Transposed()
+matrix4 matrix4::Transposed()
 {
-	Matrix4 T{
+	matrix4 T{
 		(*this)(0,0), (*this)(1,0), (*this)(2,0), (*this)(3,0),
 		(*this)(0,1), (*this)(1,1), (*this)(2,1), (*this)(3,1),
 		(*this)(0,2), (*this)(1,2), (*this)(2,2), (*this)(3,2),
@@ -385,7 +385,7 @@ Matrix4 Matrix4::Transposed()
 	return T;
 }
 
-Matrix4 Matrix4::Inversed() const {
+matrix4 matrix4::Inversed() const {
 	//http://www.cg.info.hiroshima-cu.ac.jp/~miyazaki/knowledge/teche23.html
 
 	double out_00 = n[1][1] * n[2][2] * n[3][3] + n[2][1] * n[3][2] * n[1][3] + n[3][1] * n[1][2] * n[2][3] -
@@ -439,16 +439,16 @@ Matrix4 Matrix4::Inversed() const {
 	double out_33 = n[0][0] * n[1][1] * n[2][2] + n[1][0] * n[2][1] * n[0][2] + n[2][0] * n[0][1] * n[1][2] -
 					n[0][0] * n[2][1] * n[1][2] - n[1][0] * n[0][1] * n[2][2] - n[2][0] * n[1][1] * n[0][2];
 
-	Matrix4 A{
+	matrix4 A{
 		out_00, out_01, out_02, out_03,
 		out_10, out_11, out_12, out_13,
 		out_20, out_21, out_22, out_23,
 		out_30, out_31, out_32, out_33
 	};
-	Matrix4 output = A * (1 / Determinant());
+	matrix4 output = A * (1 / Determinant());
 
 
-//	Matrix4 output{};
+//	matrix4 output{};
 //	double det = Determinant();
 //	for (int row = 0; row < 4; row++)
 //	{
@@ -461,7 +461,7 @@ Matrix4 Matrix4::Inversed() const {
 	return output;
 }
 
-double Matrix4::Determinant() const {
+double matrix4::Determinant() const {
 //determinant calculation from http://www.cg.info.hiroshima-cu.ac.jp/~miyazaki/knowledge/teche23.html
     double determinant =    n[0][0] * n[1][1] * n[2][2] * n[3][3] + n[0][0] * n[2][1] * n[3][2] * n[1][3] + n[0][0] * n[3][1] * n[1][2] * n[2][3] +
 
@@ -491,14 +491,14 @@ double Matrix4::Determinant() const {
 	return determinant;
 }
 
-double Matrix4::Minor(const int row, const int column) const
+double matrix4::Minor(const int row, const int column) const
 {
-	Matrix3 submatrix = Math::Submatrix((*this), row, column);
+	matrix3 submatrix = Math::Submatrix((*this), row, column);
 	double sub_det = submatrix.Determinant();
 	return sub_det;
 }
 
-double Matrix4::Cofactor(const int row, const int column) const {
+double matrix4::Cofactor(const int row, const int column) const {
 	if ((row + column) % 2 == 0)
 	{
 		return this->Minor(row, column);
@@ -509,7 +509,7 @@ double Matrix4::Cofactor(const int row, const int column) const {
 	}
 }
 
-bool Matrix4::IsInvertible()
+bool matrix4::IsInvertible()
 {
 	if (this->Determinant() == 0)
 	{
@@ -521,7 +521,7 @@ bool Matrix4::IsInvertible()
 
 }
 
-void Matrix4::Print()
+void matrix4::Print()
 {
 	std::cout << "|" << (*this)(0, 0) << "|" << (*this)(0, 1) << "|" << (*this)(0, 2) << "|" << (*this)(0, 3) << "|\n";
 	std::cout << "|" << (*this)(1, 0) << "|" << (*this)(1, 1) << "|" << (*this)(1, 2) << "|" << (*this)(1, 3) << "|\n";
@@ -531,7 +531,7 @@ void Matrix4::Print()
 
 
 
-Matrix2::Matrix2(
+matrix2::matrix2(
 	double n00, double n01,
 	double n10, double n11)
 {
@@ -539,13 +539,13 @@ Matrix2::Matrix2(
 	n[1][0] = n01; n[1][1] = n11;
 }
 
-double Matrix2::Determinant()
+double matrix2::Determinant()
 {
 	double determinant = n[0][0] * n[1][1] - n[0][1] * n[1][0];
 	return determinant;
 }
 
-bool Matrix2::operator==(const Matrix2& other) const
+bool matrix2::operator==(const matrix2& other) const
 {
 	if (!Math::Equal((*this)(0, 0), other(0, 0))) return false;
 	if (!Math::Equal((*this)(0, 1), other(0, 1))) return false;
@@ -556,12 +556,12 @@ bool Matrix2::operator==(const Matrix2& other) const
 	return true;
 }
 
-bool Matrix2::operator!=(const Matrix2& other) const
+bool matrix2::operator!=(const matrix2& other) const
 {
 	return !(*this == other);
 }
 
-Matrix3::Matrix3(
+matrix3::matrix3(
 	double n00, double n01, double n02,
 	double n10, double n11, double n12,
 	double n20, double n21, double n22)
@@ -571,7 +571,7 @@ Matrix3::Matrix3(
 	n[2][0] = n02; n[2][1] = n12; n[2][2] = n22;
 }
 
-bool Matrix3::operator==(const Matrix3& other) const
+bool matrix3::operator==(const matrix3& other) const
 {
 	if (!Math::Equal((*this)(0, 0), other(0, 0))) return false;
 	if (!Math::Equal((*this)(0, 1), other(0, 1))) return false;
@@ -588,12 +588,12 @@ bool Matrix3::operator==(const Matrix3& other) const
 	return true;
 }
 
-bool Matrix3::operator!=(const Matrix3& other) const
+bool matrix3::operator!=(const matrix3& other) const
 {
 	return !(*this == other);
 }
 
-double Matrix3::Determinant()
+double matrix3::Determinant()
 {
 	double det =
 		(*this)(0, 0) * this->Cofactor(0, 0) + 
@@ -602,14 +602,14 @@ double Matrix3::Determinant()
 	return det;
 }
 
-double Matrix3::Minor(const int row, const int column)
+double matrix3::Minor(const int row, const int column)
 {
-	Matrix2 submatrix = Math::Submatrix((*this), row, column);
+	matrix2 submatrix = Math::Submatrix((*this), row, column);
 	double sub_det = submatrix.Determinant();
 	return sub_det;
 }
 
-double Matrix3::Cofactor(const int row, const int column)
+double matrix3::Cofactor(const int row, const int column)
 {
 	if ((row + column) % 2 == 0)
 	{

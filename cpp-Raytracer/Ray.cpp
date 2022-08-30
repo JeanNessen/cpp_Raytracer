@@ -19,7 +19,7 @@ point ray::position(const double distance) const
 	return position;
 }
 
-ray ray::transform(const Matrix4 matrix) const
+ray ray::transform(const matrix4 matrix) const
 {
 	const tuple originTuple{ matrix * origin };
 	const tuple directionTuple{ matrix * direction };

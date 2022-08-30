@@ -12,13 +12,13 @@ class Pattern {
 protected:
     Pattern(color a, color b);
 
-    Matrix4 m_transform = Math::identiy_matrix;
+    matrix4 m_transform = Math::identiy_matrix;
 
 public:
     [[nodiscard]] virtual color PatternAt(point p) const = 0;
 
-    Matrix4 GetTransform(){return m_transform;}
-    void SetTransform(Matrix4 new_transform);
+    matrix4 GetTransform(){return m_transform;}
+    void SetTransform(matrix4 new_transform);
 
 //Members
 private:

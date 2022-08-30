@@ -22,7 +22,7 @@ public:
     };
 
 protected:
-    Matrix4 m_transform;
+    matrix4 m_transform;
 
     material m_material;
 
@@ -37,8 +37,8 @@ public:
 
     const shape_type type;
 
-    [[nodiscard]] Matrix4 get_transform() const { return m_transform; }
-    void set_transform(const Matrix4 pT){ m_transform = pT; }
+    [[nodiscard]] matrix4 get_transform() const { return m_transform; }
+    void set_transform(const matrix4 pT){ m_transform = pT; }
 
     material& get_material() { return m_material; }
     [[nodiscard]] material get_material_const() const {return m_material;}

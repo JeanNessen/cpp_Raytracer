@@ -11,7 +11,7 @@ Pattern::Pattern(color a, color b):
 
 }
 
-void Pattern::SetTransform(Matrix4 new_transform) {
+void Pattern::SetTransform(matrix4 new_transform) {
     m_transform = new_transform;
 }
 

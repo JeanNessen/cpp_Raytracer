@@ -34,7 +34,7 @@ public:
     std::vector<intersection> intersect(shape_ptr s) const;
 
 	//Transforms the Ray according to the given transformation Matrix
-	ray transform(Matrix4 matrix) const;
+	ray transform(matrix4 matrix) const;
 
     std::vector<intersection> local_intersect(sphere_ptr s) const;
     std::vector<intersection> local_intersect(plane_ptr p) const;

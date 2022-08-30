@@ -23,8 +23,8 @@ public:
     [[nodiscard]] double get_fov() const{return m_field_of_view;}
     void set_fov(const double pFov){ m_field_of_view = pFov;}
 
-	[[nodiscard]] Matrix4 get_transform() const {return m_transform;}
-    void set_transform(const Matrix4 pT){ m_transform = pT;}
+	[[nodiscard]] matrix4 get_transform() const {return m_transform;}
+    void set_transform(const matrix4 pT){ m_transform = pT;}
 
     [[nodiscard]] double get_aperture_size() const{ return m_aperture_size; }
     void set_aperture_size(const double pNewApertureSize){ m_aperture_size = pNewApertureSize; }
@@ -62,7 +62,7 @@ private:
     double m_field_of_view;
     double m_focal_length = 5;
     double m_aperture_size = 0.1;
-    Matrix4 m_transform;
+    matrix4 m_transform;
     int m_samples_per_pixel = 10;
 
     double m_pixel_size;

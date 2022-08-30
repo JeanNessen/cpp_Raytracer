@@ -238,7 +238,7 @@ TEST(RayTracing, HitIsAlwaysLowestNotNegativeIntersection)
 TEST(RayTracing, TranslatingARay)
 {
     ray r{point(1, 2, 3), vector(0, 1, 0) };
-    Matrix4 m = Math::Translation(3, 4, 5);
+    matrix4 m = Math::Translation(3, 4, 5);
 
     ray r2 = r.transform(m);
 
@@ -249,7 +249,7 @@ TEST(RayTracing, TranslatingARay)
 TEST(RayTracing, ScalingARay)
 {
     ray r{point(1, 2, 3), vector(0, 1, 0) };
-    Matrix4 m = Math::Scaling(2, 3, 4);
+    matrix4 m = Math::Scaling(2, 3, 4);
 
     ray r2 = r.transform(m);
 
@@ -267,7 +267,7 @@ TEST(RayTracing, SphereDefaultTransformation)
 TEST(RayTracing, ChangingSphereTransform)
 {
     Sphere s{};
-    Matrix4 t = Math::Translation(2, 3, 4);
+    matrix4 t = Math::Translation(2, 3, 4);
 
     s.set_transform(t);
 
@@ -363,7 +363,7 @@ TEST(RayTracing, NormalOnTranslatedSphere)
 TEST(RayTracing, NormalOnTransformedSphere)
 {
     Sphere s{};
-    Matrix4 m = Math::Scaling(1, 0.5, 1) * Math::Rotation_Z(M_PI/5);
+    matrix4 m = Math::Scaling(1, 0.5, 1) * Math::Rotation_Z(M_PI/5);
 
     s.set_transform(m);
     vector n = s.normal_at(point(0, std::sqrt(2)/2, -std::sqrt(2)/2));

@@ -32,7 +32,7 @@ void PlaceSpheres(World &w)
         sphere->get_material().reflective = 0.1;
         sphere->get_material().shininess = 150;
         double sphere_scaling_s = Math::GetRandomDouble(0.1, 0.25);
-        Matrix4 scaling = Math::Scaling(sphere_scaling_s);
+        matrix4 scaling = Math::Scaling(sphere_scaling_s);
         point spot{Math::GetRandomDouble(-5, 5), sphere_scaling_s, Math::GetRandomDouble(10, 20)};
         while(!CheckSpot(spot, taken_spots))
         {
