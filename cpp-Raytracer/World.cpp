@@ -2,7 +2,7 @@
 // Created by Jean-Luc von Nessen on 24.01.22.
 //
 
-#include "World.h"
+#include "world.h"
 
 #include <iostream>
 #include <chrono>
@@ -13,13 +13,13 @@
 
 
 //static variables
-int World::m_recursion_depth = 5;
-std::atomic<int> World::m_remaining_lines;
+int world::m_recursion_depth = 5;
+std::atomic<int> world::m_remaining_lines;
 
 using namespace std::chrono_literals;
 
-World DefaultWorld() {
-    World w{};
+world DefaultWorld() {
+    world w{};
 
     point_light default_light{color(1, 1, 1), point(-10, 10, -10)};
     w.add_light(default_light);
@@ -39,15 +39,15 @@ World DefaultWorld() {
     return w;
 }
 
-void World::add_light(point_light light) {
+void world::add_light(point_light light) {
     m_world_lights.push_back(light);
 }
 
-void World::add_object(shape_ptr obj) {
+void world::add_object(shape_ptr obj) {
     m_world_objects.push_back(obj);
 }
 
-std::vector<intersection> World::intersect_world(ray ray) {
+std::vector<intersection> world::intersect_world(ray ray) {
 
     std::vector<std::unique_ptr<intersection>> world_intersections_ptr;
 
@@ -78,7 +78,7 @@ std::vector<intersection> World::intersect_world(ray ray) {
     return world_intersections;
 }
 
-color World::shade_hit(intersection_computations comps, int remaining) {
+color world::shade_hit(intersection_computations comps, int remaining) {
     color surface = Lighting(comps.object->get_material_const(),
                               comps.object,
                               m_world_lights[0],
@@ -104,7 +104,7 @@ color World::shade_hit(intersection_computations comps, int remaining) {
 }
 
 //TODO Bounce light for diffuse materials
-color World::calculate_color_at(ray r, int remaining) {
+color world::calculate_color_at(ray r, int remaining) {
 
     std::vector<intersection> intersections = intersect_world(r);
 
@@ -122,7 +122,7 @@ color World::calculate_color_at(ray r, int remaining) {
 
 }
 
-canvas World::render_multi_thread(camera c, int num_threads) {
+canvas world::render_multi_thread(camera c, int num_threads) {
 
     auto start = std::chrono::high_resolution_clock::now();
 
@@ -164,11 +164,11 @@ canvas World::render_multi_thread(camera c, int num_threads) {
         std::cout << "Starting render pass " << i + 1 << " of " << c.get_samples_per_pixel() << "." << std::endl;
         if(i == num_threads-1)
         {
-            render_pass_canvases.push_back(std::async(&World::execute_multiple_passes, this, c, num_passes_last_thread));
+            render_pass_canvases.push_back(std::async(&world::execute_multiple_passes, this, c, num_passes_last_thread));
         }
         else
         {
-            render_pass_canvases.push_back(std::async(&World::execute_multiple_passes, this, c, num_passes_per_thread));
+            render_pass_canvases.push_back(std::async(&world::execute_multiple_passes, this, c, num_passes_per_thread));
         }
     }
 
@@ -203,7 +203,7 @@ canvas World::render_multi_thread(camera c, int num_threads) {
 }
 
 
-canvas World::execute_single_pass(camera c) {
+canvas world::execute_single_pass(camera c) {
     canvas image{c.get_h_size(), c.get_v_size()};
 
 	for (int y = 0; y < c.get_v_size(); ++y) 
@@ -218,7 +218,7 @@ canvas World::execute_single_pass(camera c) {
     return image;
 }
 
-canvas World::execute_multiple_passes(camera c, int num_passes)
+canvas world::execute_multiple_passes(camera c, int num_passes)
 {
     canvas image{ c.get_h_size(), c.get_v_size() };
 
@@ -230,7 +230,7 @@ canvas World::execute_multiple_passes(camera c, int num_passes)
     return image / num_passes;
 }
 
-bool World::calculate_shadow(point p) {
+bool world::calculate_shadow(point p) {
     vector v_point_to_light{m_world_lights[0].position - p};
     double distance_to_light = (v_point_to_light).magnitude();
     vector direction_to_light = v_point_to_light.normalized();
@@ -251,7 +251,7 @@ bool World::calculate_shadow(point p) {
     return false;
 }
 
-color World::calculate_reflected_color(intersection_computations comps, int remaining) {
+color world::calculate_reflected_color(intersection_computations comps, int remaining) {
     if(comps.object->get_material().reflective == 0 || remaining <= 0)
     {
         return colors::black;
@@ -264,13 +264,13 @@ color World::calculate_reflected_color(intersection_computations comps, int rema
     }
 }
 
-color World::get_color_for_pixel(camera c, int x, int y) {
+color world::get_color_for_pixel(camera c, int x, int y) {
     ray r = c.ray_for_pixel(x, y);
     color pixel_color = calculate_color_at(r);
     return pixel_color;
 }
 
-void World::print_progress_update() const
+void world::print_progress_update() const
 {
 	const double remaining_percentage = static_cast<double>(m_remaining_lines) / static_cast<double>(m_total_lines);
 	const double progress_percentage = 100 - remaining_percentage * 100;
@@ -279,7 +279,7 @@ void World::print_progress_update() const
 	std::cout << "Progress: " << progress_percentage << "%" << std::endl;
 }
 
-color World::calculate_refracted_color(intersection_computations comps, int remaining)
+color world::calculate_refracted_color(intersection_computations comps, int remaining)
 {
     //Aplly snells law to check for total internal reflection
     double n_ratio = comps.n1 / comps.n2;

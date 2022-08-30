@@ -8,7 +8,7 @@
 
 #include "../cpp-Raytracer/Shapes/Plane.h"
 #include "../cpp-Raytracer/IntersectionComputations.h"
-#include "../cpp-Raytracer/World.h"
+#include "../cpp-Raytracer/world.h"
 
 TEST(Reflections, ReflectivityForDefaultMaterial)
 {
@@ -30,7 +30,7 @@ TEST(Reflections, PrecomputingReflectionVector)
 
 TEST(Reflections, ReflectedColorForNonreflectiveMaterial)
 {
-    World w = DefaultWorld();
+    world w = DefaultWorld();
     ray r{point(0, 0, 0), vector(0, 0, 1)};
     sphere_ptr shape = dynamic_pointer_cast<Sphere>(w.get_world_objects()[1]);
     shape->get_material().ambient = 1;
@@ -44,7 +44,7 @@ TEST(Reflections, ReflectedColorForNonreflectiveMaterial)
 
 TEST(Reflections, ReflectedColorForReflectiveMaterial)
 {
-    World w = DefaultWorld();
+    world w = DefaultWorld();
     plane_ptr shape (new plane());
     shape->get_material().reflective = 0.5;
     shape->set_transform(Math::Translation(0, -1, 0));
@@ -60,7 +60,7 @@ TEST(Reflections, ReflectedColorForReflectiveMaterial)
 
 TEST(Reflections, ShadeHitWithReflectiveMaterial)
 {
-    World w = DefaultWorld();
+    world w = DefaultWorld();
     plane_ptr shape (new plane());
     shape->get_material().reflective = 0.5;
     shape->set_transform(Math::Translation(0, -1, 0));
@@ -76,7 +76,7 @@ TEST(Reflections, ShadeHitWithReflectiveMaterial)
 
 TEST(Reflections, ColorAtWithMutuallyReflectiveSurfaces)
 {
-    World w{};
+    world w{};
     w.add_light(point_light(colors::white, point(0, 0, 0)));
 
     plane_ptr lower(new plane());
@@ -96,7 +96,7 @@ TEST(Reflections, ColorAtWithMutuallyReflectiveSurfaces)
 
 TEST(Reflections, TheReflectedColorAtMaximumRecursiveDepth)
 {
-    World w = DefaultWorld();
+    world w = DefaultWorld();
     plane_ptr p(new plane());
     p->get_material().reflective = 0.5;
     p->set_transform(Math::Translation(0, -1, 0));

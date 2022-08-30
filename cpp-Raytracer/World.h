@@ -11,7 +11,7 @@
 #include "IntersectionComputations.h"
 
 
-class World {
+class world {
 //Methods
 private:
 
@@ -62,5 +62,5 @@ private:
 public:
 };
 
-World DefaultWorld();
+world DefaultWorld();
 

@@ -96,7 +96,7 @@ TEST(Refractions, TheUnderPointIfOffsetBelowTheSurface)
 
 TEST(Refractions, TheRefractedColorWithOpaqueSurface)
 {
-    World w = DefaultWorld();
+    world w = DefaultWorld();
     shape_ptr shape = w.get_world_objects()[0];
     ray r{point(0, 0, -5), vector(0, 0, 1)};
     std::vector<intersection> xs{intersection(4, shape), intersection(6, shape)};
@@ -109,7 +109,7 @@ TEST(Refractions, TheRefractedColorWithOpaqueSurface)
 
 TEST(Refractions, RefractedColorAtMaxRecursiveDepth)
 {
-    World w = DefaultWorld();
+    world w = DefaultWorld();
     shape_ptr shape = w.get_world_objects()[0];
     shape->get_material().transparency = 1;
     shape->get_material().refractive_index = 1.5;
@@ -124,7 +124,7 @@ TEST(Refractions, RefractedColorAtMaxRecursiveDepth)
 
 TEST(Refractions, TheRefractedColorUnderTotalInternalReflection)
 {
-    World w = DefaultWorld();
+    world w = DefaultWorld();
     shape_ptr shape = w.get_world_objects()[0];
     shape->get_material().transparency = 1;
     shape->get_material().refractive_index = 1.5;
@@ -139,7 +139,7 @@ TEST(Refractions, TheRefractedColorUnderTotalInternalReflection)
 
 TEST(Refractions, RefractedColorWithRefractedRay)
 {
-    World w = DefaultWorld();
+    world w = DefaultWorld();
 
     shape_ptr A = w.get_world_objects()[0];
     A->get_material().ambient = 1;
@@ -165,7 +165,7 @@ TEST(Refractions, RefractedColorWithRefractedRay)
 
 TEST(Refractions, ShadeHitWithTransparentMaterial)
 {
-    World w = DefaultWorld();
+    world w = DefaultWorld();
 
     plane_ptr floor{new plane()};
     floor->set_transform(Math::Translation(0, -1, 0));
@@ -228,7 +228,7 @@ TEST(Refractions, SchlickApproximationWithSmallAngleAndn2Biggern1)
 
 TEST(Refractions, ShadeHitWithAReflectiveTransparentMaterial)
 {
-    World w = DefaultWorld();
+    world w = DefaultWorld();
 
     plane_ptr floor{new plane()};
     floor->set_transform(Math::Translation(0, -1, 0));

@@ -1,5 +1,5 @@
 #include "Canvas.h"
-#include "World.h"
+#include "world.h"
 #include <random>
 
 bool CheckSpot(point spot, const std::vector<point>& taken_spots)
@@ -20,7 +20,7 @@ bool CheckSpot(point spot, const std::vector<point>& taken_spots)
     return spot_is_free;
 }
 
-void PlaceSpheres(World &w)
+void PlaceSpheres(world &w)
 {
     std::vector<point> taken_spots;
 
@@ -47,7 +47,7 @@ void PlaceSpheres(World &w)
 int main()
 {
     //Initialize the World
-    World w{};
+    world w{};
     w.set_recursion_depth(5);
 
     //Initialize the light
