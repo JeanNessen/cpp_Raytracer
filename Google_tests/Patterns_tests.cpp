@@ -90,7 +90,7 @@ TEST(Patterns, StripesWithBothObjectAndPatternTransformation)
 
 TEST(Patterns, GradientLinearlyInterpolatesBetweenColors)
 {
-    CGradientPattern pattern{colors::white, colors::black};
+    gradient_pattern pattern{colors::white, colors::black};
 
     EXPECT_EQ(pattern.PatternAt(point(0, 0, 0)), colors::white);
     EXPECT_EQ(pattern.PatternAt(point(0.25, 0, 0)), color(0.75, 0.75, 0.75));

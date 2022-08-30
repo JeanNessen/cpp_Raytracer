@@ -31,13 +31,13 @@ stripe_pattern::stripe_pattern(color a, color b):
 
 }
 
-CGradientPattern::CGradientPattern(color a, color b):
+gradient_pattern::gradient_pattern(color a, color b):
         pattern(a, b)
 {
 
 }
 
-color CGradientPattern::PatternAt(point p) const {
+color gradient_pattern::PatternAt(point p) const {
     color distance = b - a;
     double fraction = p.x - std::floor(p.x);
     return a + distance * fraction;

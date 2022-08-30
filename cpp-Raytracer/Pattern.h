@@ -35,10 +35,10 @@ public:
     [[nodiscard]] color PatternAt(point p) const override;
 };
 
-class CGradientPattern: public pattern {
+class gradient_pattern: public pattern {
 
 public:
-    CGradientPattern(color a, color b);
+    gradient_pattern(color a, color b);
 
     [[nodiscard]] color PatternAt(point p) const override;
 
