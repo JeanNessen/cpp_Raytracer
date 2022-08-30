@@ -143,7 +143,7 @@ TEST(Refractions, RefractedColorWithRefractedRay)
 
     shape_ptr A = w.get_world_objects()[0];
     A->get_material().ambient = 1;
-    std::shared_ptr<pattern> pat(new CTestPattern(colors::white, colors::black));
+    std::shared_ptr<pattern> pat(new test_pattern(colors::white, colors::black));
     A->get_material().SetPattern(pat);
 
     shape_ptr B = w.get_world_objects()[1];

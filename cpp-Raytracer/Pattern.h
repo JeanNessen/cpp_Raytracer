@@ -53,10 +53,10 @@ public:
 
 };
 
-class CTestPattern: public pattern {
+class test_pattern: public pattern {
 
 public:
-    CTestPattern(color a, color b);
+    test_pattern(color a, color b);
 
     color PatternAt(point p) const override;
 };

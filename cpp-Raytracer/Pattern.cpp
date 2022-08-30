@@ -58,10 +58,10 @@ color checkers_pattern::PatternAt(point p) const {
     }
 }
 
-CTestPattern::CTestPattern(color a, color b) : pattern(a, b) {
+test_pattern::test_pattern(color a, color b) : pattern(a, b) {
 
 }
 
-color CTestPattern::PatternAt(point p) const {
+color test_pattern::PatternAt(point p) const {
     return color(p.x, p.y, p.z);
 }
