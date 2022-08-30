@@ -551,7 +551,7 @@ TEST(Lighting, HitShouldOffsetPoint)
 TEST(Lighting, LightingWithPatternApplied)
 {
     material m{};
-    std::shared_ptr<pattern> pattern (new CStripePattern(colors::white, colors::black));
+    std::shared_ptr<pattern> pattern (new stripe_pattern(colors::white, colors::black));
     m.SetPattern(pattern);
     m.ambient = 1;
     m.diffuse = 0;

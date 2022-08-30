@@ -27,10 +27,10 @@ public:
     color b;
 };
 
-class CStripePattern: public pattern {
+class stripe_pattern: public pattern {
 
 public:
-    CStripePattern(color a, color b);
+    stripe_pattern(color a, color b);
 
     [[nodiscard]] color PatternAt(point p) const override;
 };

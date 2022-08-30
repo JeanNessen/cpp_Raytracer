@@ -15,7 +15,7 @@ void pattern::SetTransform(matrix4 new_transform) {
     m_transform = new_transform;
 }
 
-color CStripePattern::PatternAt(point p) const {
+color stripe_pattern::PatternAt(point p) const {
     if(int(std::floor(p.x)) % 2 == 0)
     {
         return a;
@@ -25,7 +25,7 @@ color CStripePattern::PatternAt(point p) const {
     }
 }
 
-CStripePattern::CStripePattern(color a, color b):
+stripe_pattern::stripe_pattern(color a, color b):
         pattern(a, b)
 {
 
