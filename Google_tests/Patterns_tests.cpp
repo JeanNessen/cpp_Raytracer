@@ -100,7 +100,7 @@ TEST(Patterns, GradientLinearlyInterpolatesBetweenColors)
 
 TEST(Patterns, CheckersShouldRepeatInX)
 {
-    CCheckersPattern pattern{colors::white, colors::black};
+    checkers_pattern pattern{colors::white, colors::black};
 
     EXPECT_EQ(pattern.PatternAt(point(0, 0, 0)), colors::white);
     EXPECT_EQ(pattern.PatternAt(point(0.99, 0, 0)), colors::white);
@@ -109,7 +109,7 @@ TEST(Patterns, CheckersShouldRepeatInX)
 
 TEST(Patterns, CheckersShouldRepeatInY)
 {
-    CCheckersPattern pattern{colors::white, colors::black};
+    checkers_pattern pattern{colors::white, colors::black};
 
     EXPECT_EQ(pattern.PatternAt(point(0, 0, 0)), colors::white);
     EXPECT_EQ(pattern.PatternAt(point(0, 0.99, 0)), colors::white);
@@ -118,7 +118,7 @@ TEST(Patterns, CheckersShouldRepeatInY)
 
 TEST(Patterns, CheckersShouldRepeatInZ)
 {
-    CCheckersPattern pattern{colors::white, colors::black};
+    checkers_pattern pattern{colors::white, colors::black};
 
     EXPECT_EQ(pattern.PatternAt(point(0, 0, 0)), colors::white);
     EXPECT_EQ(pattern.PatternAt(point(0, 0, 0.99)), colors::white);

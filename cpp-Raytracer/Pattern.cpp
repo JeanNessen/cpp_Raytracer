@@ -43,13 +43,13 @@ color gradient_pattern::PatternAt(point p) const {
     return a + distance * fraction;
 }
 
-CCheckersPattern::CCheckersPattern(color a, color b) :
+checkers_pattern::checkers_pattern(color a, color b) :
         pattern(a, b)
 {
 
 }
 
-color CCheckersPattern::PatternAt(point p) const {
+color checkers_pattern::PatternAt(point p) const {
     if((int(floor(p.x)) + int(floor(p.y)) + int(floor(p.z))) % 2 == 0) {
         return a;
     } else

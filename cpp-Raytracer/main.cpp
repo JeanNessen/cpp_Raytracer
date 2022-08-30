@@ -56,7 +56,7 @@ int main()
 
 
     //Set up the m_pattern for the floor
-    std::shared_ptr<Pattern> p(new CCheckersPattern(color(0.8, 0.8, 0.8), color(0.4, 0.4, 0.4)));
+    std::shared_ptr<Pattern> p(new checkers_pattern(color(0.8, 0.8, 0.8), color(0.4, 0.4, 0.4)));
     p->SetTransform(Math::Scaling(2));
 
     //Set up the floor

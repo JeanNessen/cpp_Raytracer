@@ -44,10 +44,10 @@ public:
 
 };
 
-class CCheckersPattern: public pattern {
+class checkers_pattern: public pattern {
 
 public:
-    CCheckersPattern(color a, color b);
+    checkers_pattern(color a, color b);
 
     [[nodiscard]] color PatternAt(point p) const override;
 
