@@ -3,7 +3,7 @@
 
 #include "Intersection.h"
 
-ray::ray(const point origin, const Vector direction):
+ray::ray(const point origin, const vector direction):
 	origin(origin),
 	direction(direction)
 {
@@ -25,7 +25,7 @@ ray ray::transform(const Matrix4 matrix) const
 	const tuple directionTuple{ matrix * direction };
 
 	const point newOrigin{ originTuple.x, originTuple.y, originTuple.z };
-	const Vector newDirection{ directionTuple.x, directionTuple.y, directionTuple.z };
+	const vector newDirection{ directionTuple.x, directionTuple.y, directionTuple.z };
 
 	ray r = ray{newOrigin, newDirection };
 	return r;
@@ -61,7 +61,7 @@ std::vector<intersection> ray::intersect(shape_ptr s) const
 std::vector<intersection> ray::local_intersect(sphere_ptr s) const
 {
 	const tuple sphereToRayTmp = origin - point(0, 0, 0); //vector from the center of the sphere to the ray origin
-	const Vector sphereToRay{ sphereToRayTmp.x, sphereToRayTmp.y, sphereToRayTmp.z };
+	const vector sphereToRay{ sphereToRayTmp.x, sphereToRayTmp.y, sphereToRayTmp.z };
 
 	const double a = Math::Dot(direction, direction);
 	const double b = 2 * Math::Dot(direction, sphereToRay);

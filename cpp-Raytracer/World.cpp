@@ -70,7 +70,7 @@ std::vector<intersection> World::intersect_world(ray ray) {
 
     world_intersections.reserve(world_intersections_ptr.size());
 
-    //Reverse the Vector
+    //Reverse the vector
     for (int i = 0; i < world_intersections_ptr.size(); ++i) {
         world_intersections.push_back(*(world_intersections_ptr[world_intersections_ptr.size()-i-1]));
     }
@@ -231,9 +231,9 @@ canvas World::execute_multiple_passes(camera c, int num_passes)
 }
 
 bool World::calculate_shadow(point p) {
-    Vector v_point_to_light{m_world_lights[0].position - p};
+    vector v_point_to_light{m_world_lights[0].position - p};
     double distance_to_light = (v_point_to_light).magnitude();
-    Vector direction_to_light = v_point_to_light.normalized();
+    vector direction_to_light = v_point_to_light.normalized();
 
     ray r_point_to_light{p, direction_to_light};
 
@@ -304,7 +304,7 @@ color World::calculate_refracted_color(intersection_computations comps, int rema
     {
         double cos_t = sqrt(1 - sin2_t);
 
-        Vector direction {comps.normal_v * (n_ratio * cos_i - cos_t) -
+        vector direction {comps.normal_v * (n_ratio * cos_i - cos_t) -
                 comps.eye_v * n_ratio};
 
         ray refracted_ray{comps.under_point, direction};

@@ -7,7 +7,7 @@ class cone final : public shape
 public:
 	cone();
 
-	[[nodiscard]] Vector local_normal_at(point pLocalPoint) const override;
+	[[nodiscard]] vector local_normal_at(point pLocalPoint) const override;
 
 	double minimum = -std::numeric_limits<double>::infinity();
 	double maximum = std::numeric_limits<double>::infinity();

@@ -4,7 +4,7 @@
 
 #include "Light.h"
 
-color Lighting(material m, shape_ptr object, point_light light, point position, Vector eye_v, Vector normal_v, bool in_shadow) {
+color Lighting(material m, shape_ptr object, point_light light, point position, vector eye_v, vector normal_v, bool in_shadow) {
 
     color light_color;
 
@@ -30,7 +30,7 @@ color Lighting(material m, shape_ptr object, point_light light, point position, 
     else
     {
         //Find the direction to the light source
-        Vector light_v = Vector(light.position - position).normalized();
+        vector light_v = vector(light.position - position).normalized();
 
         //Compute the ambient contribution
         color ambient = effective_color * m.ambient;
@@ -52,7 +52,7 @@ color Lighting(material m, shape_ptr object, point_light light, point position, 
             //reflection vector and the eye vector. A negative number means the
             //light reflects away from it
 
-            Vector reflect_v{-light_v.Reflect(normal_v)};
+            vector reflect_v{-light_v.Reflect(normal_v)};
             double reflect_dot_eye = Math::Dot(reflect_v, eye_v);
 
             if(reflect_dot_eye <= 0)

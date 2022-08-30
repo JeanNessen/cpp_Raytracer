@@ -48,7 +48,7 @@ ray camera::ray_for_pixel(const int pX, const int pY) const
 
     point origin = calculate_ray_origin();
 
-    Vector direction{Vector{pixel - origin}.normalized()};
+    vector direction{vector{pixel - origin}.normalized()};
 
     return {origin, direction};
 }

@@ -27,14 +27,14 @@ bool Math::Equal(const tuple a, const tuple b)
 	return Equal(a.x, b.x) && Equal(a.y, b.y) && Equal(a.z, b.z) && Equal(a.w, b.w);
 }
 
-double Math::Dot(const Vector & a, const Vector & b)
+double Math::Dot(const vector & a, const vector & b)
 {
 	return a.x*b.x + a.y*b.y + a.z*b.z + a.w*b.w;
 }
 
-Vector Math::Cross(const Vector & a, const Vector & b)
+vector Math::Cross(const vector & a, const vector & b)
 {
-	Vector crossProduct = Vector(
+	vector crossProduct = vector(
 		a.y * b.z - a.z * b.y,
 		a.z * b.x - a.x * b.z,
 		a.x * b.y - a.y * b.x
@@ -170,10 +170,10 @@ Matrix4 Math::Shearing(const int x_y, const int x_z, const int y_x, const int y_
 	return transform;
 }
 
-Matrix4 Math::ViewTransform(point from, point to, Vector up) {
-    Vector forward = Vector(to-from).normalized();
-    Vector left = Math::Cross(forward, up.normalized());
-    Vector true_up = Math::Cross(left, forward);
+Matrix4 Math::ViewTransform(point from, point to, vector up) {
+    vector forward = vector(to-from).normalized();
+    vector left = Math::Cross(forward, up.normalized());
+    vector true_up = Math::Cross(left, forward);
 
     Matrix4 orientation{
         left.x, left.y, left.z, 0,
@@ -642,7 +642,7 @@ point::point(tuple t) {
     w = 1;
 }
 
-Vector::Vector()
+vector::vector()
 {
 	x = 0;
 	y = 0;
@@ -650,13 +650,13 @@ Vector::Vector()
 	w = 0;
 }
 
-Vector::Vector(double x, double y, double z):
+vector::vector(double x, double y, double z):
 	tuple(x, y, z)
 {
 	w = 0;
 }
 
-Vector::Vector(tuple t)
+vector::vector(tuple t)
 {
     x = t.x;
     y = t.y;
@@ -664,9 +664,9 @@ Vector::Vector(tuple t)
     w = 0;
 }
 
-Vector Vector::normalized() const
+vector vector::normalized() const
 {
-	Vector norm;
+	vector norm;
 	norm.x = x / magnitude();
 	norm.y = y / magnitude();
 	norm.z = z / magnitude();
@@ -674,7 +674,7 @@ Vector Vector::normalized() const
 	return norm;
 }
 
-Vector Vector::Reflect(Vector normal) const {
-    Vector in = *this;
-    return Vector{in - normal * 2 * Math::Dot(in, normal)};
+vector vector::Reflect(vector normal) const {
+    vector in = *this;
+    return vector{in - normal * 2 * Math::Dot(in, normal)};
 }

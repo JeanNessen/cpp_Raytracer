@@ -64,7 +64,7 @@ TEST(World, DefaultWorld)
 TEST(World, IntersectWorldWithRay)
 {
     World w = DefaultWorld();
-    ray r{point(0, 0, -5), Vector(0, 0, 1)};
+    ray r{point(0, 0, -5), vector(0, 0, 1)};
 
     std::vector<intersection> xs = w.intersect_world(r);
 
@@ -78,7 +78,7 @@ TEST(World, IntersectWorldWithRay)
 TEST(World, ShadingAnIntersection)
 {
     World w = DefaultWorld();
-    ray r{point(0, 0, -5), Vector(0, 0, 1)};
+    ray r{point(0, 0, -5), vector(0, 0, 1)};
     auto shape = w.get_world_objects()[0];
     intersection i{4, shape};
 
@@ -92,7 +92,7 @@ TEST(World, ShadingAnIntersectionFromInside)
 {
     World w = DefaultWorld();
     w.get_world_lights()[0] = point_light{color(1, 1, 1), point(0, 0.25, 0)};
-    ray r{point(0, 0, 0), Vector(0, 0, 1)};
+    ray r{point(0, 0, 0), vector(0, 0, 1)};
     auto shape = w.get_world_objects()[1];
     intersection i{0.5, shape};
 
@@ -104,7 +104,7 @@ TEST(World, ShadingAnIntersectionFromInside)
 TEST(World, ColorWhenRayMisses)
 {
     World w = DefaultWorld();
-    ray r{point(0, 0, -5), Vector(0, 1, 0)};
+    ray r{point(0, 0, -5), vector(0, 1, 0)};
 
     color c = w.calculate_color_at(r);
 
@@ -114,7 +114,7 @@ TEST(World, ColorWhenRayMisses)
 TEST(World, ColorWhenRayHits)
 {
     World w = DefaultWorld();
-    ray r{point(0, 0, -5), Vector(0, 0, 1)};
+    ray r{point(0, 0, -5), vector(0, 0, 1)};
 
     color c = w.calculate_color_at(r);
 
@@ -128,7 +128,7 @@ TEST(World, ColorWithIntersectionBehinRay)
     outer->get_material().ambient = 1;
     auto inner = w.get_world_objects()[1];
     inner->get_material().ambient = 1;
-    ray r{point(0, 0, 0.75), Vector(0, 0, -1)};
+    ray r{point(0, 0, 0.75), vector(0, 0, -1)};
 
     color c = w.calculate_color_at(r);
 
@@ -170,7 +170,7 @@ TEST(Camera, ConstructingRayThroughCenterOfCanvas)
     ray r = c.ray_for_pixel(100, 50);
 
     EXPECT_TRUE(Math::Equal(r.origin, point(0, 0, 0)));
-    EXPECT_TRUE(Math::Equal(r.direction, Vector(0, 0, -1)));
+    EXPECT_TRUE(Math::Equal(r.direction, vector(0, 0, -1)));
 }
 
 TEST(Camera, ConstructingRayThroughCorneOfCanvas)
@@ -181,7 +181,7 @@ TEST(Camera, ConstructingRayThroughCorneOfCanvas)
     ray r = c.ray_for_pixel(0, 0);
 
     EXPECT_TRUE(Math::Equal(r.origin, point(0, 0, 0)));
-    EXPECT_TRUE(Math::Equal(r.direction, Vector(0.66519, 0.33259, -0.66851)));
+    EXPECT_TRUE(Math::Equal(r.direction, vector(0.66519, 0.33259, -0.66851)));
 }
 
 TEST(Camera, ConsturctingRayWhenCameraIsTransformed)
@@ -192,7 +192,7 @@ TEST(Camera, ConsturctingRayWhenCameraIsTransformed)
     ray r = c.ray_for_pixel(100, 50);
 
     EXPECT_TRUE(Math::Equal(r.origin, point(0, 2, -5)));
-    EXPECT_TRUE(Math::Equal(r.direction, Vector(std::sqrt(2)/2, 0, -sqrt(2)/2)));
+    EXPECT_TRUE(Math::Equal(r.direction, vector(std::sqrt(2)/2, 0, -sqrt(2)/2)));
 }
 
 TEST(Camera, RenderingAWorldWithACamera)
@@ -201,7 +201,7 @@ TEST(Camera, RenderingAWorldWithACamera)
     camera c{11, 11, M_PI / 2};
     point from{0, 0, -5};
     point to{0, 0, 0};
-    Vector up{0, 1, 0};
+    vector up{0, 1, 0};
     c.set_transform(Math::ViewTransform(from, to, up));
 
     canvas image = w.render_multi_thread(c, 1);
@@ -255,7 +255,7 @@ TEST(Lighting, ShadeHitIsGivenIntersectionInShadow)
     s2->set_transform(Math::Translation(0, 0, 10));
     w.add_object(s2);
 
-    ray r{point(0, 0, 5), Vector(0, 0, 1)};
+    ray r{point(0, 0, 5), vector(0, 0, 1)};
     intersection i{4, s2};
 
     intersection_computations comps = PrepareComputations(i, r);

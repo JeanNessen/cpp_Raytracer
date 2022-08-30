@@ -16,7 +16,7 @@ TEST(Tuples, CreatePoint)
 
 TEST(Tuples, CreateVector)
 {
-    Vector v = Vector(4, -4, 3);
+    vector v = vector(4, -4, 3);
     tuple target{ 4, -4, 3, 0 };
     EXPECT_EQ(v, target);
 }
@@ -54,7 +54,7 @@ TEST(Tuples, PointMinusPoint)
 {
     point p1 = point(3, 2, 1);
     point p2 = point(5, 6, 7);
-    Vector target = Vector(-2, -4, -6);
+    vector target = vector(-2, -4, -6);
 
     EXPECT_EQ(p1-p2, target);
 }
@@ -62,7 +62,7 @@ TEST(Tuples, PointMinusPoint)
 TEST(Tuples, PointMinusVector)
 {
     point p = point(3, 2, 1);
-    Vector v = Vector(5, 6, 7);
+    vector v = vector(5, 6, 7);
     point target = point(-2, -4, -6);
 
     EXPECT_EQ(p-v, target);
@@ -70,9 +70,9 @@ TEST(Tuples, PointMinusVector)
 
 TEST(Tuples, VectorMinusVector)
 {
-    Vector v1 = Vector(3, 2, 1);
-    Vector v2 = Vector(5, 6, 7);
-    Vector target = Vector(-2, -4, -6);
+    vector v1 = vector(3, 2, 1);
+    vector v2 = vector(5, 6, 7);
+    vector target = vector(-2, -4, -6);
 
     EXPECT_EQ(v1-v2, target);
 }
@@ -102,89 +102,89 @@ TEST(Tuples, TupleFractionMultiplication)
 
 TEST(Tuples, VectorMagnitude01)
 {
-    Vector v = Vector(1, 0 , 0);
+    vector v = vector(1, 0 , 0);
 
     EXPECT_TRUE(Math::Equal(v.magnitude(), 1));
 }
 
 TEST(Tuples, VectorMagnitude02)
 {
-    Vector v = Vector(0, 1 , 0);
+    vector v = vector(0, 1 , 0);
 
     EXPECT_TRUE(Math::Equal(v.magnitude(), 1));
 }
 TEST(Tuples, VectorMagnitude03)
 {
-    Vector v = Vector(0, 0 , 1);
+    vector v = vector(0, 0 , 1);
 
     EXPECT_TRUE(Math::Equal(v.magnitude(), 1));
 }
 TEST(Tuples, VectorMagnitude04)
 {
-    Vector v = Vector(1, 2 , 3);
+    vector v = vector(1, 2 , 3);
 
     EXPECT_TRUE(Math::Equal(v.magnitude(), std::sqrt(14)));
 }
 
 TEST(Tuples, NormalizeVector01)
 {
-    Vector v = Vector(4, 0, 0);
-    Vector target = Vector(1, 0, 0);
+    vector v = vector(4, 0, 0);
+    vector target = vector(1, 0, 0);
 
     EXPECT_TRUE(Math::Equal(v.normalized(), target));
 }
 
 TEST(Tuples, NormalizeVector02)
 {
-    Vector v = Vector(1, 2, 3);
-    Vector target = Vector(1 / std::sqrt(14), 2 / std::sqrt(14), 3 / std::sqrt(14));
+    vector v = vector(1, 2, 3);
+    vector target = vector(1 / std::sqrt(14), 2 / std::sqrt(14), 3 / std::sqrt(14));
 
     EXPECT_TRUE(Math::Equal(v.normalized(), target));
 }
 
 TEST(Tuples, NormalizedVectorMagnitude)
 {
-    Vector v = Vector(1, 2, 3);
-    Vector norm = v.normalized();
+    vector v = vector(1, 2, 3);
+    vector norm = v.normalized();
 
     EXPECT_TRUE(Math::Equal(norm.magnitude(), 1));
 }
 
 TEST(Tuples, DotProductVectors)
 {
-    Vector v1 = Vector(1, 2, 3);
-    Vector v2 = Vector(2, 3, 4);
+    vector v1 = vector(1, 2, 3);
+    vector v2 = vector(2, 3, 4);
 
     EXPECT_TRUE(Math::Equal(Math::Dot(v1, v2), 20));
 }
 
 TEST(Tuples, CrossProductVectors)
 {
-    Vector v1 = Vector(1, 2, 3);
-    Vector v2 = Vector(2, 3, 4);
-    Vector target = Vector(-1, 2, -1);
+    vector v1 = vector(1, 2, 3);
+    vector v2 = vector(2, 3, 4);
+    vector target = vector(-1, 2, -1);
 
     EXPECT_TRUE(Math::Equal(Math::Cross(v1, v2), target));
 }
 
 TEST(Tuples, ReflectingVectorAt45)
 {
-    Vector v{1, -1, 0};
-    Vector n{0, 1, 0};
+    vector v{1, -1, 0};
+    vector n{0, 1, 0};
 
-    Vector r = v.Reflect(n);
+    vector r = v.Reflect(n);
 
-    EXPECT_TRUE(Math::Equal(r, Vector(1, 1, 0)));
+    EXPECT_TRUE(Math::Equal(r, vector(1, 1, 0)));
 }
 
 TEST(Tuples, ReflectingVectorOffSlant)
 {
-    Vector v{0, -1, 0};
-    Vector n{static_cast<float>(std::sqrt(2)/2), static_cast<float>(std::sqrt(2)/2), 0};
+    vector v{0, -1, 0};
+    vector n{static_cast<float>(std::sqrt(2)/2), static_cast<float>(std::sqrt(2)/2), 0};
 
-    Vector r = v.Reflect(n);
+    vector r = v.Reflect(n);
 
-    EXPECT_TRUE(Math::Equal(r, Vector(1, 0, 0)));
+    EXPECT_TRUE(Math::Equal(r, vector(1, 0, 0)));
 }
 
 TEST(Matricies, ConstructionMatrix4)
@@ -623,7 +623,7 @@ TEST(Matricies, MultiplyByInverseOfTranslationMatrix)
 TEST(Matricies, TranslationDoesNotAffectVectors)
 {
     Matrix4 transform = Math::Translation(5, -3, 2);
-    Vector v{ -3, 4, 5 };
+    vector v{ -3, 4, 5 };
 
     EXPECT_EQ(transform * v, v);
 }
@@ -640,8 +640,8 @@ TEST(Matricies, ScalingMatrixAppliedToAPoint)
 TEST(Matricies, ScalingMatrixAppliedToAVector)
 {
     Matrix4 transform = Math::Scaling(2, 3, 4);
-    Vector v{ -4, 6, 8 };
-    Vector target{-8, 18, 32};
+    vector v{ -4, 6, 8 };
+    vector target{-8, 18, 32};
 
     EXPECT_EQ(transform * v, target);
 }
@@ -650,8 +650,8 @@ TEST(Matricies, MultiplyingByInverseOfScalingMatrix)
 {
     Matrix4 transform = Math::Scaling(2, 3, 4);
     Matrix4 inv = transform.Inversed();
-    Vector v{ -4, 6, 8 };
-    Vector target{-2, 2, 2};
+    vector v{ -4, 6, 8 };
+    vector target{-2, 2, 2};
 
     EXPECT_EQ(inv * v, target);
 }
@@ -798,7 +798,7 @@ TEST(Matricies, TransformationMatrixForDefaultorientation)
 {
     point from{0, 0, 0};
     point to{0, 0, -1};
-    Vector up{0, 1, 0};
+    vector up{0, 1, 0};
 
     Matrix4 t = Math::ViewTransform(from, to, up);
 
@@ -809,7 +809,7 @@ TEST(Matricies, TransformationMatrixLookingInPositiveDirection)
 {
     point from{0, 0, 0};
     point to{0, 0, 1};
-    Vector up{0, 1, 0};
+    vector up{0, 1, 0};
 
     Matrix4 t = Math::ViewTransform(from, to, up);
 
@@ -820,7 +820,7 @@ TEST(Matricies, TransfomationMovesTheWorld)
 {
     point from{0, 0, 8};
     point to{0, 0, 0};
-    Vector up{0, 1, 0};
+    vector up{0, 1, 0};
 
     Matrix4 t = Math::ViewTransform(from, to, up);
 
@@ -831,7 +831,7 @@ TEST(Matricies, ArbitraryViewTransformation)
 {
     point from{1, 3, 2};
     point to{4, -2, 8};
-    Vector up{1, 1, 0};
+    vector up{1, 1, 0};
 
     Matrix4 t = Math::ViewTransform(from, to, up);
 

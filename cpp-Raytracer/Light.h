@@ -22,5 +22,5 @@ struct point_light{
     bool operator==(const point_light& other) const;
 };
 
-color Lighting(material m, shape_ptr object, point_light light, point position, Vector eye_v, Vector normal_v, bool in_shadow);
+color Lighting(material m, shape_ptr object, point_light light, point position, vector eye_v, vector normal_v, bool in_shadow);
 

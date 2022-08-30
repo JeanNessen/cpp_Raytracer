@@ -30,7 +30,7 @@ protected:
 
     explicit shape(shape_type pT);
 
-    [[nodiscard]] virtual Vector local_normal_at(point local_point) const = 0;
+    [[nodiscard]] virtual vector local_normal_at(point local_point) const = 0;
 
 public:
     const int id;
@@ -49,11 +49,11 @@ public:
 
     virtual ~shape()= default;
 
-    [[nodiscard]] Vector normal_at(point pWorldPoint) const;
+    [[nodiscard]] vector normal_at(point pWorldPoint) const;
     [[nodiscard]] color stripe_at_object(point pWorldPoint) const;
 
     point saved_ray_origin;
-    Vector saved_ray_direction;
+    vector saved_ray_direction;
 
 };
 

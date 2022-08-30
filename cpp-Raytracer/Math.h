@@ -36,15 +36,15 @@
         explicit point(tuple t);
 	};
 
-	struct Vector : public tuple
+	struct vector : public tuple
 	{
-		Vector();
-		Vector(double x, double y, double z);
-        explicit Vector(tuple t);
+		vector();
+		vector(double x, double y, double z);
+        explicit vector(tuple t);
 
-		[[nodiscard]]Vector normalized() const;
+		[[nodiscard]]vector normalized() const;
 
-        Vector Reflect(Vector normal) const;
+        vector Reflect(vector normal) const;
 	};
 
 	class Matrix2
@@ -137,8 +137,8 @@
         bool Equal(const double a, const double b);
 		bool Equal(const tuple a, const tuple b);
 
-		double Dot(const Vector& a, const Vector& b);
-		Vector Cross(const Vector& a, const Vector& b);
+		double Dot(const vector& a, const vector& b);
+		vector Cross(const vector& a, const vector& b);
 
 		//Returns the identity Matrix
 		Matrix4 Identity4();
@@ -150,9 +150,9 @@
 		//Translates a point in space, does not affect Vectors
 		Matrix4 Translation(const double x, const double y, const double z);
 
-		//Scales a point or Vector in Space
+		//Scales a point or vector in Space
 		Matrix4 Scaling(const double x, const double y, const double z);
-        //Scales a point or Vector uniformly in all dimensions
+        //Scales a point or vector uniformly in all dimensions
         Matrix4 Scaling(const double s);
 
 		//Rotates a point around the given Axis
@@ -173,7 +173,7 @@
         //From: Where should the eye be
         //To: Where should the eye be oriented towards
         //Up: What direction is up
-        Matrix4 ViewTransform(point from, point to, Vector up);
+        Matrix4 ViewTransform(point from, point to, vector up);
 
 		extern Matrix4 identiy_matrix;
 	}

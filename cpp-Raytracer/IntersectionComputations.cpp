@@ -7,7 +7,7 @@
 #include <utility>
 
 
-intersection_computations::intersection_computations(const double pT, shape_ptr  pObject, const point pPoint, const Vector pEyeV, const Vector pNormalV, const double pN1, const double pN2):
+intersection_computations::intersection_computations(const double pT, shape_ptr  pObject, const point pPoint, const vector pEyeV, const vector pNormalV, const double pN1, const double pN2):
         t(pT),
         object(std::move(pObject)),
 		intersect_point(pPoint),
@@ -47,8 +47,8 @@ intersection_computations PrepareComputations(const intersection& pIntersection,
 
     //precompute needed values
     const point compsPoint{pRay.position(pIntersection.t)};
-    const Vector compsEyeV{-pRay.direction.x, -pRay.direction.y, -pRay.direction.z};
-    const Vector compsNormalV{pIntersection.object->normal_at(pRay.position(pIntersection.t))};
+    const vector compsEyeV{-pRay.direction.x, -pRay.direction.y, -pRay.direction.z};
+    const vector compsNormalV{pIntersection.object->normal_at(pRay.position(pIntersection.t))};
 
     const std::vector<double> n1n2 = find_refractive_indices(pIntersection, xs);
 

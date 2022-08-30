@@ -46,7 +46,7 @@ TEST(Refractions, Findingn1Andn2AtVariousIntersections)
     C->set_transform(Math::Translation(0, 0, 0.25));
     C->get_material().refractive_index = 2.5;
 
-    ray r{point(0, 0, -4), Vector(0, 0, 1)};
+    ray r{point(0, 0, -4), vector(0, 0, 1)};
 
     std::vector<intersection> xs{intersection(2, A),
                                   intersection(2.75, B),
@@ -82,7 +82,7 @@ TEST(Refractions, Findingn1Andn2AtVariousIntersections)
 
 TEST(Refractions, TheUnderPointIfOffsetBelowTheSurface)
 {
-    ray r{point(0, 0, -5), Vector(0, 0, 1)};
+    ray r{point(0, 0, -5), vector(0, 0, 1)};
 
     sphere_ptr shape = GlassSphere();
     shape->set_transform(Math::Translation(0, 0, 1));
@@ -98,7 +98,7 @@ TEST(Refractions, TheRefractedColorWithOpaqueSurface)
 {
     World w = DefaultWorld();
     shape_ptr shape = w.get_world_objects()[0];
-    ray r{point(0, 0, -5), Vector(0, 0, 1)};
+    ray r{point(0, 0, -5), vector(0, 0, 1)};
     std::vector<intersection> xs{intersection(4, shape), intersection(6, shape)};
 
     intersection_computations comps = PrepareComputations(xs[0], r, xs);
@@ -113,7 +113,7 @@ TEST(Refractions, RefractedColorAtMaxRecursiveDepth)
     shape_ptr shape = w.get_world_objects()[0];
     shape->get_material().transparency = 1;
     shape->get_material().refractive_index = 1.5;
-    ray r{point(0, 0, -5), Vector(0, 0, 1)};
+    ray r{point(0, 0, -5), vector(0, 0, 1)};
     std::vector<intersection> xs{intersection(4, shape), intersection(6, shape)};
 
     intersection_computations comps = PrepareComputations(xs[0], r, xs);
@@ -128,7 +128,7 @@ TEST(Refractions, TheRefractedColorUnderTotalInternalReflection)
     shape_ptr shape = w.get_world_objects()[0];
     shape->get_material().transparency = 1;
     shape->get_material().refractive_index = 1.5;
-    ray r{point(0, 0, sqrt(2) / 2), Vector(0, 1, 0)};
+    ray r{point(0, 0, sqrt(2) / 2), vector(0, 1, 0)};
     std::vector<intersection> xs{intersection(-sqrt(2) / 2, shape), intersection(sqrt(2) / 2, shape)};
 
     intersection_computations comps = PrepareComputations(xs[1], r, xs);
@@ -150,7 +150,7 @@ TEST(Refractions, RefractedColorWithRefractedRay)
     B->get_material().transparency = 1;
     B->get_material().refractive_index = 1.5;
 
-    ray r{point(0, 0, 0.1), Vector(0, 1, 0)};
+    ray r{point(0, 0, 0.1), vector(0, 1, 0)};
     std::vector<intersection> xs{intersection(-0.9899, A),
                                   intersection(-0.4899, B),
                                   intersection(0.4899, B),
@@ -179,7 +179,7 @@ TEST(Refractions, ShadeHitWithTransparentMaterial)
     ball->set_transform(Math::Translation(0, -3.5, -0.5));
     w.add_object(ball);
 
-    ray r{point(0, 0, -3), Vector(0, -sqrt(2) / 2, sqrt(2) / 2)};
+    ray r{point(0, 0, -3), vector(0, -sqrt(2) / 2, sqrt(2) / 2)};
     std::vector<intersection> xs{intersection(sqrt(2), floor)};
 
     intersection_computations comps = PrepareComputations(xs[0], r, xs);
@@ -193,7 +193,7 @@ TEST(Refractions, SchlickApproximationUnterTotalInternalReflection)
 {
     sphere_ptr shape = GlassSphere();
 
-    ray r{point(0, 0, sqrt(2) / 2), Vector(0, 1, 0)};
+    ray r{point(0, 0, sqrt(2) / 2), vector(0, 1, 0)};
     std::vector<intersection> xs{intersection(-sqrt(2) / 2, shape), intersection(sqrt(2) / 2, shape)};
 
     intersection_computations comps = PrepareComputations(xs[1], r, xs);
@@ -204,7 +204,7 @@ TEST(Refractions, SchlickApproximationUnterTotalInternalReflection)
 
 TEST(Refractions, SchlickApproximationWithPerpendicularViewingAngle) {
     shape_ptr shape = GlassSphere();
-    ray r{point(0, 0, 0), Vector(0, 1, 0)};
+    ray r{point(0, 0, 0), vector(0, 1, 0)};
     std::vector<intersection> xs{intersection(-1, shape), intersection(1, shape)};
 
     intersection_computations comps = PrepareComputations(xs[1], r, xs);
@@ -217,7 +217,7 @@ TEST(Refractions, SchlickApproximationWithSmallAngleAndn2Biggern1)
 {
     shape_ptr shape = GlassSphere();
 
-    ray r{point(0, 0.99, -2), Vector(0, 0, 1)};
+    ray r{point(0, 0.99, -2), vector(0, 0, 1)};
     std::vector<intersection> xs{intersection(1.8589, shape)};
 
     intersection_computations comps = PrepareComputations(xs[0], r, xs);
@@ -243,7 +243,7 @@ TEST(Refractions, ShadeHitWithAReflectiveTransparentMaterial)
     ball->set_transform(Math::Translation(0, -3.5, -0.5));
     w.add_object(ball);
 
-    ray r{point(0, 0, -3), Vector(0, -sqrt(2) / 2, sqrt(2) / 2)};
+    ray r{point(0, 0, -3), vector(0, -sqrt(2) / 2, sqrt(2) / 2)};
     std::vector<intersection> xs{intersection(sqrt(2), floor)};
 
     intersection_computations comps = PrepareComputations(xs[0], r, xs);

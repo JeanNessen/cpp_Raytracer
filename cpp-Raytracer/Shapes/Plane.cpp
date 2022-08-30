@@ -11,7 +11,7 @@ plane::plane():
 
 }
 
-Vector plane::local_normal_at(point pLocalPoint) const{
+vector plane::local_normal_at(point pLocalPoint) const{
     return {0, 1, 0};
 }
 

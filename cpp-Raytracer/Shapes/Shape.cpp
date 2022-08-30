@@ -33,10 +33,10 @@ shape::shape(const shape_type pT):
     ++m_latest_id;
 }
 
-Vector shape::normal_at(const point pWorldPoint) const{
+vector shape::normal_at(const point pWorldPoint) const{
 	const point localPoint{get_transform().Inversed() * pWorldPoint};
-	const Vector localNormal{local_normal_at(localPoint)};
-    Vector worldNormal{get_transform().Inversed().Transposed() * localNormal};
+	const vector localNormal{local_normal_at(localPoint)};
+    vector worldNormal{get_transform().Inversed().Transposed() * localNormal};
     worldNormal.w = 0;
     return worldNormal.normalized();
 }

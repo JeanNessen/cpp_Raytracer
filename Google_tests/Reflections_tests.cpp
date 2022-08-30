@@ -20,18 +20,18 @@ TEST(Reflections, ReflectivityForDefaultMaterial)
 TEST(Reflections, PrecomputingReflectionVector)
 {
     plane_ptr p (new plane());
-    ray r{point(0, 1, -1), Vector(0, -sqrt(2) / 2, sqrt(2) / 2)};
+    ray r{point(0, 1, -1), vector(0, -sqrt(2) / 2, sqrt(2) / 2)};
     intersection i{sqrt(2), p};
 
     intersection_computations comps = PrepareComputations(i, r);
 
-    EXPECT_TRUE(Math::Equal(comps.reflect_v, Vector(0, sqrt(2)/2, sqrt(2)/2)));
+    EXPECT_TRUE(Math::Equal(comps.reflect_v, vector(0, sqrt(2)/2, sqrt(2)/2)));
 }
 
 TEST(Reflections, ReflectedColorForNonreflectiveMaterial)
 {
     World w = DefaultWorld();
-    ray r{point(0, 0, 0), Vector(0, 0, 1)};
+    ray r{point(0, 0, 0), vector(0, 0, 1)};
     sphere_ptr shape = dynamic_pointer_cast<Sphere>(w.get_world_objects()[1]);
     shape->get_material().ambient = 1;
     intersection i{1, shape};
@@ -49,7 +49,7 @@ TEST(Reflections, ReflectedColorForReflectiveMaterial)
     shape->get_material().reflective = 0.5;
     shape->set_transform(Math::Translation(0, -1, 0));
     w.add_object(shape);
-    ray r{point(0, 0, -3), Vector(0, -sqrt(2) / 2, sqrt(2) / 2)};
+    ray r{point(0, 0, -3), vector(0, -sqrt(2) / 2, sqrt(2) / 2)};
     intersection i{sqrt(2), shape};
 
     intersection_computations comps = PrepareComputations(i, r);
@@ -65,7 +65,7 @@ TEST(Reflections, ShadeHitWithReflectiveMaterial)
     shape->get_material().reflective = 0.5;
     shape->set_transform(Math::Translation(0, -1, 0));
     w.add_object(shape);
-    ray r{point(0, 0, -3), Vector(0, -sqrt(2) / 2, sqrt(2) / 2)};
+    ray r{point(0, 0, -3), vector(0, -sqrt(2) / 2, sqrt(2) / 2)};
     intersection i{sqrt(2), shape};
 
     intersection_computations comps = PrepareComputations(i, r);
@@ -89,7 +89,7 @@ TEST(Reflections, ColorAtWithMutuallyReflectiveSurfaces)
     upper->set_transform(Math::Translation(0, 1, 0));
     w.add_object(upper);
 
-    ray r{point(0, 0, 0), Vector(0, 1, 0)};
+    ray r{point(0, 0, 0), vector(0, 1, 0)};
 
     color c = w.calculate_color_at(r);
 }
@@ -101,7 +101,7 @@ TEST(Reflections, TheReflectedColorAtMaximumRecursiveDepth)
     p->get_material().reflective = 0.5;
     p->set_transform(Math::Translation(0, -1, 0));
     w.add_object(p);
-    ray r{point(0, 0, -3), Vector(0, -sqrt(2) / 2, sqrt(2) / 2)};
+    ray r{point(0, 0, -3), vector(0, -sqrt(2) / 2, sqrt(2) / 2)};
     intersection i{sqrt(2), p};
 
     intersection_computations comps = PrepareComputations(i, r);

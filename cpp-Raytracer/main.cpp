@@ -130,8 +130,8 @@ int main()
     camera c{1000, 1000, 3 * (M_PI / 4)};
 
     //Position the Camera
-    c.set_transform(Math::ViewTransform(point(0, 5, -29.5), point(0, 5, 0), Vector(0, 1, 0)));
-    //c.SetTransform(Math::ViewTransform(point(0, 1, -20), point(0, 1, 8), Vector(0, 1, 0)));
+    c.set_transform(Math::ViewTransform(point(0, 5, -29.5), point(0, 5, 0), vector(0, 1, 0)));
+    //c.SetTransform(Math::ViewTransform(point(0, 1, -20), point(0, 1, 8), vector(0, 1, 0)));
 
     c.set_samples_per_pixel(20);
 

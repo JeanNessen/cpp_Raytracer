@@ -23,7 +23,7 @@ private:
     //returns a vector with two doubles, tmin and tmax
     static std::vector<double> check_axis(double axis_origin, double axis_direction);
 public:
-	ray(point origin, Vector direction);
+	ray(point origin, vector direction);
 
 	//Returns the position of the Ray at the given distance from the origin
 	point position(double distance) const;
@@ -51,7 +51,7 @@ public:
 private:
 public:
     const point origin;
-    const Vector direction;
+    const vector direction;
 };
 
 

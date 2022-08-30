@@ -15,14 +15,14 @@ struct intersection_computations {
     double t;
     const shape_ptr object;
     point intersect_point;
-    Vector eye_v;
-    Vector normal_v;
-    Vector reflect_v;
+    vector eye_v;
+    vector normal_v;
+    vector reflect_v;
     bool inside;
     point over_point, under_point;
     double n1, n2;
 
-    intersection_computations(double pT, shape_ptr  pObject, point pPoint, Vector pEyeV, Vector pNormalV, double pN1, double pN2);
+    intersection_computations(double pT, shape_ptr  pObject, point pPoint, vector pEyeV, vector pNormalV, double pN1, double pN2);
 
 
 };
