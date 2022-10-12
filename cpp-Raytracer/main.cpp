@@ -56,7 +56,7 @@ int main()
 
 
     //Set up the m_pattern for the floor
-    std::shared_ptr<Pattern> p(new checkers_pattern(color(0.8, 0.8, 0.8), color(0.4, 0.4, 0.4)));
+    std::shared_ptr<pattern> p(new checkers_pattern(color(0.8, 0.8, 0.8), color(0.4, 0.4, 0.4)));
     p->SetTransform(Math::Scaling(2));
 
     //Set up the floor
@@ -127,13 +127,13 @@ int main()
 
     //Initialize the Camera
 
-    camera c{1000, 1000, 3 * (M_PI / 4)};
+    camera c{500, 500, 3 * (M_PI / 4)};
 
     //Position the Camera
     c.set_transform(Math::ViewTransform(point(0, 5, -29.5), point(0, 5, 0), vector(0, 1, 0)));
     //c.SetTransform(Math::ViewTransform(point(0, 1, -20), point(0, 1, 8), vector(0, 1, 0)));
 
-    c.set_samples_per_pixel(20);
+    c.set_samples_per_pixel(5);
 
     c.depth_of_field = false;
     c.anti_aliasing = true;
