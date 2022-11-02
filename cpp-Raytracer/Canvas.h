@@ -2,10 +2,7 @@
 
 #include <vector>
 #include <string>
-
-
-//Forward declarations
-struct color;
+#include "Color.h"
 
 class canvas
 {

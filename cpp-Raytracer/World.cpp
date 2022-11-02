@@ -25,7 +25,7 @@ world DefaultWorld() {
     w.add_light(default_light);
 
     sphere_ptr default_sphere_1 (new Sphere());
-    default_sphere_1->get_material().color = color(0.8, 1.0, 0.6);
+    default_sphere_1->get_material().col = color(0.8, 1.0, 0.6);
     default_sphere_1->get_material().diffuse = 0.7;
     default_sphere_1->get_material().specular = 0.2;
 
@@ -79,13 +79,15 @@ std::vector<intersection> world::intersect_world(ray ray) {
 }
 
 color world::shade_hit(intersection_computations comps, int remaining) {
-    color surface = Lighting(comps.object->get_material_const(),
-                              comps.object,
-                              m_world_lights[0],
-                              comps.over_point,
-                              comps.eye_v,
-                              comps.normal_v,
-                              calculate_shadow(comps.over_point));
+    // color surface = Lighting(comps.object->get_material_const(),
+    //                           comps.object,
+    //                           m_world_lights[0],
+    //                           comps.over_point,
+    //                           comps.eye_v,
+    //                           comps.normal_v,
+    //                           calculate_shadow(comps.over_point));
+    color surface = {};
+
 
     color reflected = calculate_reflected_color(comps, remaining);
     color refracted = calculate_refracted_color(comps, remaining);
@@ -98,7 +100,7 @@ color world::shade_hit(intersection_computations comps, int remaining) {
     }
     else
     {
-        return surface + reflected + refracted;
+        return surface + reflected + refracted + material.emissive;
 
     }
 }

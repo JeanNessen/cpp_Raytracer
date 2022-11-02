@@ -26,7 +26,7 @@ void PlaceSpheres(world &w)
 
     for (int i = 0; i < 25; ++i) {
         sphere_ptr sphere(new Sphere());
-        sphere->get_material().color = color(Math::GetRandomDouble(0, 1), Math::GetRandomDouble(0, 1), Math::GetRandomDouble(0, 1));
+        sphere->get_material().col = color(Math::GetRandomDouble(0, 1), Math::GetRandomDouble(0, 1), Math::GetRandomDouble(0, 1));
         sphere->get_material().diffuse = 0.7f;
         sphere->get_material().specular = 0.2f;
         sphere->get_material().reflective = 0.1;
@@ -61,22 +61,23 @@ int main()
 
     //Set up the floor
     plane_ptr floor (new plane());
-    floor->get_material().color = colors::white;
+    floor->get_material().col = colors::white;
     floor->get_material().specular = 0.0f;
     floor->get_material().reflective = 0.01f;
     w.add_object(floor);
 
     //Set up ceiling
     cube_ptr ceiling(std::make_shared<cube>(cube()));
-    ceiling->get_material().color = colors::white;
+    ceiling->get_material().col = colors::white;
     ceiling->get_material().specular = 0.0f;
     ceiling->get_material().reflective = 0.01f;
+    ceiling->get_material().emissive = {1, 1, 1};
     ceiling->set_transform(Math::Translation(0, 10, 0) * Math::Scaling(10, 0.5, 11));
     w.add_object(ceiling);
 
     //Set up right wall
     cube_ptr right_wall(std::make_shared<cube>(cube()));
-    right_wall->get_material().color = colors::green;
+    right_wall->get_material().col = colors::green;
     right_wall->get_material().specular = 0.0f;
     right_wall->get_material().reflective = 0.01f;
     right_wall->set_transform(Math::Translation(5, 0, 0)* Math::Scaling(0.5, 11, 11));
@@ -84,7 +85,7 @@ int main()
 
     //Set up left wall
     cube_ptr left_wall(std::make_shared<cube>(cube()));
-    left_wall->get_material().color = colors::red;
+    left_wall->get_material().col = colors::red;
     left_wall->get_material().specular = 0.0f;
     left_wall->get_material().reflective = 0.01f;
     left_wall->set_transform( Math::Translation(-5, 0, 0) * Math::Scaling(0.5, 11, 11));
@@ -92,7 +93,7 @@ int main()
 
     //Set up back wall
     cube_ptr back_wall(std::make_shared<cube>(cube()));
-    back_wall->get_material().color = colors::white;
+    back_wall->get_material().col = colors::white;
     back_wall->get_material().specular = 0.0f;
     back_wall->get_material().reflective = 0.01f;
     back_wall->set_transform(Math::Translation(0, 0, 5) * Math::Scaling(11, 11, 0.5));
@@ -101,7 +102,7 @@ int main()
 
     //Add first cube
     cube_ptr cube_1(std::make_shared<cube>(cube()));
-    cube_1->get_material().color = colors::white;
+    cube_1->get_material().col = colors::white;
     cube_1->get_material().specular = 0.0f;
     cube_1->get_material().reflective = 0.01f;
     cube_1->set_transform(Math::Translation(2.5, 1, 0.5) * Math::Rotation_Y(-50) * Math::Scaling(1, 2, 1));
@@ -111,7 +112,7 @@ int main()
 
     //Set Glass material
     material glass_mat{};
-    glass_mat.color = colors::black;
+    glass_mat.col = colors::black;
     glass_mat.transparency = 0.8;
     glass_mat.refractive_index = 1.51;
     glass_mat.reflective = 1;
@@ -122,21 +123,18 @@ int main()
     glass_mat.throws_shadow = false;
 
 
-
-
-
     //Initialize the Camera
 
-    camera c{500, 500, 3 * (M_PI / 4)};
+    camera c{100, 100, 3 * (M_PI / 4)};
 
     //Position the Camera
     c.set_transform(Math::ViewTransform(point(0, 5, -29.5), point(0, 5, 0), vector(0, 1, 0)));
     //c.SetTransform(Math::ViewTransform(point(0, 1, -20), point(0, 1, 8), vector(0, 1, 0)));
 
-    c.set_samples_per_pixel(5);
+    c.set_samples_per_pixel(1);
 
     c.depth_of_field = false;
-    c.anti_aliasing = true;
+    c.anti_aliasing = false;
     c.set_aperture_size(0.5);
     c.set_focal_length(10);
 

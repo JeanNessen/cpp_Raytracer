@@ -4,7 +4,6 @@
 
 #include "Material.h"
 
-#include <memory>
 
 bool material::operator==(const material &other) const {
     return (
@@ -12,7 +11,7 @@ bool material::operator==(const material &other) const {
             Math::Equal(diffuse, other.diffuse) &&
             Math::Equal(shininess, other.shininess) &&
             Math::Equal(specular, other.specular) &&
-            color == other.color &&
+            col == other.col &&
             m_pattern == other.m_pattern &&
             Math::Equal(reflective, other.reflective)
             );

@@ -38,8 +38,8 @@ public:
     bool calculate_shadow(point p);
 
     color calculate_reflected_color(intersection_computations comps, int remaining = m_recursion_depth);
-
     color calculate_refracted_color(intersection_computations comps, int remaining = m_recursion_depth);
+    color calculate_scattered_color(intersection_computations comps, int remaining = m_recursion_depth);
 
     color shade_hit(intersection_computations comps, int remaining = m_recursion_depth);
 

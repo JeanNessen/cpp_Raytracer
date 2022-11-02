@@ -14,7 +14,7 @@ color Lighting(material m, shape_ptr object, point_light light, point position, 
         light_color = object->stripe_at_object(position);
     } else
     {
-        light_color = m.color;
+        light_color = m.col;
     }
 
     //Combine surface color with lights intensity/color

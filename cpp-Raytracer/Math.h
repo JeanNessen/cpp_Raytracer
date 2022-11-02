@@ -45,6 +45,13 @@
 		[[nodiscard]]vector normalized() const;
 
         vector Reflect(vector normal) const;
+
+		inline static vector random(double min, double max)
+		{
+			return{Math::GetRandomDouble(min, max), Math::GetRandomDouble(min, max), Math::GetRandomDouble(min, max)};
+		}
+
+		static vector randomInUnitSphere();
 	};
 
 	class matrix2
@@ -64,7 +71,6 @@
 
 		bool operator==(const matrix2& other) const;
 		bool operator!=(const matrix2& other) const;
-
 	};
 
 	class matrix3

@@ -6,6 +6,7 @@
 #include <memory>
 
 #include "pattern.h"
+#include "Color.h"
 
 class material {
 //Methods
@@ -28,10 +29,11 @@ public:
     double diffuse = 0.9;
     double specular = 0.9;
     double shininess = 200.0;
-    color color{1, 1, 1};
+    color col{1, 1, 1};
     double reflective = 0;
     double transparency = 0;
     double refractive_index = 1;
     bool throws_shadow = true;
+    color emissive{0, 0, 0};
 };
 
