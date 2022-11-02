@@ -174,7 +174,7 @@ TEST(Refractions, ShadeHitWithTransparentMaterial)
     w.add_object(floor);
 
     sphere_ptr ball{new Sphere()};
-    ball->get_material().color = colors::red;
+    ball->get_material().col = colors::red;
     ball->get_material().ambient = 0.5;
     ball->set_transform(Math::Translation(0, -3.5, -0.5));
     w.add_object(ball);
@@ -238,7 +238,7 @@ TEST(Refractions, ShadeHitWithAReflectiveTransparentMaterial)
     w.add_object(floor);
 
     sphere_ptr ball{new Sphere()};
-    ball->get_material().color = colors::red;
+    ball->get_material().col = colors::red;
     ball->get_material().ambient = 0.5;
     ball->set_transform(Math::Translation(0, -3.5, -0.5));
     w.add_object(ball);

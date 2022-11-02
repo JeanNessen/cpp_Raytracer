@@ -38,3 +38,26 @@ TEST(RandomNumbers, RandomDoublesOnMultipleThreads)
         EXPECT_NE(numbers[i], numbers[i+1]);
     }
 }
+
+TEST(RandomVectors, RandomVector)
+{
+    vector random_vec = vector::random(0, 1);
+
+    EXPECT_TRUE(random_vec.x <= 1);
+    EXPECT_TRUE(random_vec.y <= 1);
+    EXPECT_TRUE(random_vec.z <= 1);
+
+    EXPECT_TRUE(random_vec.x >= 0);
+    EXPECT_TRUE(random_vec.y >= 0);
+    EXPECT_TRUE(random_vec.z >= 0);
+    
+}
+
+TEST(RandomVectors, RandomVectorInUnitSphere)
+{
+    vector random_vec = vector::randomInUnitSphere();
+
+    EXPECT_TRUE(random_vec.magnitude() <= 1);
+    EXPECT_TRUE(random_vec.magnitude() > 0);
+
+}

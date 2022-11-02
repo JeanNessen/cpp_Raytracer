@@ -48,7 +48,7 @@ int main()
 {
     //Initialize the World
     world w{};
-    w.set_recursion_depth(5);
+    w.set_recursion_depth(50);
 
     //Initialize the light
     point_light default_light{ color{254.0/255.0, 216.0/255.0, 177.0/255.0}, point(0, 6, 0) };
@@ -63,15 +63,15 @@ int main()
     plane_ptr floor (new plane());
     floor->get_material().col = colors::white;
     floor->get_material().specular = 0.0f;
-    floor->get_material().reflective = 0.01f;
+    floor->get_material().reflective = 0.0f;
     w.add_object(floor);
 
     //Set up ceiling
     cube_ptr ceiling(std::make_shared<cube>(cube()));
     ceiling->get_material().col = colors::white;
     ceiling->get_material().specular = 0.0f;
-    ceiling->get_material().reflective = 0.01f;
-    ceiling->get_material().emissive = {1, 1, 1};
+    ceiling->get_material().reflective = 0.0f;
+    ceiling->get_material().emissive = {4, 4, 4};
     ceiling->set_transform(Math::Translation(0, 10, 0) * Math::Scaling(10, 0.5, 11));
     w.add_object(ceiling);
 
@@ -79,7 +79,7 @@ int main()
     cube_ptr right_wall(std::make_shared<cube>(cube()));
     right_wall->get_material().col = colors::green;
     right_wall->get_material().specular = 0.0f;
-    right_wall->get_material().reflective = 0.01f;
+    right_wall->get_material().reflective = 0.0f;
     right_wall->set_transform(Math::Translation(5, 0, 0)* Math::Scaling(0.5, 11, 11));
     w.add_object(right_wall);
 
@@ -87,7 +87,7 @@ int main()
     cube_ptr left_wall(std::make_shared<cube>(cube()));
     left_wall->get_material().col = colors::red;
     left_wall->get_material().specular = 0.0f;
-    left_wall->get_material().reflective = 0.01f;
+    left_wall->get_material().reflective = 0.0f;
     left_wall->set_transform( Math::Translation(-5, 0, 0) * Math::Scaling(0.5, 11, 11));
     w.add_object(left_wall);
 
@@ -95,7 +95,7 @@ int main()
     cube_ptr back_wall(std::make_shared<cube>(cube()));
     back_wall->get_material().col = colors::white;
     back_wall->get_material().specular = 0.0f;
-    back_wall->get_material().reflective = 0.01f;
+    back_wall->get_material().reflective = 0.0f;
     back_wall->set_transform(Math::Translation(0, 0, 5) * Math::Scaling(11, 11, 0.5));
     w.add_object(back_wall);
 
@@ -104,7 +104,7 @@ int main()
     cube_ptr cube_1(std::make_shared<cube>(cube()));
     cube_1->get_material().col = colors::white;
     cube_1->get_material().specular = 0.0f;
-    cube_1->get_material().reflective = 0.01f;
+    cube_1->get_material().reflective = 0.0f;
     cube_1->set_transform(Math::Translation(2.5, 1, 0.5) * Math::Rotation_Y(-50) * Math::Scaling(1, 2, 1));
     w.add_object(cube_1);
 
@@ -137,6 +137,8 @@ int main()
     c.anti_aliasing = false;
     c.set_aperture_size(0.5);
     c.set_focal_length(10);
+
+    //w.set_recursion_depth(10);
 
     //RenderMultiThread the image
     canvas image = w.render_multi_thread(c,20);

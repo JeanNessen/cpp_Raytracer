@@ -79,30 +79,34 @@ std::vector<intersection> world::intersect_world(ray ray) {
 }
 
 color world::shade_hit(intersection_computations comps, int remaining) {
-    // color surface = Lighting(comps.object->get_material_const(),
-    //                           comps.object,
-    //                           m_world_lights[0],
-    //                           comps.over_point,
-    //                           comps.eye_v,
-    //                           comps.normal_v,
-    //                           calculate_shadow(comps.over_point));
-    color surface = {};
+    color surface = Lighting(comps.object->get_material_const(),
+                              comps.object,
+                              m_world_lights[0],
+                              comps.over_point,
+                              comps.eye_v,
+                              comps.normal_v,
+                              calculate_shadow(comps.over_point));
+
 
 
     color reflected = calculate_reflected_color(comps, remaining);
     color refracted = calculate_refracted_color(comps, remaining);
+    color scattered = calculate_scattered_color(comps, remaining);
+    //TODO scatter color needs to be added each scattering
+
+    return scattered;
 
     material material = comps.object->get_material();
     if (material.reflective > 0 && material.transparency > 0)
     {
         double reflectance = Schlick(comps);
-        return surface + reflected * reflectance + refracted * (1-reflectance);
+        return reflected * reflectance + refracted * (1-reflectance);
     }
     else
     {
-        return surface + reflected + refracted + material.emissive;
-
+        return reflected + refracted + material.emissive;
     }
+
 }
 
 //TODO Bounce light for diffuse materials
@@ -315,6 +319,24 @@ color world::calculate_refracted_color(intersection_computations comps, int rema
     }
 }
 
+color world::calculate_scattered_color(intersection_computations comps, int remaining)
+{
+    if(remaining == 0)
+    {
+        return colors::black;
+    }
 
+    point target = point{comps.intersect_point + comps.normal_v + vector::randomInUnitSphere()};
+
+    vector scattered_vec{target - comps.intersect_point};
+    ray scattered_ray{comps.over_point, comps.reflect_v};
+
+    if(comps.object->get_material().emissive != color{0, 0, 0})
+    {
+        return comps.object->get_material().emissive;
+    }
+
+    return comps.object->get_material().emissive + calculate_color_at(scattered_ray, remaining - 1) * 0.5;
+}
 
 

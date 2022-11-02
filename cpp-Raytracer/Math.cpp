@@ -247,6 +247,11 @@ double tuple::magnitude() const
 	return std::sqrt(std::pow(x, 2)+std::pow(y, 2) + std::pow(z, 2) + std::pow(w, 2));
 }
 
+double tuple::magnitudeSquared() const
+{
+	return std::pow(x, 2)+std::pow(y, 2) + std::pow(z, 2) + std::pow(w, 2);
+}
+
 tuple tuple::operator-() {
     tuple negative{-x, -y, -z, -w};
     return negative;
@@ -677,4 +682,31 @@ vector vector::normalized() const
 vector vector::Reflect(vector normal) const {
     vector in = *this;
     return vector{in - normal * 2 * Math::Dot(in, normal)};
+}
+
+vector vector::random(double min, double max)
+{
+	return{Math::GetRandomDouble(min, max), Math::GetRandomDouble(min, max), Math::GetRandomDouble(min, max)};
+}
+
+// vec3 random_in_hemisphere(const vec3& normal) {
+//     vec3 in_unit_sphere = random_in_unit_sphere();
+//     if (dot(in_unit_sphere, normal) > 0.0) // In the same hemisphere as the normal
+//         return in_unit_sphere;
+//     else
+//         return -in_unit_sphere;
+// }
+
+vector vector::randomInUnitSphere()
+{
+	while (true)
+	{
+		vector result = vector::random(-1, 1);
+		if (result.magnitudeSquared() >= 1)
+		{
+			continue;
+		}
+		return result;
+	}
+	
 }

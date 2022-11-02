@@ -34,7 +34,7 @@ TEST(World, DefaultWorld)
     point_light light{color(1, 1, 1), point(-10, 10, -10)};
 
     Sphere sphere_1{};
-    sphere_1.get_material().color = color{0.8, 1.0, 0.6};
+    sphere_1.get_material().col = color{0.8, 1.0, 0.6};
     sphere_1.get_material().diffuse = 0.7;
     sphere_1.get_material().specular = 0.2;
 
@@ -132,7 +132,7 @@ TEST(World, ColorWithIntersectionBehinRay)
 
     color c = w.calculate_color_at(r);
 
-    EXPECT_EQ(c, inner->get_material().color);
+    EXPECT_EQ(c, inner->get_material().col);
 }
 
 TEST(Camera, ConstructingACamera)

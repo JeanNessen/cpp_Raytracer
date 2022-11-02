@@ -24,6 +24,7 @@
         tuple operator-();
 
 		double magnitude() const;
+		double magnitudeSquared() const;
 
         friend std::ostream& operator<<(std::ostream& os, const tuple& t);
 
@@ -46,11 +47,9 @@
 
         vector Reflect(vector normal) const;
 
-		inline static vector random(double min, double max)
-		{
-			return{Math::GetRandomDouble(min, max), Math::GetRandomDouble(min, max), Math::GetRandomDouble(min, max)};
-		}
-
+		static vector random(double min, double max);
+		vector random_in_hemisphere(const vector& normal);
+	
 		static vector randomInUnitSphere();
 	};
 

@@ -426,7 +426,7 @@ TEST(Materials, DefaultMaterial)
 {
     material m{};
 
-    EXPECT_EQ(m.color, color(1, 1, 1));
+    EXPECT_EQ(m.col, color(1, 1, 1));
     EXPECT_TRUE(Math::Equal(m.ambient, 0.1f));
     EXPECT_TRUE(Math::Equal(m.diffuse, 0.9));
     EXPECT_TRUE(Math::Equal(m.specular, 0.9f));
